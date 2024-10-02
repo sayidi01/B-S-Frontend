@@ -3,6 +3,7 @@ import { Input, Modal } from 'antd';
 import axiosInstance from '../../config/Api';
 import { toast } from 'react-hot-toast';
 import UserContext from '../../config/UserContext';
+import { useUserContext } from '../../config/UserContext';
 
 interface ModalCreateAdminProps {
     isModalOpen: boolean;
@@ -14,18 +15,18 @@ interface FormData {
     email: string;
     password: string;
     phone: number;
-    role: string;
+    
 }
 
 const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({ isModalOpen, handleCancel }) => {
-    const { data } = useContext(UserContext) || {};
+    const { data } = useUserContext();
 
     const [formdata, setFormData] = useState<FormData>({
         fullName: '',
         email: '',
         password: '',
         phone: 0,
-        role: ''
+       
     });
 
     console.log(formdata)
@@ -59,7 +60,6 @@ const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({ isModalOpen, handle
             <Input name="email" type="email" value={formdata.email} placeholder="Email" onChange={handleChange} style={{ marginTop: '23px' }} />
             <Input name="password" value={formdata.password} type="password" onChange={handleChange} placeholder="Password" style={{ marginTop: '23px' }} />
             <Input placeholder="Phone" name="phone" value={formdata.phone} onChange={handleChange} style={{ marginTop: '23px' }} />
-            <Input placeholder="Role" name="role" value={formdata.role} onChange={handleChange} style={{ marginTop: '23px', marginBottom: '16px' }} />
         </Modal>
     );
 };

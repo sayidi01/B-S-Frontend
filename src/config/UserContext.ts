@@ -4,6 +4,8 @@ import React, { createContext, useContext } from "react";
 interface UserContextType {
     data: {};
     setData: React.Dispatch<React.SetStateAction<{}>>;
+    isConnected: boolean | null;
+    setIsConnected: React.Dispatch<React.SetStateAction<boolean | null>> ;
 }
 
 

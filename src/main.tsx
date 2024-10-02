@@ -25,9 +25,10 @@ import { MantineProvider } from '@mantine/core';
 
 const App = () => {
     const [data, setData] = useState({});
+    const [isConnected, setIsConnected] = useState<boolean |null>(false);
 
     return (
-        <UserContext.Provider value={{ data, setData }}>
+        <UserContext.Provider value={{ data, setData ,isConnected, setIsConnected}}>
             <RouterProvider router={router } />
             <Toaster />
         </UserContext.Provider>
