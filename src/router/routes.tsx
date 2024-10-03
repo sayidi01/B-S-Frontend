@@ -12,30 +12,29 @@ const PrivateRoutes = lazy(() => import('../router/PrivateRoutes'))
 
 const routes = [
     {
-        path: '/Dashbord',
-        element: <PrivateRoutes />,
-        layout: 'default',
-        children: [
-            {
-                path: "",
-                element: <Index />,
-                layout: 'default',
-            },
-            {
-                path: 'Admin',
-                element: <AccountAdmins />,
-                layout: 'default',
-                children: [
-                    {
-                        path: 'ListAdmin',
-                        element: <ListAdmins />,
-                        layout: 'default',
-                    },
-                ],
-            },
-        ],
+      path: '/Dashbord',
+      element: <PrivateRoutes />,
+      layout: 'default',
+      children: [
+        {
+          path: '',
+          element: <Index />,
+          layout: 'default',
+        },
+        {
+          path: 'Admin', 
+          element: <AccountAdmins />,
+          layout: 'default',
+         
+        },
+        {
+            path: 'ListAdmin',
+            element: <ListAdmins />,
+            layout: 'default',
+          },
+      ],
     },
-];
+  ];
 
 const publicRoutes = [
     {

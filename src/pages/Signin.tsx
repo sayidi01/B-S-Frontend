@@ -9,6 +9,7 @@ import IconCaretDown from "../components/Icon/IconCaretDown";
 import IconMail from "../components/Icon/IconMail";
 import IconLockDots from "../components/Icon/IconLockDots";
 
+
 import object1 from "../../public/assets/auth/coming-soon-object1.png";
 import object2 from "../../public/assets/auth/coming-soon-object2.png";
 import object3 from "../../public/assets/auth/coming-soon-object3.png";
@@ -33,7 +34,9 @@ interface Signin {
 
 const Signin = () => {
     
-    const { data, setData, setIsConnected } = useUserContext() 
+    const { data, setData, setIsConnected , isConnected} = useUserContext() 
+
+    const navigate = useNavigate()
 
 
   const [signinAdmin, setSigninAdmin] = useState<Signin>({
@@ -47,6 +50,14 @@ const Signin = () => {
     const { name, value } = e.target;
     setSigninAdmin((prevState) => ({ ...prevState, [name]: value }));
   };
+
+
+  useEffect(() => {
+    if (isConnected) {
+      navigate("/Dashbord"); 
+    }
+  }, [isConnected]);
+
 
   const handleSigninAdmin = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,7 +80,7 @@ const Signin = () => {
   useEffect(() => {
     dispatch(setPageTitle("Login Cover"));
   });
-  const navigate = useNavigate();
+
   const isRtl =
     useSelector((state: IRootState) => state.themeConfig.rtlClass) === "rtl"
       ? true
