@@ -1,67 +1,132 @@
-import React, { useCallback, useContext, useState } from 'react';
-import { Input, Modal } from 'antd';
-import axiosInstance from '../../config/Api';
-import { toast } from 'react-hot-toast';
-import UserContext from '../../config/UserContext';
-import { useUserContext } from '../../config/UserContext';
+import React, { useCallback, useContext, useState } from "react";
+import { Input, Modal } from "antd";
+import axiosInstance from "../../config/Api";
+import { toast } from "react-hot-toast";
+import { useUserContext } from "../../config/UserContext";
+import isObject from "lodash/isObject";
 
 interface ModalCreateAdminProps {
-    isModalOpen: boolean;
-    handleCancel: () => void;
+  isModalOpen: boolean;
+  handleCancel: () => void;
+  setListAdmins: React.Dispatch<React.SetStateAction<Admin[]>>;
 }
 
 interface FormData {
-    fullName: string;
-    email: string;
-    password: string;
-    phone: number;
-    
+  fullName: string;
+  email: string;
+  password: string;
+  phone: string;
 }
 
-const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({ isModalOpen, handleCancel }) => {
-    const { data } = useUserContext();
+export interface Admin {
+  _id: string;
+  fullName: string;
+  email: string;
+  password: string;
+  phone: string;
+}
 
-    const [formdata, setFormData] = useState<FormData>({
-        fullName: '',
-        email: '',
-        password: '',
-        phone: 0,
-       
-    });
+const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({
+  isModalOpen,
+  handleCancel,
+  setListAdmins,
+}) => {
+  const { data } = useUserContext();
 
-    console.log(formdata)
+  const [formdata, setFormData] = useState<FormData>({
+    fullName: "",
+    email: "",
+    password: "",
+    phone: "",
+  });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevState) => ({ ...prevState, [name]: value }));
-    };
+  console.log(formdata);
 
-    const handlesubmit = useCallback(() => {
-        if (!data) {
-            toast.error('Admin data is not available');
-            return;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handlesubmit = useCallback(() => {
+    if (!data || !isObject(data)) {
+      toast.error("Admin data is not available or not valid");
+      return;
+    }
+    if (
+      !formdata.fullName ||
+      !formdata.email ||
+      !formdata.password ||
+      !formdata.phone
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    axiosInstance
+      .post("/admin", { ...formdata, adminData: data })
+      .then(({ data }) => {
+        console.log(data);
+
+        if (
+          isObject(data) &&
+          "data" in data &&
+          isObject(data.data) &&
+          "admin" in data.data &&
+          isObject(data.data.admin)
+        ) {
+          const newAdmin = { ...data.data.admin, password: "" } as Admin;
+
+          setListAdmins((prev: Admin[]) => [...prev, newAdmin]);
+          toast.success("Admin added successfully");
+          handleCancel();
+        } else {
+          toast.error("Invalid server error");
         }
-        axiosInstance
-            .post('/admin', { ...formdata, adminData: data })
-            .then(({ data }) => {
-                console.log(data);
-                toast.success('Create new Admin  Successfully');
-                handleCancel();
-            })
-            .catch((err) => {
-                console.log(err);
-                toast.error('Error in Create New Admin');
-            });
-    }, [formdata, data]);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error in Create New Admin");
+      });
+  }, [formdata, data, setListAdmins]);
 
-    return (
-        <Modal title="Create New Admin" open={isModalOpen} onCancel={handleCancel} onOk={handlesubmit}>
-            <Input name="fullName" value={formdata.fullName} onChange={handleChange} placeholder="Full Name" />
-            <Input name="email" type="email" value={formdata.email} placeholder="Email" onChange={handleChange} style={{ marginTop: '23px' }} />
-            <Input name="password" value={formdata.password} type="password" onChange={handleChange} placeholder="Password" style={{ marginTop: '23px' }} />
-            <Input placeholder="Phone" name="phone" value={formdata.phone} onChange={handleChange} style={{ marginTop: '23px' }} />
-        </Modal>
-    );
+  return (
+    <Modal
+      title="Create New Admin"
+      open={isModalOpen}
+      onCancel={handleCancel}
+      onOk={handlesubmit}
+    >
+      <Input
+        name="fullName"
+        value={formdata.fullName}
+        onChange={handleChange}
+        placeholder="Full Name"
+      />
+      <Input
+        name="email"
+        type="email"
+        value={formdata.email}
+        placeholder="Email"
+        onChange={handleChange}
+        style={{ marginTop: "23px" }}
+      />
+      <Input
+        name="password"
+        value={formdata.password}
+        type="password"
+        onChange={handleChange}
+        placeholder="Password"
+        style={{ marginTop: "23px" }}
+      />
+      <Input
+        placeholder="Phone"
+        name="phone"
+        value={formdata.phone}
+        onChange={handleChange}
+        style={{ marginTop: "23px" }}
+      />
+    </Modal>
+  );
 };
 
 export default ModalCreateAdmin;

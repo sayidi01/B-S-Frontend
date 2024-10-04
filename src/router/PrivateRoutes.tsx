@@ -33,7 +33,7 @@ export default function PrivateRoutes() {
             })
             .catch((error) => {
               console.error("Admin not connected", error);
-              navigate("/Dashbord");
+              navigate("/");
             });
         }
       }, [isConnected, navigate, setData, setIsConnected]);
