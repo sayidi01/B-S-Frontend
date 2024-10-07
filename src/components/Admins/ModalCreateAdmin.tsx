@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Input, Modal } from "antd";
 import axiosInstance from "../../config/Api";
 import { toast } from "react-hot-toast";
@@ -9,9 +9,10 @@ interface ModalCreateAdminProps {
   isModalOpen: boolean;
   handleCancel: () => void;
   setListAdmins: React.Dispatch<React.SetStateAction<Admin[]>>;
+  setVisiblePasswords: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
 }
 
-interface FormData {
+export interface FormData {
   fullName: string;
   email: string;
   password: string;
@@ -30,6 +31,7 @@ const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({
   isModalOpen,
   handleCancel,
   setListAdmins,
+  setVisiblePasswords,
 }) => {
   const { data } = useUserContext();
 
@@ -74,10 +76,20 @@ const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({
           "admin" in data.data &&
           isObject(data.data.admin)
         ) {
-          const newAdmin = { ...data.data.admin, password: "" } as Admin;
+          const newAdmin = { ...data.data.admin,  } as Admin;
 
           setListAdmins((prev: Admin[]) => [...prev, newAdmin]);
+          setVisiblePasswords((prev) => ({
+            ...prev,
+            [newAdmin.email]: false,
+          }));
           toast.success("Admin added successfully");
+          setFormData({
+            fullName: "",
+            email: "",
+            password: "",
+            phone: "",
+          });
           handleCancel();
         } else {
           toast.error("Invalid server error");
