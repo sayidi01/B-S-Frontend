@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Input, Modal } from "antd";
 import axiosInstance from "../../config/Api";
 import { toast } from "react-hot-toast";
-import { useUserContext } from "../../config/UserContext";
 import { Admin, FormData } from "./ModalCreateAdmin";
 
 interface ModalEditAdminProps {

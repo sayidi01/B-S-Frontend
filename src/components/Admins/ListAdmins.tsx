@@ -15,8 +15,9 @@ import { toast } from "react-hot-toast";
 import { Admin } from "./ModalCreateAdmin";
 
 
-interface AdminResponse {
+export interface AdminResponse {
   admins: Admin[];
+  admin: Admin
 }
 
 
@@ -85,6 +86,8 @@ const ListAdmins: React.FC = () => {
         });
     }
   }, [isConnected, searchAdmin]);
+  
+
 
   // SEARCH ADMIN BY QUERY
 
