@@ -22,13 +22,15 @@ import store from './store/index';
 import { Toaster } from 'react-hot-toast';
 import UserContext from './config/UserContext';
 import { MantineProvider } from '@mantine/core';
+import { Admin } from './components/Admins/ModalCreateAdmin';
 
 const App = () => {
     const [data, setData] = useState({});
     const [isConnected, setIsConnected] = useState<boolean |null>(false);
+    const [currentAdmin, setCurrentAdmin] =useState<Admin | null>(null);
 
     return (
-        <UserContext.Provider value={{ data, setData ,isConnected, setIsConnected}}>
+        <UserContext.Provider value={{ data, setData ,isConnected, setIsConnected, currentAdmin, setCurrentAdmin}}>
             <RouterProvider router={router } />
             <Toaster />
         </UserContext.Provider>

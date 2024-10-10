@@ -8,8 +8,12 @@ import Header from './Header';
 import Setting from './Setting';
 import Sidebar from './Sidebar';
 import Portals from '../../components/Portals';
+import { useUserContext } from '../../config/UserContext';
 
 const DefaultLayout = ({ children }: PropsWithChildren) => {
+
+    const { currentAdmin} = useUserContext();
+
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const dispatch = useDispatch();
 
@@ -85,7 +89,7 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
 
                     <div className="main-content flex flex-col min-h-screen">
                         {/* BEGIN TOP NAVBAR */}
-                        <Header />
+                        <Header  currentAdmin={ currentAdmin} />
                         {/* END TOP NAVBAR */}
 
                         {/* BEGIN CONTENT AREA */}

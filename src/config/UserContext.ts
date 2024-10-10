@@ -1,11 +1,13 @@
 import React, { createContext, useContext } from "react";
 
-
+import { Admin } from "../components/Admins/ModalCreateAdmin";
 interface UserContextType {
     data: {};
     setData: React.Dispatch<React.SetStateAction<{}>>;
     isConnected: boolean | null;
     setIsConnected: React.Dispatch<React.SetStateAction<boolean | null>> ;
+    currentAdmin: Admin | null;  // Ajoute currentAdmin ici
+    setCurrentAdmin: React.Dispatch<React.SetStateAction<Admin | null>>;
 }
 
 
