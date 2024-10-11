@@ -18,6 +18,7 @@ import { Admin } from "./ModalCreateAdmin";
 export interface AdminResponse {
   admins: Admin[];
   admin: Admin
+  image: string;
 }
 
 

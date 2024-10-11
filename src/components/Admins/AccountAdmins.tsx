@@ -10,18 +10,43 @@ import { Admin } from "./ModalCreateAdmin";
 import { toast } from "react-hot-toast";
 import { useUserContext } from "../../config/UserContext";
 
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Flex, message, Upload } from 'antd';
+import type { GetProp, UploadProps } from 'antd';
 
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+const getBase64 = (img: FileType, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+};
+
+const beforeUpload = (file: FileType) => {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isJpgOrPng && isLt2M;
+};
 
 const AccountAdmins = () => {
-    const {  currentAdmin, setCurrentAdmin} = useUserContext();
+  const { currentAdmin, setCurrentAdmin } = useUserContext();
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const [formDataAdmin, setFormDataAdmin] = useState({
-    fullName: '',
-    email: '',
-    phone: ''
-  })
+    fullName: "",
+    email: "",
+    phone: "",
+  });
 
-  console.log(formDataAdmin)
+  console.log(formDataAdmin);
+  console.log(currentAdmin);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -32,22 +57,7 @@ const AccountAdmins = () => {
     setTabs(name);
   };
 
-  // GET CURRENT ADMIN
-
-  useEffect(() => {
-    axiosInstance
-      .get<AdminResponse>("/admin/current")
-      .then((response) => {
-        console.log(response.data);
-        setCurrentAdmin(response.data.admin);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-
-  // EDIT CURRENT ADMIN 
+  // EDIT CURRENT ADMIN
 
   const handleEditCurrentAdmin = useCallback(() => {
     if (!currentAdmin) return;
@@ -64,32 +74,65 @@ const AccountAdmins = () => {
       });
   }, [currentAdmin, formDataAdmin]);
 
-
-// INITIALISE
+  // INITIALISE
   useEffect(() => {
     if (currentAdmin) {
       setFormDataAdmin({
-        fullName: currentAdmin.fullName || '',
-        email: currentAdmin.email || '',
-        phone: currentAdmin.phone || ''
+        fullName: currentAdmin.fullName || "",
+        email: currentAdmin.email || "",
+        phone: currentAdmin.phone || "",
       });
     }
   }, [currentAdmin]);
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormDataAdmin((prev) => ({
       ...prev,
       [id]: value,
-      
     }));
     console.log(`Input changed: ${id} = ${value}`);
   };
 
+  // UPLOAD IMAGE ADMIN
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setImageFile(file);
+
+      if (currentAdmin) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        axiosInstance
+          .post<AdminResponse>(
+            `/admin/image/${currentAdmin._id}`,
+            formData,
+            {
+              headers: { "Content-Type": "multipart/form-data" },
+            }
+          )
+          .then(({ data }) => {
+            toast.success("Image uploaded successfully");
+            setCurrentAdmin({ ...currentAdmin, profileImage: data.image });
+          })
+          .catch((err) => {
+            toast.error("Error in uploading image: " + err.message);
+          });
+      }
+    }
+  };
+
+  const uploadButton = (
+    <button style={{ border: 0, background: 'none' }} type="button">
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
+
+
   return (
     <div>
-      
       <ul className="flex space-x-2 rtl:space-x-reverse">
         <li>
           <Link to="#" className="text-primary hover:underline">
@@ -139,54 +182,60 @@ const AccountAdmins = () => {
               <h6 className="text-lg font-bold mb-5">General Information</h6>
               <div className="flex flex-col sm:flex-row">
                 <div className="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5">
-                  <img
-                    src="/assets//images/profile-34.jpeg"
-                    alt="img"
-                    className="w-20 h-20 md:w-32 md:h-32 rounded-full object-cover mx-auto"
+                    
+                  <input
+                    id="profileImage"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="form-input"
                   />
                 </div>
                 {currentAdmin && (
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label htmlFor="fullName">Full Name</label>
-                    <input
-                      id="fullName"
-                      type="text"
-                      value={formDataAdmin.fullName}
-                      onChange={handleInputChange}
-                      className="form-input"
-                    />
+                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="fullName">Full Name</label>
+                      <input
+                        id="fullName"
+                        type="text"
+                        value={formDataAdmin.fullName}
+                        onChange={handleInputChange}
+                        className="form-input"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email">Email</label>
+                      <input
+                        id="email"
+                        type="text"
+                        value={formDataAdmin.email}
+                        onChange={handleInputChange}
+                        className="form-input"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="phone">Phone</label>
+                      <input
+                        id="phone"
+                        type="text"
+                        value={formDataAdmin.phone}
+                        onChange={handleInputChange}
+                        className="form-input"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-2 mt-3">
+                      <button
+                        onClick={handleEditCurrentAdmin}
+                        type="button"
+                        className="btn btn-primary"
+                      >
+                        Save
+                      </button>
+                    </div>
                   </div>
-                  <div>
-                    <label htmlFor="email">Email</label>
-                    <input
-                      id="email"
-                      type="text"
-                      value={formDataAdmin.email}  
-                      onChange={handleInputChange}
-                      className="form-input"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone">Phone</label>
-                    <input
-                      id="phone"
-                      type="text"
-                      value={formDataAdmin.phone}
-                      onChange={handleInputChange}
-                      className="form-input"
-                    />
-                  </div>
-                
-                  <div className="sm:col-span-2 mt-3">
-                    <button onClick={handleEditCurrentAdmin} type="button" className="btn btn-primary">
-                      Save
-                    </button>
-                  </div>
-                </div>
-                 )}
+                )}
               </div>
-              
             </form>
           </div>
         ) : (
@@ -237,10 +286,8 @@ const AccountAdmins = () => {
           ""
         )}
       </div>
-    
     </div>
   );
-  
 };
 
 export default AccountAdmins;

@@ -6,7 +6,7 @@ interface UserContextType {
     setData: React.Dispatch<React.SetStateAction<{}>>;
     isConnected: boolean | null;
     setIsConnected: React.Dispatch<React.SetStateAction<boolean | null>> ;
-    currentAdmin: Admin | null;  // Ajoute currentAdmin ici
+    currentAdmin: Admin | null; 
     setCurrentAdmin: React.Dispatch<React.SetStateAction<Admin | null>>;
 }
 

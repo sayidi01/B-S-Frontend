@@ -17,6 +17,7 @@ import IconSun from "../Icon/IconSun";
 import IconMoon from "../Icon/IconMoon";
 import IconLaptop from "../Icon/IconLaptop";
 
+
 import IconUser from "../Icon/IconUser";
 
 import IconLogout from "../Icon/IconLogout";
@@ -25,10 +26,17 @@ import { useUserContext } from "../../config/UserContext";
 import axiosInstance from "../../config/Api";
 import { toast } from "react-hot-toast";
 
+
+
 const Header = () => {
   const navigate = useNavigate();
 
   const { setData, setIsConnected, currentAdmin } = useUserContext();
+ 
+  useEffect(() => {
+    console.log("Current Admin:", currentAdmin);
+  }, [currentAdmin]);
+
   const location = useLocation();
   useEffect(() => {
     const selector = document.querySelector(

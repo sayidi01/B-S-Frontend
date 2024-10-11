@@ -25,6 +25,7 @@ export interface Admin {
   email: string;
   password: string;
   phone: string;
+  profileImage?: string; 
 }
 
 const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({

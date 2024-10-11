@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
 // Perfect Scrollbar
@@ -23,11 +23,25 @@ import { Toaster } from 'react-hot-toast';
 import UserContext from './config/UserContext';
 import { MantineProvider } from '@mantine/core';
 import { Admin } from './components/Admins/ModalCreateAdmin';
+import axiosInstance from './config/Api';
+import { AdminResponse } from './components/Admins/ListAdmins';
 
 const App = () => {
     const [data, setData] = useState({});
     const [isConnected, setIsConnected] = useState<boolean |null>(false);
     const [currentAdmin, setCurrentAdmin] =useState<Admin | null>(null);
+
+    useEffect(() => {
+        axiosInstance
+          .get<AdminResponse>("/admin/current")
+          .then((response) => {
+            console.log(response.data);
+            setCurrentAdmin(response.data.admin);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, []);
 
     return (
         <UserContext.Provider value={{ data, setData ,isConnected, setIsConnected, currentAdmin, setCurrentAdmin}}>
