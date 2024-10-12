@@ -6,30 +6,31 @@ import IconHome from "../../components/Icon/IconHome";
 import IconPhone from "../../components/Icon/IconPhone";
 import axiosInstance from "../../config/Api";
 import { AdminResponse } from "./ListAdmins";
-import { Admin } from "./ModalCreateAdmin";
 import { toast } from "react-hot-toast";
 import { useUserContext } from "../../config/UserContext";
 
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Flex, message, Upload } from 'antd';
-import type { GetProp, UploadProps } from 'antd';
+import { LoadingOutlined, PlusOutlined, EditOutlined } from "@ant-design/icons";
+import { Avatar, Button, message, Upload } from "antd";
+import type { GetProp, UploadProps } from "antd";
+import ProfileImg from "./ProfileImg";
+import { IFormDataAdmin } from "./types";
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const getBase64 = (img: FileType, callback: (url: string) => void) => {
   const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.addEventListener("load", () => callback(reader.result as string));
   reader.readAsDataURL(img);
 };
 
 const beforeUpload = (file: FileType) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
   if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
+    message.error("You can only upload JPG/PNG file!");
   }
   const isLt2M = file.size / 1024 / 1024 < 2;
   if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
+    message.error("Image must smaller than 2MB!");
   }
   return isJpgOrPng && isLt2M;
 };
@@ -37,16 +38,20 @@ const beforeUpload = (file: FileType) => {
 const AccountAdmins = () => {
   const { currentAdmin, setCurrentAdmin } = useUserContext();
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isProfileImgEditing, setIsProfileImgEditing] = useState(false);
+
+  const handleToggleImgEdit = useCallback(() => {
+    setIsProfileImgEditing((prev) => !prev);
+  }, []);
+
   const [loading, setLoading] = useState(false);
 
-  const [formDataAdmin, setFormDataAdmin] = useState({
+  const [formDataAdmin, setFormDataAdmin] = useState<IFormDataAdmin>({
     fullName: "",
     email: "",
     phone: "",
+    img: null,
   });
-
-  console.log(formDataAdmin);
-  console.log(currentAdmin);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -81,6 +86,7 @@ const AccountAdmins = () => {
         fullName: currentAdmin.fullName || "",
         email: currentAdmin.email || "",
         phone: currentAdmin.phone || "",
+        img: null,
       });
     }
   }, [currentAdmin]);
@@ -105,13 +111,9 @@ const AccountAdmins = () => {
         formData.append("image", file);
 
         axiosInstance
-          .post<AdminResponse>(
-            `/admin/image/${currentAdmin._id}`,
-            formData,
-            {
-              headers: { "Content-Type": "multipart/form-data" },
-            }
-          )
+          .post<AdminResponse>(`/admin/image/${currentAdmin._id}`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          })
           .then(({ data }) => {
             toast.success("Image uploaded successfully");
             setCurrentAdmin({ ...currentAdmin, profileImage: data.image });
@@ -124,12 +126,13 @@ const AccountAdmins = () => {
   };
 
   const uploadButton = (
-    <button style={{ border: 0, background: 'none' }} type="button">
+    <button style={{ border: 0, background: "none" }} type="button">
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
 
+  if (!currentAdmin) return null;
 
   return (
     <div>
@@ -181,14 +184,10 @@ const AccountAdmins = () => {
             <form className="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-black">
               <h6 className="text-lg font-bold mb-5">General Information</h6>
               <div className="flex flex-col sm:flex-row">
-                <div className="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-2/12 mb-5">
-                    
-                  <input
-                    id="profileImage"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="form-input"
+                <div className="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-3/12 mb-5">
+                  <ProfileImg
+                    formDataAdmin={formDataAdmin}
+                    setFormDataAdmin={setFormDataAdmin}
                   />
                 </div>
                 {currentAdmin && (
