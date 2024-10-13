@@ -9,31 +9,8 @@ import { AdminResponse } from "./ListAdmins";
 import { toast } from "react-hot-toast";
 import { useUserContext } from "../../config/UserContext";
 
-import { LoadingOutlined, PlusOutlined, EditOutlined } from "@ant-design/icons";
-import { Avatar, Button, message, Upload } from "antd";
-import type { GetProp, UploadProps } from "antd";
 import ProfileImg from "./ProfileImg";
 import { IFormDataAdmin } from "./types";
-
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file: FileType) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-  return isJpgOrPng && isLt2M;
-};
 
 const AccountAdmins = () => {
   const { currentAdmin, setCurrentAdmin } = useUserContext();
@@ -67,8 +44,27 @@ const AccountAdmins = () => {
   const handleEditCurrentAdmin = useCallback(() => {
     if (!currentAdmin) return;
 
+    const formData = new FormData();
+
+    if (formDataAdmin.img) {
+      const uploadedBlob = formDataAdmin.img.originFileObj as Blob;
+      formData.append("image", uploadedBlob);
+    }
+
+    Object.keys(formDataAdmin)
+      .filter((key) => key != "img")
+      .forEach((key) => {
+        const value = formDataAdmin[key];
+        console.log(key)
+        if (value && key !== "img") {
+          formData.append(key, value as any);
+        }
+      });
+
     axiosInstance
-      .put(`/admin/${currentAdmin._id}`, { ...formDataAdmin })
+      .put(`/admin/${currentAdmin._id}`, formDataAdmin, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
       .then(({ data }) => {
         console.log(data);
         toast.success("Admin updated successfully");
@@ -125,13 +121,6 @@ const AccountAdmins = () => {
     }
   };
 
-  const uploadButton = (
-    <button style={{ border: 0, background: "none" }} type="button">
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  );
-
   if (!currentAdmin) return null;
 
   return (
@@ -184,7 +173,7 @@ const AccountAdmins = () => {
             <form className="border border-[#ebedf2] dark:border-[#191e3a] rounded-md p-4 mb-5 bg-white dark:bg-black">
               <h6 className="text-lg font-bold mb-5">General Information</h6>
               <div className="flex flex-col sm:flex-row">
-                <div className="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-3/12 mb-5">
+                <div className="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-3/12 mb-5 flex justify-center items-center">
                   <ProfileImg
                     formDataAdmin={formDataAdmin}
                     setFormDataAdmin={setFormDataAdmin}

@@ -5,4 +5,5 @@ export interface IFormDataAdmin {
   email: string;
   phone: string;
   img: null | UploadFile<any>;
+  [key: string]: IFormDataAdmin[keyof IFormDataAdmin];
 }

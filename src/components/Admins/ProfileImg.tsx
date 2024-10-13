@@ -1,13 +1,8 @@
-import { Avatar, Button, Typography, Upload, UploadProps } from "antd";
+import { Avatar, Button, Upload, UploadProps } from "antd";
 import { useCallback } from "react";
 import { useState } from "react";
 import { useUserContext } from "../../config/UserContext";
-import {
-  EditOutlined,
-  UploadOutlined,
-  PlusOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { toast } from "react-hot-toast";
 import { IFormDataAdmin } from "./types";
 import { UploadChangeParam, UploadFile } from "antd/es/upload";
@@ -88,42 +83,65 @@ export default function ProfileImg({
     return false;
   };
 
+  const uploadButton = (
+    <button style={{ border: 0, background: "none" }} type="button">
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
+
   if (!currentAdmin) return null;
 
   return !isProfileImgEditing ? (
     <div className="relative w-min">
-      <Avatar size="large" src={currentAdmin.profileImage}>
+      <Avatar
+        size="large"
+        src={currentAdmin.profileImage}
+        className="w-32 h-32"
+      >
         {currentAdmin.fullName[0].toUpperCase()}
       </Avatar>
-      <Button
-        onClick={handleToggleImgEdit}
-        className="absolute -right-3 -top-3"
-        size="small"
-        icon={<EditOutlined />}
-      />
+      <div className="group absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hover:bg-slate-400 hover:bg-opacity-30 h-full w-full rounded-full hover:flex justify-center items-center">
+        <Button
+          onClick={handleToggleImgEdit}
+          size="large"
+          icon={<EditOutlined />}
+          className="hidden group-hover:block"
+        />
+      </div>
     </div>
   ) : (
-    <>
+    <div className="flex flex-col justify-center items-center">
       <Upload
         {...props}
         onChange={handleChangeImg}
         beforeUpload={beforeUpload}
         name="image"
-        listType="text"
-        className="image-uploader"
         showUploadList={false}
+        listType="picture-circle"
+        className="avatar-uploader block"
       >
-        {loading ? (
-          <LoadingOutlined />
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="avatar"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            className="rounded-full"
+          />
         ) : (
-          <Button>Upload a photo</Button>
+          uploadButton
         )}
       </Upload>
-      {imageUrl && <Avatar src={imageUrl} />}
 
-      <Button size="small" className="mt-2" variant="dashed" color="primary" onClick={handleToggleImgEdit}>
+      <Button
+        size="small"
+        className="mt-2"
+        variant="dashed"
+        color="primary"
+        onClick={handleToggleImgEdit}
+      >
         Cancel
       </Button>
-    </>
+    </div>
   );
 }
