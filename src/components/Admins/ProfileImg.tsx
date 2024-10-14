@@ -33,14 +33,15 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
   });
 
 export default function ProfileImg({
-  formDataAdmin,
   setFormDataAdmin,
+  setIsProfileImgEditing,
+  isProfileImgEditing,
 }: {
-  formDataAdmin: IFormDataAdmin;
   setFormDataAdmin: React.Dispatch<React.SetStateAction<IFormDataAdmin>>;
+  isProfileImgEditing: boolean;
+  setIsProfileImgEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { currentAdmin } = useUserContext();
-  const [isProfileImgEditing, setIsProfileImgEditing] = useState(false);
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -92,11 +93,17 @@ export default function ProfileImg({
 
   if (!currentAdmin) return null;
 
+  console.log(currentAdmin);
+
   return !isProfileImgEditing ? (
     <div className="relative w-min">
       <Avatar
         size="large"
-        src={currentAdmin.profileImage}
+        src={
+          <img
+            src={`http://localhost:3000/profile-images/${currentAdmin.image}`}
+          />
+        }
         className="w-32 h-32"
       >
         {currentAdmin.fullName[0].toUpperCase()}

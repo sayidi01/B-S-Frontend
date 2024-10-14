@@ -11,6 +11,8 @@ import { useUserContext } from "../../config/UserContext";
 
 import ProfileImg from "./ProfileImg";
 import { IFormDataAdmin } from "./types";
+import { isObject } from "lodash";
+import { Admin } from "./ModalCreateAdmin";
 
 const AccountAdmins = () => {
   const { currentAdmin, setCurrentAdmin } = useUserContext();
@@ -20,8 +22,6 @@ const AccountAdmins = () => {
   const handleToggleImgEdit = useCallback(() => {
     setIsProfileImgEditing((prev) => !prev);
   }, []);
-
-  const [loading, setLoading] = useState(false);
 
   const [formDataAdmin, setFormDataAdmin] = useState<IFormDataAdmin>({
     fullName: "",
@@ -55,7 +55,7 @@ const AccountAdmins = () => {
       .filter((key) => key != "img")
       .forEach((key) => {
         const value = formDataAdmin[key];
-        console.log(key)
+        console.log(key);
         if (value && key !== "img") {
           formData.append(key, value as any);
         }
@@ -66,9 +66,15 @@ const AccountAdmins = () => {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(({ data }) => {
-        console.log(data);
+        console.log("data", data);
         toast.success("Admin updated successfully");
-        setCurrentAdmin({ ...currentAdmin, ...formDataAdmin });
+        if (isObject(data) && "admin" in data) {
+          const adminData = data.admin;
+          if (isObject(adminData))
+            setCurrentAdmin((prev) => ({ ...prev, ...(adminData as Admin) }));
+
+          setIsProfileImgEditing(false);
+        }
       })
       .catch((err) => {
         toast.error("Error in updating Admin: " + err.message);
@@ -94,31 +100,6 @@ const AccountAdmins = () => {
       [id]: value,
     }));
     console.log(`Input changed: ${id} = ${value}`);
-  };
-
-  // UPLOAD IMAGE ADMIN
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setImageFile(file);
-
-      if (currentAdmin) {
-        const formData = new FormData();
-        formData.append("image", file);
-
-        axiosInstance
-          .post<AdminResponse>(`/admin/image/${currentAdmin._id}`, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-          })
-          .then(({ data }) => {
-            toast.success("Image uploaded successfully");
-            setCurrentAdmin({ ...currentAdmin, profileImage: data.image });
-          })
-          .catch((err) => {
-            toast.error("Error in uploading image: " + err.message);
-          });
-      }
-    }
   };
 
   if (!currentAdmin) return null;
@@ -175,8 +156,9 @@ const AccountAdmins = () => {
               <div className="flex flex-col sm:flex-row">
                 <div className="ltr:sm:mr-4 rtl:sm:ml-4 w-full sm:w-3/12 mb-5 flex justify-center items-center">
                   <ProfileImg
-                    formDataAdmin={formDataAdmin}
                     setFormDataAdmin={setFormDataAdmin}
+                    isProfileImgEditing={isProfileImgEditing}
+                    setIsProfileImgEditing={setIsProfileImgEditing}
                   />
                 </div>
                 {currentAdmin && (
