@@ -14,16 +14,14 @@ import { toast } from "react-hot-toast";
 
 import { Admin } from "./ModalCreateAdmin";
 
-
 export interface AdminResponse {
   admins: Admin[];
-  admin: Admin
+  admin: Admin;
   image: string;
 }
 
-
 const ListAdmins: React.FC = () => {
-  const { isConnected } = useUserContext();
+  const { isConnected, currentAdmin } = useUserContext();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -87,8 +85,6 @@ const ListAdmins: React.FC = () => {
         });
     }
   }, [isConnected, searchAdmin]);
-  
-
 
   // SEARCH ADMIN BY QUERY
 
@@ -152,60 +148,68 @@ const ListAdmins: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-  {listAdmins.length > 0 ? (
-    listAdmins.map((admin, index) => (
-      <tr key={admin._id || index}>
-        <td className="flex items-center">
-          <span className="flex justify-center items-center w-12 h-12 text-center rounded-full bg-orange-400 text-xl text-white mr-3">
-            {admin.fullName.charAt(0)}
-          </span>
-          {admin.fullName}
-        </td>
-        <td>{admin.email}</td>
-        <td>
-          {visiblePasswords[admin.email] ? admin.password : "******"}
-          <button
-            onClick={() => togglePasswordVisibility(admin.email)}
-            className="ml-2"
-          >
-            {visiblePasswords[admin.email] ? (
-              <EyeInvisibleOutlined />
-            ) : (
-              <EyeOutlined />
-            )}
-          </button>
-        </td>
-        <td>{admin.phone}</td>
-        <td className="text-center">
-          <div className="flex justify-center items-center space-x-3">
-            <EditOutlined
-              style={{
-                color: "blue",
-                fontSize: "20px",
-                cursor: "pointer",
-              }}
-              onClick={() => showModalEdit(admin)}
-            />
-            <DeleteOutlined
-              style={{
-                color: "red",
-                fontSize: "20px",
-                cursor: "pointer",
-              }}
-              onClick={() => deleteAdmin(admin._id)}
-            />
-          </div>
-        </td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan={5} className="text-center">
-        No Admin found
-      </td>
-    </tr>
-  )}
-</tbody>
+          {listAdmins.length > 0 ? (
+            listAdmins.map((admin, index) => (
+              <tr key={admin._id || index}>
+                <td className="flex items-center">
+                  <span className="flex justify-center items-center w-12 h-12 text-center rounded-full bg-orange-400 text-xl text-white mr-3">
+                    {admin.image ? (
+                      <img
+                        src={`http://localhost:3000/profile-images/${admin.image}`}
+                        alt="Admin Profile"
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    ) : (
+                      admin.fullName.charAt(0).toUpperCase()
+                    )}
+                  </span>
+                  {admin.fullName}
+                </td>
+                <td>{admin.email}</td>
+                <td>
+                  {visiblePasswords[admin.email] ? admin.password : "******"}
+                  <button
+                    onClick={() => togglePasswordVisibility(admin.email)}
+                    className="ml-2"
+                  >
+                    {visiblePasswords[admin.email] ? (
+                      <EyeInvisibleOutlined />
+                    ) : (
+                      <EyeOutlined />
+                    )}
+                  </button>
+                </td>
+                <td>{admin.phone}</td>
+                <td className="text-center">
+                  <div className="flex justify-center items-center space-x-3">
+                    <EditOutlined
+                      style={{
+                        color: "blue",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => showModalEdit(admin)}
+                    />
+                    <DeleteOutlined
+                      style={{
+                        color: "red",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => deleteAdmin(admin._id)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={5} className="text-center">
+                No Admin found
+              </td>
+            </tr>
+          )}
+        </tbody>
       </table>
 
       <ModalCreateAdmin

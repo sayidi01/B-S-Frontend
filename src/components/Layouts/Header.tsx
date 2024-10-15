@@ -17,7 +17,6 @@ import IconSun from "../Icon/IconSun";
 import IconMoon from "../Icon/IconMoon";
 import IconLaptop from "../Icon/IconLaptop";
 
-
 import IconUser from "../Icon/IconUser";
 
 import IconLogout from "../Icon/IconLogout";
@@ -26,13 +25,11 @@ import { useUserContext } from "../../config/UserContext";
 import axiosInstance from "../../config/Api";
 import { toast } from "react-hot-toast";
 
-
-
 const Header = () => {
   const navigate = useNavigate();
 
-  const { setData, setIsConnected, currentAdmin } = useUserContext();
- 
+  const { setData, setIsConnected, currentAdmin, setCurrentAdmin } = useUserContext();
+
   useEffect(() => {
     console.log("Current Admin:", currentAdmin);
   }, [currentAdmin]);
@@ -91,6 +88,7 @@ const Header = () => {
       .then((data) => {
         console.log(data);
         setIsConnected(false);
+        setCurrentAdmin(null)
         setData({});
         toast.success("Vous êtes Deconnecté");
         navigate("/");
@@ -109,16 +107,15 @@ const Header = () => {
       <div className="shadow-sm">
         <div className="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-black">
           <div className="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
-            <Link to="/" className="main-logo flex items-center shrink-0">
-              <img
-                className="w-8 ltr:-ml-1 rtl:-mr-1 inline"
-                src="/assets/images/logo.svg"
-                alt="logo"
-              />
-              <span className="text-2xl ltr:ml-1.5 rtl:mr-1.5  font-semibold  align-middle hidden md:inline dark:text-white-light transition-all duration-300">
-                VRISTO
-              </span>
-            </Link>
+            <img
+              className="w-8 ltr:-ml-1 rtl:-mr-1 inline"
+              src="/assets/images/logo.svg"
+              alt="logo"
+            />
+            <span className="text-2xl ltr:ml-1.5 rtl:mr-1.5  font-semibold  align-middle hidden md:inline dark:text-white-light transition-all duration-300">
+              VRISTO
+            </span>
+
             <button
               type="button"
               className="collapse-icon flex-none dark:text-[#d0d2d6] hover:text-primary dark:hover:text-primary flex lg:hidden ltr:ml-2 rtl:mr-2 p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:bg-white-light/90 dark:hover:bg-dark/60"
@@ -264,21 +261,35 @@ const Header = () => {
                 placement={`${isRtl ? "bottom-start" : "bottom-end"}`}
                 btnClassName="relative group block"
                 button={
-                  <img
-                    className="w-9 h-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
-                    src="/assets/images/user-profile.jpeg"
-                    alt="userProfile"
-                  />
+                  currentAdmin && currentAdmin.image ? (
+                    <img
+                      className="w-9 h-9 rounded-full saturate-50"
+                      src={`http://localhost:3000/profile-images/${currentAdmin.image}`}
+                      alt="userProfile"
+                    />
+                  ) : (
+                    <span className="w-9 h-9 rounded-full bg-slate-400 text-white flex justify-center items-center text-xl">
+                      {currentAdmin?.fullName.charAt(0).toUpperCase()}
+                    </span>
+                  )
                 }
               >
                 <ul className="text-dark dark:text-white-dark !py-0 w-[230px] font-semibold dark:text-white-light/90">
                   <li>
                     <div className="flex items-center px-4 py-4">
-                      <img
-                        className="rounded-md w-10 h-10 object-cover"
-                        src="/assets/images/user-profile.jpeg"
-                        alt="userProfile"
-                      />
+                      <span className="flex justify-center items-center w-12 h-12 text-center rounded-full bg-slate-400 text-xl text-white mr-3">
+                        {currentAdmin && currentAdmin.image ? (
+                          <img
+                            src={`http://localhost:3000/profile-images/${currentAdmin.image}`}
+                            alt="Admin Profile"
+                            className="w-full h-full object-cover rounded-full"
+                          />
+                        ) : currentAdmin ? (
+                          <span className="text-xl text-white">
+                            {currentAdmin.fullName.charAt(0).toUpperCase()}
+                          </span>
+                        ) : null}
+                      </span>
                       <div className="ltr:pl-4 rtl:pr-4 truncate">
                         <h4 className="text-base">
                           {currentAdmin?.fullName}
@@ -296,7 +307,7 @@ const Header = () => {
                     </div>
                   </li>
                   <li>
-                    <Link to="/Admin" className="dark:hover:text-white">
+                    <Link to="/Dashbord/Admin" className="dark:hover:text-white">
                       <IconUser className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0" />
                       Profile
                     </Link>
@@ -304,7 +315,7 @@ const Header = () => {
 
                   <li className="border-t border-white-light dark:border-white-light/10">
                     <button
-                      onClick={LogoutAdmin} 
+                      onClick={LogoutAdmin}
                       className="text-danger !py-3 flex items-center"
                     >
                       <IconLogout className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90 shrink-0" />

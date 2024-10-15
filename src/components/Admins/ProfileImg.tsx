@@ -92,7 +92,7 @@ export default function ProfileImg({
   );
 
   if (!currentAdmin) return null;
-
+  
   console.log(currentAdmin);
 
   return !isProfileImgEditing ? (
@@ -105,8 +105,9 @@ export default function ProfileImg({
           />
         }
         className="w-32 h-32"
+        
       >
-        {currentAdmin.fullName[0].toUpperCase()}
+        {currentAdmin.fullName.split(" ")[0].toUpperCase()}
       </Avatar>
       <div className="group absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hover:bg-slate-400 hover:bg-opacity-30 h-full w-full rounded-full hover:flex justify-center items-center">
         <Button
@@ -115,6 +116,7 @@ export default function ProfileImg({
           icon={<EditOutlined />}
           className="hidden group-hover:block"
         />
+        
       </div>
     </div>
   ) : (

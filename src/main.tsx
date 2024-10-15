@@ -38,7 +38,7 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [setCurrentAdmin]);
 
   return (
     <UserContext.Provider

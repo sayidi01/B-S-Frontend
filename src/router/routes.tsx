@@ -1,10 +1,13 @@
 
 import { lazy } from 'react';
+
 const Index = lazy(() => import('../pages/Index'));
 
 const AccountAdmins = lazy(() => import('../components/Admins/AccountAdmins'));
 
 const ListAdmins = lazy(() => import('../components/Admins/ListAdmins'));
+
+const ListTeacher = lazy(() => import('../components/Teachers/ListTeacher'))
 
 const Signin = lazy(() => import('../pages/Signin'));
 
@@ -30,6 +33,11 @@ const routes = [
         {
             path: 'ListAdmin',
             element: <ListAdmins />,
+            layout: 'default',
+          },
+          {
+            path: 'ListTeacher',
+            element: <ListTeacher />,
             layout: 'default',
           },
       ],

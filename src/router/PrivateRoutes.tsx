@@ -16,7 +16,7 @@ type AdminData = {
 
 export default function PrivateRoutes() {
 
-    const { setData ,isConnected, setIsConnected } = useUserContext();
+    const { setData ,isConnected, setIsConnected, setCurrentAdmin } = useUserContext();
 
     const navigate = useNavigate()
 

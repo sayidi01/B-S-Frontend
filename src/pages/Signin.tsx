@@ -25,6 +25,7 @@ import axiosInstance from "../config/Api";
 import { useUserContext } from "../config/UserContext";
 
 import { toast } from "react-hot-toast";
+import { AdminResponse } from "../components/Admins/ListAdmins";
 
 
 interface Signin {
@@ -34,7 +35,7 @@ interface Signin {
 
 const Signin = () => {
     
-    const { data, setData, setIsConnected , isConnected} = useUserContext() 
+    const { data, setData, setIsConnected , isConnected, setCurrentAdmin} = useUserContext() 
 
     const navigate = useNavigate()
 
@@ -62,10 +63,11 @@ const Signin = () => {
   const handleSigninAdmin = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axiosInstance
-    .post("/auth/admin/signin", {...signinAdmin})
+    .post<AdminResponse>("/auth/admin/signin", {...signinAdmin})
     .then((res) => {
         console.log(res.data);
-        setData(data)
+        setCurrentAdmin(res.data.admin); 
+        setData(res.data.admin)
         setIsConnected(true)
         navigate('/Dashbord')
         toast.success("Vous êtes connecté");
@@ -74,7 +76,7 @@ const Signin = () => {
         console.log("erreur connexion", err)
         toast.error("Une erreur s'est produite lors de la connexion Admin")
     })
-  }, [signinAdmin]);
+  }, [signinAdmin, setCurrentAdmin]);
 
   const dispatch = useDispatch();
   useEffect(() => {

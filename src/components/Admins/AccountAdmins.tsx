@@ -16,7 +16,6 @@ import { Admin } from "./ModalCreateAdmin";
 
 const AccountAdmins = () => {
   const { currentAdmin, setCurrentAdmin } = useUserContext();
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [isProfileImgEditing, setIsProfileImgEditing] = useState(false);
 
   const handleToggleImgEdit = useCallback(() => {
