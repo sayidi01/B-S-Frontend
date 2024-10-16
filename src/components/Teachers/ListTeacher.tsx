@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
+import ModalCreateTeacher from './ModalCreateTeacher';
 
 function ListTeacher() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className="table-responsive mb-5">
     <div className="flex justify-between items-center">
-      <button type="button" className="btn btn-primary" >
+      <button type="button" className="btn btn-primary" onClick={showModal}>
         Add New
       </button>
       <input
@@ -17,7 +29,8 @@ function ListTeacher() {
     <table className="table-hover mt-7">
       <thead>
         <tr>
-          <th>Full Name</th>
+          <th>First Name</th>
+          <th>Last Name</th>
           <th>Email</th>
           <th>Password</th>
           <th>Phone</th>
@@ -28,7 +41,10 @@ function ListTeacher() {
        
       </tbody>
     </table>
-
+    <ModalCreateTeacher
+     isModalOpen={isModalOpen}
+     handleCancel={handleCancel}
+    />
    
   </div>
   )
