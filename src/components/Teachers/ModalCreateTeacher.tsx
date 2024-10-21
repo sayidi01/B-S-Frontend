@@ -4,21 +4,24 @@ import axiosInstance from "../../config/Api";
 import { toast } from "react-hot-toast";
 import { useUserContext } from "../../config/UserContext";
 import isObject from "lodash/isObject";
-import { FormDataTeacher } from "../Teachers/typesTeacher";
-
-
+import { FormDataTeacher, Teacher } from "../Teachers/typesTeacher";
 
 interface ModalCreateTeacherProps {
   isModalOpen: boolean;
   handleCancel: () => void;
+  setListTeachers: React.Dispatch<React.SetStateAction<Teacher[]>>;
+  setVisiblePasswords: React.Dispatch<
+    React.SetStateAction<Record<string, boolean>>
+  >;
 }
 
 const ModalCreateTeacher: React.FC<ModalCreateTeacherProps> = ({
   isModalOpen,
   handleCancel,
+  setListTeachers,
+  setVisiblePasswords,
 }) => {
-
-    const { data } = useUserContext();
+  const { data } = useUserContext();
 
   const [formdataTeacher, setFormDataTeacher] = useState<FormDataTeacher>({
     firstName: "",
@@ -28,8 +31,7 @@ const ModalCreateTeacher: React.FC<ModalCreateTeacherProps> = ({
     phone: "",
   });
 
-  console.log(formdataTeacher)
-
+  console.log(formdataTeacher);
 
   // Function to generate a random password
   const generateRandomPassword = (length: number) => {
@@ -45,7 +47,7 @@ const ModalCreateTeacher: React.FC<ModalCreateTeacherProps> = ({
 
   useEffect(() => {
     if (isModalOpen) {
-      const generatedPassword = generateRandomPassword(10); 
+      const generatedPassword = generateRandomPassword(10);
       setFormDataTeacher((prevState) => ({
         ...prevState,
         password: generatedPassword,
@@ -55,35 +57,66 @@ const ModalCreateTeacher: React.FC<ModalCreateTeacherProps> = ({
 
 
 
-// CREATE NEW TEACHER 
-
   const handleChangeFormTeacher = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormDataTeacher((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handlesubmitTeacher = useCallback(() => {
-    if (
-        !formdataTeacher.firstName ||
-        !formdataTeacher.lastName ||
-        !formdataTeacher.email ||
-        !formdataTeacher.phone
-      ) {
-        toast.error("Please fill in all fields");
-        return;
-      }
-    axiosInstance
-    .post('/teacher', {...formdataTeacher})
-    .then(({data}) => {
-        console.log(data)
-        toast.success("Admin added successfully");
-    })
-    .catch((err) => {
-        console.log(err)
-        toast.error("Error in Create New Admin");
-    })
+    // CREATE NEW TEACHER
 
-  },[formdataTeacher])
+  const handlesubmitTeacher = useCallback(() => {
+    if (!data || !isObject(data)) {
+      toast.error("Teachers data is not available or not valid");
+      return;
+    }
+    if (
+      !formdataTeacher.firstName ||
+      !formdataTeacher.lastName ||
+      !formdataTeacher.email ||
+      !formdataTeacher.phone
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    axiosInstance
+      .post("/teacher", { ...formdataTeacher })
+      .then(({ data }) => {
+        console.log(data);
+        if (
+          isObject(data) &&
+          "data" in data &&
+          isObject(data.data) &&
+          "teacher" in data.data &&
+          isObject(data.data.teacher)
+        ) {
+          const newTeacher = { ...data.data.teacher } as Teacher;
+
+          setListTeachers((prev: Teacher[]) => [...prev, newTeacher]);
+          setVisiblePasswords((prev) => ({
+            ...prev,
+            [newTeacher.email]: false,
+          }));
+          toast.success("Admin added successfully");
+          setFormDataTeacher({
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            phone: "",
+          });
+          handleCancel();
+        } else {
+          toast.error("Invalid server error");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error in Create New Admin");
+      });
+  }, [formdataTeacher,  setListTeachers]);
+
+
+  
 
   return (
     <div>

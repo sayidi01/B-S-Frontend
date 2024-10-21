@@ -18,3 +18,10 @@ export interface FormDataTeacher {
     image?: string; 
     
   }
+
+
+  export interface TeacherResponse {
+    teachers: Teacher[];
+    admin: Teacher;
+    image: string;
+  }

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ModalCreateTeacher from "./ModalCreateTeacher";
-import { Teacher } from "./typesTeacher";
+import { Teacher, TeacherResponse } from "./typesTeacher";
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../config/Api";
@@ -18,9 +18,13 @@ function ListTeacher() {
 
   const [listTeachers, setListTeachers] = useState<Teacher[]>([]);
 
+  const [searchTeacher, setSearchTeacher] = useState<string>("");
+
   const [visiblePasswords, setVisiblePasswords] = useState<{
     [key: string]: boolean;
   }>({});
+
+  console.log(listTeachers)
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -28,6 +32,13 @@ function ListTeacher() {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const handleInputSearchTeachers = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { target } = event;
+    setSearchTeacher(target.value);
   };
 
   const togglePasswordVisibility = (email: string) => {
@@ -56,6 +67,47 @@ function ListTeacher() {
     }
   }, [isConnected]);
 
+
+  // DELETE TEACHER BY ID 
+
+  const deleteTeacher = useCallback((teacherId: string) => {
+    if (!teacherId) {
+      console.error("L'identifiant Professeur est requis.");
+      return;
+    }
+    console.log("Suppression Professeur avec l'ID:", teacherId);
+    axiosInstance
+      .delete(`/teacher/${teacherId}`)
+      .then((data) => {
+        console.log(data);
+        setListTeachers((prev) => prev.filter((admin) => admin._id != teacherId));
+        console.log(data);
+        toast.success("Teacher successfully deleted");
+      })
+      .catch((err) => {
+        toast.error("Erreur lors de la suppression Professeur", err);
+      });
+  }, []);
+
+
+  // SEARCH TEACHER BY QUERY 
+
+  useEffect(() => {
+    if (searchTeacher) {
+      axiosInstance
+        .get<TeacherResponse>(`/teacher/search?query=` + searchTeacher)
+        .then(({ data }) => {
+          console.log(data);
+          setListTeachers(data.teachers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+  },[searchTeacher])
+
+
   return (
     <div className="table-responsive mb-5">
       <div className="flex justify-between items-center">
@@ -64,6 +116,8 @@ function ListTeacher() {
         </button>
         <input
           type="text"
+          value={searchTeacher}
+          onChange={handleInputSearchTeachers}
           placeholder="Search Attendees..."
           className="form-input w-48 shadow-[0_0_4px_2px_rgb(31_45_61_/_10%)] bg-white placeholder:tracking-wider ltr:pr-11 rtl:pl-11"
         />
@@ -71,7 +125,6 @@ function ListTeacher() {
       <table className="table-hover mt-7">
         <thead>
           <tr>
-            <th>Avatar</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
@@ -83,12 +136,15 @@ function ListTeacher() {
         <tbody>
           {listTeachers.map((teacher) => (
             <tr key={teacher._id}>
-              <td>
-                <Avatar style={{ backgroundColor: "#87d068" }}>
-                  {teacher.firstName.charAt(0).toUpperCase()}
-                </Avatar>
-              </td>
-              <td>{teacher.firstName}</td>
+             
+             <td>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Avatar style={{ backgroundColor: "#87d068", marginRight: "10px" }}>
+              {teacher.firstName.charAt(0).toUpperCase()}
+            </Avatar>
+            <span>{teacher.firstName}</span>
+          </div>
+        </td>
               <td>{teacher.lastName}</td>
               <td>{teacher.email}</td>
               <td>
@@ -121,6 +177,7 @@ function ListTeacher() {
                   className="cursor-pointer mx-2"
                 />
                 <DeleteOutlined
+                  onClick={() => deleteTeacher(teacher._id)}
                   className="cursor-pointer mx-2"
                   style={{
                     color: "red",
@@ -136,6 +193,8 @@ function ListTeacher() {
       <ModalCreateTeacher
         isModalOpen={isModalOpen}
         handleCancel={handleCancel}
+        setListTeachers={setListTeachers}
+        setVisiblePasswords={setVisiblePasswords}
       />
     </div>
   );
