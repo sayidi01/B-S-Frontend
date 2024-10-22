@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import ModalCreateTeacher from "./ModalCreateTeacher";
+import ModalEditTeacher from "./ModalEditTeacher";
 import { Teacher, TeacherResponse } from "./typesTeacher";
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
@@ -14,9 +15,13 @@ import {
 
 function ListTeacher() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const [isModalEditOpen, setIsModaEditlOpen] = useState<boolean>(false);
   const { isConnected } = useUserContext();
 
   const [listTeachers, setListTeachers] = useState<Teacher[]>([]);
+
+  const [editTeacher, setEditTeacher] = useState<Teacher | null>(null);
 
   const [searchTeacher, setSearchTeacher] = useState<string>("");
 
@@ -28,6 +33,17 @@ function ListTeacher() {
 
   const showModal = () => {
     setIsModalOpen(true);
+  };
+
+ 
+
+  const showModalEdit = (teacher: Teacher) => {
+    setEditTeacher(teacher);
+    setIsModaEditlOpen(true);
+  };
+
+  const handleEditCancel = () => {
+    setIsModaEditlOpen(false);
   };
 
   const handleCancel = () => {
@@ -169,6 +185,7 @@ function ListTeacher() {
               <td>{teacher.phone}</td>
               <td className="text-center">
                 <EditOutlined
+                 onClick={() => showModalEdit(teacher)}
                   style={{
                     color: "blue",
                     fontSize: "20px",
@@ -195,6 +212,12 @@ function ListTeacher() {
         handleCancel={handleCancel}
         setListTeachers={setListTeachers}
         setVisiblePasswords={setVisiblePasswords}
+      />
+      <ModalEditTeacher
+      isModalEditOpen={isModalEditOpen}
+      handleEditCancel={ handleEditCancel}
+      editTeacher={editTeacher}
+      setListTeachers={setListTeachers}
       />
     </div>
   );
