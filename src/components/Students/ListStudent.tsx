@@ -10,7 +10,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { Student } from "./typesStudent";
+import { Student, StudentResponse } from "./typesStudent";
 
 import ModalCreateStudent from "./ModalCreateStudent";
 
@@ -20,6 +20,9 @@ function ListStudent() {
   const { isConnected } = useUserContext();
 
   const [listStudents, setListStudents] = useState<Student[]>([]);
+
+
+  const [searchStudent, setSearchStudent] = useState<string>("");
 
 
   const [visiblePasswords, setVisiblePasswords] = useState<{
@@ -44,6 +47,13 @@ function ListStudent() {
       ...prevState,
       [email]: !prevState[email],
     }));
+  };
+
+  const handleInputSearchStudents = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { target } = event;
+    setSearchStudent(target.value);
   };
 
 
@@ -88,6 +98,24 @@ function ListStudent() {
       });
   }, []);
 
+
+   // SEARCH STUDENT BY QUERY 
+
+   useEffect(() => {
+    if (searchStudent) {
+      axiosInstance
+        .get<StudentResponse>(`/student/search?query=` + searchStudent)
+        .then(({ data }) => {
+          console.log(data);
+          setListStudents(data.students);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+  },[searchStudent])
+
  
 
   return (
@@ -97,6 +125,8 @@ function ListStudent() {
           Add New
         </button>
         <input
+        value={searchStudent}
+        onChange={handleInputSearchStudents}
           type="text"
           placeholder="Search Attendees..."
           className="form-input w-48 shadow-[0_0_4px_2px_rgb(31_45_61_/_10%)] bg-white placeholder:tracking-wider ltr:pr-11 rtl:pl-11"
@@ -119,7 +149,7 @@ function ListStudent() {
              
              <td>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Avatar style={{ backgroundColor: 'burlywood', marginRight: "10px" }}>
+            <Avatar style={{ backgroundColor: "darkolivegreen", marginRight: "10px" }}>
               {student.firstName.charAt(0).toUpperCase()}
             </Avatar>
             <span>{student.firstName}</span>
