@@ -278,13 +278,9 @@ const Sidebar = () => {
                 >
                   <ul className="sub-menu text-gray-500">
                     <li>
-                      <NavLink to="/Students/profile">{t("List")}</NavLink>
+                      <NavLink to="/Dashbord/ListStudent">{t("List")}</NavLink>
                     </li>
-                    <li>
-                      <NavLink to="/Students/user-account-settings">
-                        {t("account_settings")}
-                      </NavLink>
-                    </li>
+                  
                   </ul>
                 </AnimateHeight>
               </li>

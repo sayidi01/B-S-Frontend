@@ -22,6 +22,6 @@ export interface FormDataTeacher {
 
   export interface TeacherResponse {
     teachers: Teacher[];
-    admin: Teacher;
+    teacher: Teacher;
     image: string;
   }

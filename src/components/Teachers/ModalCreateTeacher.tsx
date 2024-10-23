@@ -62,7 +62,7 @@ const ModalCreateTeacher: React.FC<ModalCreateTeacherProps> = ({
     setFormDataTeacher((prevState) => ({ ...prevState, [name]: value }));
   };
 
-    // CREATE NEW TEACHER
+    // CREATE NEW TEACHER SEND EMAIL
 
   const handlesubmitTeacher = useCallback(() => {
     if (!data || !isObject(data)) {
@@ -96,7 +96,7 @@ const ModalCreateTeacher: React.FC<ModalCreateTeacherProps> = ({
             ...prev,
             [newTeacher.email]: false,
           }));
-          toast.success("Admin added successfully");
+          toast.success("Teacher added successfully");
           setFormDataTeacher({
             firstName: "",
             lastName: "",
@@ -111,7 +111,7 @@ const ModalCreateTeacher: React.FC<ModalCreateTeacherProps> = ({
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Error in Create New Admin");
+        toast.error("Error in Create New Teacher");
       });
   }, [formdataTeacher,  setListTeachers]);
 

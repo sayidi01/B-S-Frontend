@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import ModalCreateTeacher from "./ModalCreateTeacher";
-import ModalEditTeacher from "./ModalEditTeacher";
-import { Teacher, TeacherResponse } from "./typesTeacher";
+
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../config/Api";
@@ -12,50 +10,34 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
+import { Student } from "./typesStudent";
 
-function ListTeacher() {
+import ModalCreateStudent from "./ModalCreateStudent";
+
+function ListStudent() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const [isModalEditOpen, setIsModaEditlOpen] = useState<boolean>(false);
   const { isConnected } = useUserContext();
 
-  const [listTeachers, setListTeachers] = useState<Teacher[]>([]);
+  const [listStudents, setListStudents] = useState<Student[]>([]);
 
-  const [editTeacher, setEditTeacher] = useState<Teacher | null>(null);
-
-  const [searchTeacher, setSearchTeacher] = useState<string>("");
 
   const [visiblePasswords, setVisiblePasswords] = useState<{
     [key: string]: boolean;
   }>({});
 
-  console.log(listTeachers)
+  console.log(listStudents)
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
+  
  
-
-  const showModalEdit = (teacher: Teacher) => {
-    setEditTeacher(teacher);
-    setIsModaEditlOpen(true);
-  };
-
-  const handleEditCancel = () => {
-    setIsModaEditlOpen(false);
-  };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  const handleInputSearchTeachers = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { target } = event;
-    setSearchTeacher(target.value);
-  };
+  
 
   const togglePasswordVisibility = (email: string) => {
     setVisiblePasswords((prevState) => ({
@@ -64,19 +46,20 @@ function ListTeacher() {
     }));
   };
 
-  // GET ALL TEACHERS
+
+  // GET ALL STUDENTS 
 
   useEffect(() => {
     if (isConnected) {
       axiosInstance
-        .get<Teacher[]>("/teacher")
+        .get<Student[]>("/student")
         .then(({ data }) => {
           console.log(data);
-          setListTeachers(data);
+          setListStudents(data);
         })
         .catch((error) => {
           console.error(
-            "Erreur lors de la récupération des Professeurs",
+            "Erreur lors de la récupération des ètudiants",
             error
           );
         });
@@ -84,45 +67,28 @@ function ListTeacher() {
   }, [isConnected]);
 
 
-  // DELETE TEACHER BY ID 
+  // DELETE STUDENT BY ID 
 
-  const deleteTeacher = useCallback((teacherId: string) => {
-    if (!teacherId) {
-      console.error("L'identifiant Professeur est requis.");
+  const deleteStudent = useCallback((studentId: string) => {
+    if (!studentId) {
+      console.error("L'identifiant étudiant est requis.");
       return;
     }
-    console.log("Suppression Professeur avec l'ID:", teacherId);
+    console.log("Suppression étudiant avec l'ID:", studentId);
     axiosInstance
-      .delete(`/teacher/${teacherId}`)
+      .delete(`/student/${studentId}`)
       .then((data) => {
         console.log(data);
-        setListTeachers((prev) => prev.filter((teacher) => teacher._id != teacherId));
+        setListStudents((prev) => prev.filter((student) => student._id != studentId));
         console.log(data);
-        toast.success("Teacher successfully deleted");
+        toast.success("Student successfully deleted");
       })
       .catch((err) => {
-        toast.error("Erreur lors de la suppression Professeur", err);
+        toast.error("Erreur lors de la suppression étudiant", err);
       });
   }, []);
 
-
-  // SEARCH TEACHER BY QUERY 
-
-  useEffect(() => {
-    if (searchTeacher) {
-      axiosInstance
-        .get<TeacherResponse>(`/teacher/search?query=` + searchTeacher)
-        .then(({ data }) => {
-          console.log(data);
-          setListTeachers(data.teachers);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-
-  },[searchTeacher])
-
+ 
 
   return (
     <div className="table-responsive mb-5">
@@ -132,8 +98,6 @@ function ListTeacher() {
         </button>
         <input
           type="text"
-          value={searchTeacher}
-          onChange={handleInputSearchTeachers}
           placeholder="Search Attendees..."
           className="form-input w-48 shadow-[0_0_4px_2px_rgb(31_45_61_/_10%)] bg-white placeholder:tracking-wider ltr:pr-11 rtl:pl-11"
         />
@@ -150,42 +114,41 @@ function ListTeacher() {
           </tr>
         </thead>
         <tbody>
-          {listTeachers.map((teacher) => (
-            <tr key={teacher._id}>
+        {listStudents.map((student) => (
+            <tr key={student._id}>
              
              <td>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Avatar style={{ backgroundColor: "#87d068", marginRight: "10px" }}>
-              {teacher.firstName.charAt(0).toUpperCase()}
+            <Avatar style={{ backgroundColor: 'burlywood', marginRight: "10px" }}>
+              {student.firstName.charAt(0).toUpperCase()}
             </Avatar>
-            <span>{teacher.firstName}</span>
+            <span>{student.firstName}</span>
           </div>
         </td>
-              <td>{teacher.lastName}</td>
-              <td>{teacher.email}</td>
+              <td>{student.lastName}</td>
+              <td>{student.email}</td>
               <td>
                 <input
-                  type={visiblePasswords[teacher.email] ? "text" : "password"}
-                  value={teacher.password}
+                  type={visiblePasswords[student.email] ? "text" : "password"}
+                  value={student.password}
                   readOnly
                   className="bg-transparent border-none"
                 />
-                {visiblePasswords[teacher.email] ? (
+                {visiblePasswords[student.email] ? (
                   <EyeInvisibleOutlined
-                    onClick={() => togglePasswordVisibility(teacher.email)}
+                    onClick={() => togglePasswordVisibility(student.email)}
                     className="cursor-pointer ml-2"
                   />
                 ) : (
                   <EyeOutlined
-                    onClick={() => togglePasswordVisibility(teacher.email)}
+                    onClick={() => togglePasswordVisibility(student.email)}
                     className="cursor-pointer ml-2"
                   />
                 )}
               </td>
-              <td>{teacher.phone}</td>
+              <td>{student.phone}</td>
               <td className="text-center">
                 <EditOutlined
-                 onClick={() => showModalEdit(teacher)}
                   style={{
                     color: "blue",
                     fontSize: "20px",
@@ -194,7 +157,7 @@ function ListTeacher() {
                   className="cursor-pointer mx-2"
                 />
                 <DeleteOutlined
-                  onClick={() => deleteTeacher(teacher._id)}
+                  onClick={() => deleteStudent(student._id)}
                   className="cursor-pointer mx-2"
                   style={{
                     color: "red",
@@ -205,22 +168,18 @@ function ListTeacher() {
               </td>
             </tr>
           ))}
+          
         </tbody>
       </table>
-      <ModalCreateTeacher
+      <ModalCreateStudent
         isModalOpen={isModalOpen}
         handleCancel={handleCancel}
-        setListTeachers={setListTeachers}
+        setListStudents={setListStudents}
         setVisiblePasswords={setVisiblePasswords}
       />
-      <ModalEditTeacher
-      isModalEditOpen={isModalEditOpen}
-      handleEditCancel={ handleEditCancel}
-      editTeacher={editTeacher}
-      setListTeachers={setListTeachers}
-      />
+    
     </div>
   );
 }
 
-export default ListTeacher;
+export default ListStudent;
