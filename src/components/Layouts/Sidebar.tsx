@@ -17,6 +17,10 @@ import iconsStudents from "../../../public/icons-students.png";
 import iconsTeachers from "../../../public/icons-teacher.png";
 
 import iconsAdmins from "../../../public/icons-admis.png";
+import IconUser from "../Icon/IconUser";
+import IconUserPlus from '../Icon/IconUserPlus';
+import IconMessage2 from "../Icon/IconMessage2";
+import IconMenuPages from "../Icon/Menu/IconMenuPages";
 
 const Sidebar = () => {
   const [currentMenu, setCurrentMenu] = useState<string>("");
@@ -148,11 +152,7 @@ const Sidebar = () => {
                   onClick={() => toggleMenu("Admins")}
                 >
                   <div className="flex items-center">
-                    <img
-                      src={iconsAdmins}
-                      alt="Admins Icon"
-                      className="group-hover:!text-primary shrink-0 w-7 h-7"
-                    />
+                  <IconMenuUsers className="group-hover:!text-primary shrink-0 w-7 h-7" />
                     <span  style={{ fontSize: 15 }} className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
                       {t("Admins")}
                     </span>
@@ -200,11 +200,7 @@ const Sidebar = () => {
                   onClick={() => toggleMenu("Teachers")}
                 >
                   <div className="flex items-center">
-                    <img
-                      src={iconsTeachers}
-                      alt="Teachers Icon"
-                      className="group-hover:!text-primary shrink-0 w-7 h-7"
-                    />
+                  <IconUser className="group-hover:!text-primary shrink-0 w-7 h-7" />
                     <span  style={{ fontSize: 15 }} className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
                       {t("Teachers")}
                     </span>
@@ -248,11 +244,7 @@ const Sidebar = () => {
                   onClick={() => toggleMenu("Students")}
                 >
                   <div className="flex items-center">
-                    <img
-                      src={iconsStudents}
-                      alt="Students Icon"
-                      className="group-hover:!text-primary shrink-0 w-7 h-7"
-                    />
+                  <IconUserPlus className="group-hover:!text-primary shrink-0 w-7 h-7" />
                     <span
                       style={{ fontSize: 15 }}
                       className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
@@ -291,6 +283,42 @@ const Sidebar = () => {
                 <IconMinus className="w-4 h-5 flex-none hidden" />
                 <span>{t("supports")}</span>
               </h2>
+              <li className="menu nav-item">
+                <button
+                  type="button"
+                  className={`${
+                    currentMenu === "Courses" ? "active" : ""
+                  } nav-link group w-full`}
+                  onClick={() => toggleMenu("Courses")}
+                >
+                  <div className="flex items-center">
+                  <IconMenuPages className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                    <span
+                      style={{ fontSize: 15 }}
+                      className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                    >
+                      {t("Courses")}
+                    </span>
+                  </div>
+
+                  <div
+                    className={
+                      currentMenu !== "Courses"
+                        ? "rtl:rotate-90 -rotate-90"
+                        : ""
+                    }
+                  >
+                    <IconCaretDown />
+                  </div>
+                </button>
+
+                <AnimateHeight
+                  duration={300}
+                  height={currentMenu === "Courses" ? "auto" : 0}
+                >
+                 
+                </AnimateHeight>
+              </li>
             </ul>
           </PerfectScrollbar>
         </div>

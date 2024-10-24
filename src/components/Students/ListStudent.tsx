@@ -14,12 +14,17 @@ import { Student, StudentResponse } from "./typesStudent";
 
 import ModalCreateStudent from "./ModalCreateStudent";
 
+import ModalEditStudent from "./ModalEditStudent";
+
 function ListStudent() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalEditOpen, setIsModaEditlOpen] = useState<boolean>(false);
 
   const { isConnected } = useUserContext();
 
   const [listStudents, setListStudents] = useState<Student[]>([]);
+
+  const [editStudent, setEditStudent] = useState<Student | null>(null);
 
 
   const [searchStudent, setSearchStudent] = useState<string>("");
@@ -35,6 +40,14 @@ function ListStudent() {
     setIsModalOpen(true);
   };
 
+  const showModalEditStudent = (student: Student) => {
+    setEditStudent(student);
+    setIsModaEditlOpen(true);
+  };
+
+  const handleEditCancelStudent = () => {
+    setIsModaEditlOpen(false);
+  };
   
  
   const handleCancel = () => {
@@ -179,6 +192,7 @@ function ListStudent() {
               <td>{student.phone}</td>
               <td className="text-center">
                 <EditOutlined
+                  onClick={() => showModalEditStudent(student)}
                   style={{
                     color: "blue",
                     fontSize: "20px",
@@ -206,6 +220,12 @@ function ListStudent() {
         handleCancel={handleCancel}
         setListStudents={setListStudents}
         setVisiblePasswords={setVisiblePasswords}
+      />
+      <ModalEditStudent
+       setListStudents={setListStudents}
+       isModalEditOpen={isModalEditOpen}
+       handleEditCancelStudent={ handleEditCancelStudent} 
+       editStudent={editStudent}          
       />
     
     </div>
