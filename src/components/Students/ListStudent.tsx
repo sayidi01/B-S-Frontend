@@ -12,6 +12,8 @@ import {
 } from "@ant-design/icons";
 import { Student, StudentResponse } from "./typesStudent";
 
+import Index from "../../pages/Index";
+
 import ModalCreateStudent from "./ModalCreateStudent";
 
 import ModalEditStudent from "./ModalEditStudent";
@@ -68,6 +70,13 @@ function ListStudent() {
     const { target } = event;
     setSearchStudent(target.value);
   };
+
+
+  // const getTotalStudents = (): number => {
+  //   return listStudents.length;
+  // };
+
+  console.log(listStudents.length)
 
 
   // GET ALL STUDENTS 
@@ -227,6 +236,7 @@ function ListStudent() {
        handleEditCancelStudent={ handleEditCancelStudent} 
        editStudent={editStudent}          
       />
+     
     
     </div>
   );

@@ -13,13 +13,9 @@ import IconMinus from "../Icon/IconMinus";
 import Logo from "../Icon/Logo-BS-Dash.png";
 import IconMenuUsers from "../Icon/Menu/IconMenuUsers";
 
-import iconsStudents from "../../../public/icons-students.png";
-import iconsTeachers from "../../../public/icons-teacher.png";
 
-import iconsAdmins from "../../../public/icons-admis.png";
 import IconUser from "../Icon/IconUser";
 import IconUserPlus from '../Icon/IconUserPlus';
-import IconMessage2 from "../Icon/IconMessage2";
 import IconMenuPages from "../Icon/Menu/IconMenuPages";
 
 const Sidebar = () => {
@@ -316,6 +312,12 @@ const Sidebar = () => {
                   duration={300}
                   height={currentMenu === "Courses" ? "auto" : 0}
                 >
+                    <ul className="sub-menu text-gray-500">
+                    <li>
+                      <NavLink to="/Dashbord/uploadPDFCourses">{t("Create new Courses")}</NavLink>
+                    </li>
+                  
+                  </ul>
                  
                 </AnimateHeight>
               </li>

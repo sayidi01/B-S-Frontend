@@ -1,6 +1,8 @@
 
+import { Layout } from 'antd';
 import { lazy } from 'react';
-import path from 'path';
+
+
 
 
 const Index = lazy(() => import('../pages/Index'));
@@ -12,6 +14,8 @@ const ListAdmins = lazy(() => import('../components/Admins/ListAdmins'));
 const ListTeacher = lazy(() => import('../components/Teachers/ListTeacher'))
 
 const ListStudent = lazy(() => import('../components/Students/ListStudent'))
+
+const UploadPdfCourses = lazy(()=> import("../components/Admins/UploadPdfCourses"))
 
 
 const Signin = lazy(() => import('../pages/Signin'));
@@ -48,6 +52,11 @@ const routes = [
           {
             path: 'ListStudent',
             element: <ListStudent/>,
+            layout: 'default',
+          },
+          {
+            path: 'uploadPDFCourses',
+            element: <UploadPdfCourses/>,
             layout: 'default',
           }
       ],

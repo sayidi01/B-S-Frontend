@@ -21,11 +21,13 @@ import { Toaster } from "react-hot-toast";
 import UserContext from "./config/UserContext";
 import { MantineProvider } from "@mantine/core";
 import { Admin } from "./components/Admins/ModalCreateAdmin";
+import { Student } from "./components/Students/typesStudent";
 
 const App = () => {
   const [data, setData] = useState({});
   const [isConnected, setIsConnected] = useState<boolean | null>(false);
   const [currentAdmin, setCurrentAdmin] = useState<Admin | null>(null);
+  
 
   return (
     <UserContext.Provider
