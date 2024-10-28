@@ -4,17 +4,86 @@ import iconsHello from "../../public/icons-hello.png";
 
 import IconMenuUsers from "../components/Icon/Menu/IconMenuUsers";
 
-
 import IconUser from "../components/Icon/IconUser";
-import IconUserPlus from '../components/Icon/IconUserPlus';
+import IconUserPlus from "../components/Icon/IconUserPlus";
 
 import { Card } from "antd";
 import { Student } from "../components/Students/typesStudent";
 
 import RevenueChart from "./Chart";
+import { useEffect, useState } from "react";
+import { Admin } from "../components/Admins/ModalCreateAdmin";
+import axiosInstance from "../config/Api";
 
 const Index = () => {
-  const { currentAdmin } = useUserContext();
+  const { currentAdmin, isConnected } = useUserContext();
+
+  const [totaleAdmins, setTotalAdmins] = useState<number | null>(null);
+
+  const [totaleTeachers, setTotalTeachers] = useState<number | null>(null);
+
+  const [totaleStudents, setTotalStudents] = useState<number | null>(null);
+
+  // TOTAL ADMINS NUMBER
+
+  useEffect(() => {
+    if(isConnected) {
+      axiosInstance
+        .get<{total: number}>("/admin/total")
+        .then(({ data }) => {
+          console.log(data);
+          setTotalAdmins(data.total);
+        })
+        .catch((error) => {
+          console.error(
+            "Erreur lors de la récupération des administrateurs",
+            error
+          );
+        });
+    }
+  }, []);
+
+
+  // TOTAL TEACHERS NUMBER
+
+  useEffect(() => {
+    if(isConnected) {
+      axiosInstance
+        .get<{total: number}>("/teacher/total")
+        .then(({ data }) => {
+          console.log(data);
+          setTotalTeachers(data.total);
+        })
+        .catch((error) => {
+          console.error(
+            "Erreur lors de la récupération des Professeurs",
+            error
+          );
+        });
+    }
+  }, []);
+
+
+  // TOTAL STUDNETS NUMBER 
+
+  useEffect(() => {
+    if(isConnected) {
+      axiosInstance
+        .get<{total: number}>("/student/total")
+        .then(({ data }) => {
+          console.log(data);
+          setTotalStudents(data.total);
+        })
+        .catch((error) => {
+          console.error(
+            "Erreur lors de la récupération des ètudiants",
+            error
+          );
+        });
+    }
+  }, []);
+
+
 
   return (
     <div>
@@ -51,25 +120,25 @@ const Index = () => {
       >
         <Card style={{ width: 250, backgroundColor: "#e3f2fd" }}>
           <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#1e88e5" }}>
-          <IconMenuUsers/>
-            Total Admins : 4
+            <IconMenuUsers />
+            Total Admins : {totaleAdmins}
           </div>
         </Card>
         <Card style={{ width: 250, backgroundColor: "#e8f5e9" }}>
           <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#43a047" }}>
-          <IconUser/>
-            Total Teachers : 6
+            <IconUser />
+            Total Teachers : {totaleTeachers}
           </div>
         </Card>
         <Card style={{ width: 250, backgroundColor: "#fffde7" }}>
           <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#fbc02d" }}>
-          <IconUserPlus/>
-            Total Students : 5
+            <IconUserPlus />
+            Total Students : {totaleStudents}
           </div>
         </Card>
       </div>
-      <div style={{marginTop: '7rem'}}>
-      <RevenueChart/>
+      <div style={{ marginTop: "7rem" }}>
+        <RevenueChart />
       </div>
     </div>
   );

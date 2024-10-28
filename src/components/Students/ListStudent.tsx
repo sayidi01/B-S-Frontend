@@ -71,10 +71,7 @@ function ListStudent() {
     setSearchStudent(target.value);
   };
 
-
-  // const getTotalStudents = (): number => {
-  //   return listStudents.length;
-  // };
+ 
 
   console.log(listStudents.length)
 
