@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
+import { Pagination } from 'antd';
 import axiosInstance from "../../config/Api";
 import { Avatar } from "antd";
 import {
@@ -31,6 +32,8 @@ function ListStudent() {
 
   const [searchStudent, setSearchStudent] = useState<string>("");
 
+  
+
 
   const [visiblePasswords, setVisiblePasswords] = useState<{
     [key: string]: boolean;
@@ -50,7 +53,7 @@ function ListStudent() {
   const handleEditCancelStudent = () => {
     setIsModaEditlOpen(false);
   };
-  
+ 
  
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -218,8 +221,8 @@ function ListStudent() {
               </td>
             </tr>
           ))}
-          
         </tbody>
+       
       </table>
       <ModalCreateStudent
         isModalOpen={isModalOpen}

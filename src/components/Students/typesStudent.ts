@@ -18,6 +18,7 @@ export interface FormDataStudent {
      password: string;
      phone: string;
      image?: string; 
+     title?: string
      
    }
  
