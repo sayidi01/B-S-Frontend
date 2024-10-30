@@ -5,6 +5,7 @@ import { lazy } from 'react';
 
 
 
+
 const Index = lazy(() => import('../pages/Index'));
 
 const AccountAdmins = lazy(() => import('../components/Admins/AccountAdmins'));
@@ -21,6 +22,8 @@ const UploadPdfCourses = lazy(()=> import("../components/Admins/UploadPdfCourses
 const Signin = lazy(() => import('../pages/Signin'));
 
 const PrivateRoutes = lazy(() => import('../router/PrivateRoutes'))
+
+const AllCourses = lazy(() => import("../components/Admins/AllCourses") )
 
 const routes = [
     {
@@ -58,6 +61,11 @@ const routes = [
             path: 'uploadPDFCourses',
             element: <UploadPdfCourses/>,
             layout: 'default',
+          },
+          {
+            path: 'Courses',
+            element: <AllCourses/>,
+            Layout: 'default'
           }
       ],
     },

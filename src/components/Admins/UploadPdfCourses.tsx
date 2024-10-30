@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 
 import ModalCreateCoursePDF from "./ModalCreateCoursePDF";
-import { Student } from "../Students/typesStudent";
+
+import { Button } from "antd";
 
 import { useUserContext } from "../../config/UserContext";
 import axiosInstance from "../../config/Api";
 
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row } from "antd";
+import { Admin } from "./ModalCreateAdmin";
 
 function UploadPdfCourses() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const [titleCourses,setTitleCourses] = useState<Student[]>([])
+  const [titleCourses, setTitleCourses] = useState<Admin[]>([]);
 
   const { isConnected } = useUserContext();
 
@@ -23,11 +25,12 @@ function UploadPdfCourses() {
     setIsModalOpen(false);
   };
 
+// GET COUSRSES TITLE
 
   useEffect(() => {
     if (isConnected) {
       axiosInstance
-        .get<Student[]>("/course/title")
+        .get<Admin[]>("/course/title")
         .then(({ data }) => {
           console.log(data);
           setTitleCourses(data);
@@ -63,43 +66,41 @@ function UploadPdfCourses() {
         Add New +
       </button>
 
-      <Row gutter={[16,16]} style={{marginTop: '4rem', gap: 10, marginLeft: '3rem'}} >
+      <Row
+        gutter={[16, 16]}
+        style={{ marginTop: "4rem", gap: 10, marginLeft: "3rem" }}
+      >
         {titleCourses.map((course, index) => (
-           <Col span={4} key={index} >
-           <Card
-             title={course.title}
-             bordered={false}
-             style={{
-               backgroundColor: '#f7f7f7', 
-               boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-               borderRadius: '8px',
-             }}
-           >
-             <button
-               style={{
-                backgroundColor: '#e75159',
-                  color: '#fff',
-                 border: 'none',
-                 padding: '6px 10px',
-                 borderRadius: '5px',
-                 cursor: 'pointer',
-                 transition: 'background-color 0.3s ease',
-                
-               }}
-               onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#1565c0')} 
-               onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#1e88e5')}
-             >
-               View Course
-             </button>
-           </Card>
-         </Col>
+          <Col span={4} key={index}>
+            <Card
+              title={course.title}
+              bordered={false}
+              style={{
+                backgroundColor: "#f6f7f9",
+                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                borderRadius: "8px",
+              }}
+            >
+              <Button
+                size="small"
+                style={{
+                  backgroundColor: "#FF4201",
+                  color: "#fff",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                View Course
+              </Button>
+            </Card>
+          </Col>
         ))}
       </Row>
-
 
       <ModalCreateCoursePDF
         isModalOpen={isModalOpen}
         handleCancel={handleCancel}
+        setTitleCourses={setTitleCourses}
       />
     </div>
   );

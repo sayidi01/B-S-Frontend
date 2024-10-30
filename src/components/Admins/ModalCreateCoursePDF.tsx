@@ -10,18 +10,26 @@ import axiosInstance from "../../config/Api";
 import type { UploadFile } from "antd/es/upload/interface";
 import { toast } from "react-hot-toast";
 
+import { Admin } from './ModalCreateAdmin';
+import { useUserContext } from "../../config/UserContext";
+
 
 interface ModalCreatePDFProps {
   isModalOpen: boolean;
   handleCancel: () => void;
+  setTitleCourses: React.Dispatch<React.SetStateAction<Admin[]>>;
 }
+
+interface CourseResponse {
+    course: Admin; 
+  }
+
 
 const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
   isModalOpen,
   handleCancel,
+  setTitleCourses,
 }) => {
- 
-
   const [formCourse, setFormCourse] = useState({
     courseName: "",
     isUploading: false,
@@ -29,7 +37,9 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  console.log(formCourse)
+  const { data } = useUserContext();
+
+  console.log(formCourse);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormCourse((prevState) => ({
@@ -38,13 +48,13 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     }));
   };
 
-
-  const handleFileChange: (info: UploadChangeParam<UploadFile>) => void = (info) => {
+  const handleFileChange: (info: UploadChangeParam<UploadFile>) => void = (
+    info
+  ) => {
     if (info.fileList.length > 0) {
-      setSelectedFile(info.fileList[0].originFileObj as File); 
+      setSelectedFile(info.fileList[0].originFileObj as File);
     }
   };
-
 
   const handleUploadPDF = useCallback(async () => {
     if (!formCourse.courseName) {
@@ -57,8 +67,8 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     }
 
     if (selectedFile.type !== "application/pdf") {
-        toast.error("Veuillez sélectionner un fichier PDF valide.");
-        return;
+      toast.error("Veuillez sélectionner un fichier PDF valide.");
+      return;
     }
 
     const formData = new FormData();
@@ -68,12 +78,16 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     setFormCourse((prevState) => ({ ...prevState, isUploading: true }));
 
     try {
-      await axiosInstance.post("/course/pdf", formData, {
+     const response = await axiosInstance.post<CourseResponse>("/course/pdf", formData,{
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success("PDF téléchargé avec succès");
+      console.log(response.data.course)
+      const newCourseTitle = response.data.course
+
+      setTitleCourses((prev: Admin[]) => [...prev, newCourseTitle]);
+      toast.success("Course added Succefully");
       handleCancel();
       setFormCourse({ courseName: "", isUploading: false });
       setSelectedFile(null);
@@ -84,7 +98,6 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
       setFormCourse((prevState) => ({ ...prevState, isUploading: false }));
     }
   }, [formCourse.courseName, selectedFile, handleCancel]);
-
 
   const handleOk = () => {
     handleUploadPDF();
@@ -104,8 +117,8 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
         onCancel={handleCancel}
         onOk={handleOk}
         okButtonProps={{
-            loading: formCourse.isUploading,
-          }}
+          loading: formCourse.isUploading,
+        }}
       >
         <Input
           placeholder="Name Courses"
