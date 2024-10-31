@@ -314,7 +314,7 @@ const Sidebar = () => {
                 >
                     <ul className="sub-menu text-gray-500">
                     <li>
-                      <NavLink to="/Dashbord/uploadPDFCourses">{t("Create new Courses")}</NavLink>
+                      <NavLink to="/Dashbord/courses">{t("Create new Courses")}</NavLink>
                     </li>
                   
                   </ul>

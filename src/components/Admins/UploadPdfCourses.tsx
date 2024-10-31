@@ -9,13 +9,18 @@ import axiosInstance from "../../config/Api";
 
 import { Card, Col, Row } from "antd";
 import { Admin } from "./ModalCreateAdmin";
+import { Link } from "react-router-dom";
 
 function UploadPdfCourses() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const [titleCourses, setTitleCourses] = useState<Admin[]>([]);
 
+  const [courseId, setCourseId] = useState<Admin | null>(null);
+
   const { isConnected } = useUserContext();
+
+  console.log(courseId);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -25,7 +30,7 @@ function UploadPdfCourses() {
     setIsModalOpen(false);
   };
 
-// GET COUSRSES TITLE
+  // GET COUSRSES TITLE
 
   useEffect(() => {
     if (isConnected) {
@@ -43,6 +48,22 @@ function UploadPdfCourses() {
         });
     }
   }, [isConnected]);
+
+  // GET ONE COURSE BY ID
+
+  useEffect(() => {
+    console.log("Course ID:", courseId);
+    if (courseId) {
+      axiosInstance
+        .get(`/course/${courseId}`)
+        .then(({ data }) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la récupération cours", error);
+        });
+    }
+  }, [courseId]);
 
   return (
     <div>
@@ -81,17 +102,19 @@ function UploadPdfCourses() {
                 borderRadius: "8px",
               }}
             >
-              <Button
-                size="small"
-                style={{
-                  backgroundColor: "#FF4201",
-                  color: "#fff",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                View Course
-              </Button>
+              <Link to={`/Dashbord/courses/${course._id}`}>
+                <Button
+                  size="small"
+                  style={{
+                    backgroundColor: "#FF4201",
+                    color: "#fff",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  View Course
+                </Button>
+              </Link>
             </Card>
           </Col>
         ))}

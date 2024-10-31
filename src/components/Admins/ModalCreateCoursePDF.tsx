@@ -10,9 +10,8 @@ import axiosInstance from "../../config/Api";
 import type { UploadFile } from "antd/es/upload/interface";
 import { toast } from "react-hot-toast";
 
-import { Admin } from './ModalCreateAdmin';
+import { Admin } from "./ModalCreateAdmin";
 import { useUserContext } from "../../config/UserContext";
-
 
 interface ModalCreatePDFProps {
   isModalOpen: boolean;
@@ -21,9 +20,8 @@ interface ModalCreatePDFProps {
 }
 
 interface CourseResponse {
-    course: Admin; 
-  }
-
+  course: Admin;
+}
 
 const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
   isModalOpen,
@@ -78,13 +76,17 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     setFormCourse((prevState) => ({ ...prevState, isUploading: true }));
 
     try {
-     const response = await axiosInstance.post<CourseResponse>("/course/pdf", formData,{
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(response.data.course)
-      const newCourseTitle = response.data.course
+      const response = await axiosInstance.post<CourseResponse>(
+        "/course/pdf",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response.data.course);
+      const newCourseTitle = response.data.course;
 
       setTitleCourses((prev: Admin[]) => [...prev, newCourseTitle]);
       toast.success("Course added Succefully");
