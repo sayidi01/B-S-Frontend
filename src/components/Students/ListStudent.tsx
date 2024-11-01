@@ -2,9 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
-import { Pagination } from 'antd';
+import { Modal, Pagination } from "antd";
 import axiosInstance from "../../config/Api";
 import { Avatar } from "antd";
+import IconTrashLines from "../Icon/IconTrashLines";
+import IconPencil from "../Icon/IconPencil";
 import {
   EyeOutlined,
   EyeInvisibleOutlined,
@@ -29,17 +31,13 @@ function ListStudent() {
 
   const [editStudent, setEditStudent] = useState<Student | null>(null);
 
-
   const [searchStudent, setSearchStudent] = useState<string>("");
-
-  
-
 
   const [visiblePasswords, setVisiblePasswords] = useState<{
     [key: string]: boolean;
   }>({});
 
-  console.log(listStudents)
+  console.log(listStudents);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -53,12 +51,10 @@ function ListStudent() {
   const handleEditCancelStudent = () => {
     setIsModaEditlOpen(false);
   };
- 
- 
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  
 
   const togglePasswordVisibility = (email: string) => {
     setVisiblePasswords((prevState) => ({
@@ -74,12 +70,9 @@ function ListStudent() {
     setSearchStudent(target.value);
   };
 
- 
+  console.log(listStudents.length);
 
-  console.log(listStudents.length)
-
-
-  // GET ALL STUDENTS 
+  // GET ALL STUDENTS
 
   useEffect(() => {
     if (isConnected) {
@@ -90,16 +83,12 @@ function ListStudent() {
           setListStudents(data);
         })
         .catch((error) => {
-          console.error(
-            "Erreur lors de la récupération des ètudiants",
-            error
-          );
+          console.error("Erreur lors de la récupération des ètudiants", error);
         });
     }
   }, [isConnected]);
 
-
-  // DELETE STUDENT BY ID 
+  // DELETE STUDENT BY ID
 
   const deleteStudent = useCallback((studentId: string) => {
     if (!studentId) {
@@ -111,7 +100,9 @@ function ListStudent() {
       .delete(`/student/${studentId}`)
       .then((data) => {
         console.log(data);
-        setListStudents((prev) => prev.filter((student) => student._id != studentId));
+        setListStudents((prev) =>
+          prev.filter((student) => student._id != studentId)
+        );
         console.log(data);
         toast.success("Student successfully deleted");
       })
@@ -120,10 +111,9 @@ function ListStudent() {
       });
   }, []);
 
+  // SEARCH STUDENT BY QUERY
 
-   // SEARCH STUDENT BY QUERY 
-
-   useEffect(() => {
+  useEffect(() => {
     if (searchStudent) {
       axiosInstance
         .get<StudentResponse>(`/student/search?query=` + searchStudent)
@@ -135,10 +125,19 @@ function ListStudent() {
           console.log(err);
         });
     }
+  }, [searchStudent]);
 
-  },[searchStudent])
+  // CONFIRAMTION MODAL DELTE Student
 
- 
+  const confirmDeleteStudent = (studentId: string) => {
+    Modal.confirm({
+      title: "Confirm Deletion",
+      content: "Are you sure you want to delete this Student?",
+      onOk: () => {
+        deleteStudent(studentId);
+      },
+    });
+  };
 
   return (
     <div className="table-responsive mb-5">
@@ -147,8 +146,8 @@ function ListStudent() {
           Add New
         </button>
         <input
-        value={searchStudent}
-        onChange={handleInputSearchStudents}
+          value={searchStudent}
+          onChange={handleInputSearchStudents}
           type="text"
           placeholder="Search Attendees..."
           className="form-input w-48 shadow-[0_0_4px_2px_rgb(31_45_61_/_10%)] bg-white placeholder:tracking-wider ltr:pr-11 rtl:pl-11"
@@ -166,17 +165,21 @@ function ListStudent() {
           </tr>
         </thead>
         <tbody>
-        {listStudents.map((student) => (
+          {listStudents.map((student) => (
             <tr key={student._id}>
-             
-             <td>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Avatar style={{ backgroundColor: "darkolivegreen", marginRight: "10px" }}>
-              {student.firstName.charAt(0).toUpperCase()}
-            </Avatar>
-            <span>{student.firstName}</span>
-          </div>
-        </td>
+              <td>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Avatar
+                    style={{
+                      backgroundColor: "darkolivegreen",
+                      marginRight: "10px",
+                    }}
+                  >
+                    {student.firstName.charAt(0).toUpperCase()}
+                  </Avatar>
+                  <span>{student.firstName}</span>
+                </div>
+              </td>
               <td>{student.lastName}</td>
               <td>{student.email}</td>
               <td>
@@ -200,29 +203,23 @@ function ListStudent() {
               </td>
               <td>{student.phone}</td>
               <td className="text-center">
-                <EditOutlined
+                <div
                   onClick={() => showModalEditStudent(student)}
-                  style={{
-                    color: "blue",
-                    fontSize: "20px",
-                    cursor: "pointer",
-                  }}
-                  className="cursor-pointer mx-2"
-                />
-                <DeleteOutlined
-                  onClick={() => deleteStudent(student._id)}
-                  className="cursor-pointer mx-2"
-                  style={{
-                    color: "red",
-                    fontSize: "20px",
-                    cursor: "pointer",
-                  }}
-                />
+                  className="cursor-pointer mx-2 inline-block"
+                >
+                  <IconPencil className="w-6 h-6" fill={true} />
+                </div>
+
+                <div
+                onClick={() => confirmDeleteStudent(student._id)}
+                  className="cursor-pointer mx-2 inline-block"
+                >
+                  <IconTrashLines className="w-6 h-6" />
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
-       
       </table>
       <ModalCreateStudent
         isModalOpen={isModalOpen}
@@ -231,13 +228,11 @@ function ListStudent() {
         setVisiblePasswords={setVisiblePasswords}
       />
       <ModalEditStudent
-       setListStudents={setListStudents}
-       isModalEditOpen={isModalEditOpen}
-       handleEditCancelStudent={ handleEditCancelStudent} 
-       editStudent={editStudent}          
+        setListStudents={setListStudents}
+        isModalEditOpen={isModalEditOpen}
+        handleEditCancelStudent={handleEditCancelStudent}
+        editStudent={editStudent}
       />
-     
-    
     </div>
   );
 }

@@ -50,7 +50,13 @@ const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
+  
+    if (name === "fullName") {
+      const capitalizedFullName = value.charAt(0).toUpperCase() + value.slice(1);
+      setFormData((prevState) => ({ ...prevState, [name]: capitalizedFullName }));
+    } else {
+      setFormData((prevState) => ({ ...prevState, [name]: value }));
+    }
   };
 
   const handlesubmit = useCallback(() => {

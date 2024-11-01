@@ -5,7 +5,9 @@ import { Teacher, TeacherResponse } from "./typesTeacher";
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../config/Api";
-import { Avatar } from "antd";
+import { Avatar, Modal } from "antd";
+import IconTrashLines from "../Icon/IconTrashLines";
+import IconPencil from "../Icon/IconPencil";
 import {
   EyeOutlined,
   EyeInvisibleOutlined,
@@ -29,13 +31,11 @@ function ListTeacher() {
     [key: string]: boolean;
   }>({});
 
-  console.log(listTeachers)
+  console.log(listTeachers);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
-
- 
 
   const showModalEdit = (teacher: Teacher) => {
     setEditTeacher(teacher);
@@ -83,8 +83,7 @@ function ListTeacher() {
     }
   }, [isConnected]);
 
-
-  // DELETE TEACHER BY ID 
+  // DELETE TEACHER BY ID
 
   const deleteTeacher = useCallback((teacherId: string) => {
     if (!teacherId) {
@@ -96,7 +95,9 @@ function ListTeacher() {
       .delete(`/teacher/${teacherId}`)
       .then((data) => {
         console.log(data);
-        setListTeachers((prev) => prev.filter((teacher) => teacher._id != teacherId));
+        setListTeachers((prev) =>
+          prev.filter((teacher) => teacher._id != teacherId)
+        );
         console.log(data);
         toast.success("Teacher successfully deleted");
       })
@@ -105,8 +106,7 @@ function ListTeacher() {
       });
   }, []);
 
-
-  // SEARCH TEACHER BY QUERY 
+  // SEARCH TEACHER BY QUERY
 
   useEffect(() => {
     if (searchTeacher) {
@@ -120,9 +120,20 @@ function ListTeacher() {
           console.log(err);
         });
     }
+  }, [searchTeacher]);
 
-  },[searchTeacher])
 
+  // CONFIRMATION MODAL DELTE TEACHER
+
+  const confirmDeleteTeacher = (teacherId: string) => {
+    Modal.confirm({
+      title: "Confirm Deletion",
+      content: "Are you sure you want to delete this Teacher?",
+      onOk: () => {
+        deleteTeacher(teacherId);
+      },
+    });
+  };
 
   return (
     <div className="table-responsive mb-5">
@@ -152,15 +163,16 @@ function ListTeacher() {
         <tbody>
           {listTeachers.map((teacher) => (
             <tr key={teacher._id}>
-             
-             <td>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Avatar style={{ backgroundColor: "#87d068", marginRight: "10px" }}>
-              {teacher.firstName.charAt(0).toUpperCase()}
-            </Avatar>
-            <span>{teacher.firstName}</span>
-          </div>
-        </td>
+              <td>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Avatar
+                    style={{ backgroundColor: "#87d068", marginRight: "10px" }}
+                  >
+                    {teacher.firstName.charAt(0).toUpperCase()}
+                  </Avatar>
+                  <span>{teacher.firstName}</span>
+                </div>
+              </td>
               <td>{teacher.lastName}</td>
               <td>{teacher.email}</td>
               <td>
@@ -184,24 +196,19 @@ function ListTeacher() {
               </td>
               <td>{teacher.phone}</td>
               <td className="text-center">
-                <EditOutlined
-                 onClick={() => showModalEdit(teacher)}
-                  style={{
-                    color: "blue",
-                    fontSize: "20px",
-                    cursor: "pointer",
-                  }}
-                  className="cursor-pointer mx-2"
-                />
-                <DeleteOutlined
-                  onClick={() => deleteTeacher(teacher._id)}
-                  className="cursor-pointer mx-2"
-                  style={{
-                    color: "red",
-                    fontSize: "20px",
-                    cursor: "pointer",
-                  }}
-                />
+                <div
+                  onClick={() => showModalEdit(teacher)}
+                  className="cursor-pointer mx-2 inline-block"
+                >
+                  <IconPencil className="w-6 h-6" fill={true} />
+                </div>
+
+                <div
+                 onClick={() => confirmDeleteTeacher(teacher._id)}
+                  className="cursor-pointer mx-2 inline-block"
+                >
+                  <IconTrashLines className="w-6 h-6" />
+                </div>
               </td>
             </tr>
           ))}
@@ -214,10 +221,10 @@ function ListTeacher() {
         setVisiblePasswords={setVisiblePasswords}
       />
       <ModalEditTeacher
-      isModalEditOpen={isModalEditOpen}
-      handleEditCancel={ handleEditCancel}
-      editTeacher={editTeacher}
-      setListTeachers={setListTeachers}
+        isModalEditOpen={isModalEditOpen}
+        handleEditCancel={handleEditCancel}
+        editTeacher={editTeacher}
+        setListTeachers={setListTeachers}
       />
     </div>
   );

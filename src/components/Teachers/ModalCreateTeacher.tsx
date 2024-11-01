@@ -59,9 +59,13 @@ const ModalCreateTeacher: React.FC<ModalCreateTeacherProps> = ({
 
   const handleChangeFormTeacher = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormDataTeacher((prevState) => ({ ...prevState, [name]: value }));
+  
+    setFormDataTeacher((prevState) => ({
+      ...prevState,
+      [name]: name === "firstName" ? value.charAt(0).toUpperCase() + value.slice(1) : value,
+    }));
   };
-
+  
     // CREATE NEW TEACHER SEND EMAIL
 
   const handlesubmitTeacher = useCallback(() => {

@@ -3,6 +3,9 @@ import ModalCreateAdmin from "./ModalCreateAdmin";
 import ModalEditAdmin from "./ModalEditAdmin";
 import axiosInstance from "../../config/Api";
 import { useCallback } from "react";
+
+import IconTrashLines from "../Icon/IconTrashLines";
+import IconPencil from "../Icon/IconPencil";
 import {
   EyeOutlined,
   EyeInvisibleOutlined,
@@ -13,6 +16,7 @@ import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
 
 import { Admin } from "./ModalCreateAdmin";
+import { Modal } from "antd";
 
 export interface AdminResponse {
   admins: Admin[];
@@ -123,6 +127,19 @@ const ListAdmins: React.FC = () => {
       });
   }, []);
 
+
+  // CONFIRATION MODAL DELTE ADMIN
+
+  const confirmDelete = (adminId: string, ) => {
+    Modal.confirm({
+      title: "Confirm Deletion",
+      content: "Are you sure you want to delete this Admin ?",
+      onOk: () => {
+        deleteAdmin(adminId);
+      },
+    });
+  };
+
   return (
     <div className="table-responsive mb-5">
       <div className="flex justify-between items-center">
@@ -182,22 +199,21 @@ const ListAdmins: React.FC = () => {
                 <td>{admin.phone}</td>
                 <td className="text-center">
                   <div className="flex justify-center items-center space-x-3">
-                    <EditOutlined
-                      style={{
-                        color: "blue",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                      }}
+                    <div
+                      className="cursor-pointer"
                       onClick={() => showModalEdit(admin)}
-                    />
-                    <DeleteOutlined
-                      style={{
-                        color: "red",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => deleteAdmin(admin._id)}
-                    />
+                    >
+                      <IconPencil
+                        className="w-5 h-5"
+                        fill={true}
+                      />
+                    </div>
+                    <div
+                      className="grid place-content-center w-14 h-14 rounded-md cursor-pointer"
+                      onClick={() => confirmDelete(admin._id )}
+                    >
+                      <IconTrashLines className="w-5 h-5" />
+                    </div>
                   </div>
                 </td>
               </tr>

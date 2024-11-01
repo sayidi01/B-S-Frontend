@@ -30,7 +30,7 @@ export default function SingleCourse() {
           } else setCourse(false);
         })
         .catch((error) => {
-          console.error("Erreur lors de la récupération cours", error);
+          console.error("Erreur lors de la récupération cours ", error);
           setCourse(false);
         });
     }

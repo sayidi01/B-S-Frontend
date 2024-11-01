@@ -61,7 +61,11 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
   
     const handleChangeFormStudent = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
-      setFormDataStudent((prevState) => ({ ...prevState, [name]: value }));
+    
+      setFormDataStudent((prevState) => ({
+        ...prevState,
+        [name]: name === "firstName" ? value.charAt(0).toUpperCase() + value.slice(1) : value,
+      }));
     };
 
 
