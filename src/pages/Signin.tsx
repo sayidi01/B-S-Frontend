@@ -9,7 +9,6 @@ import IconCaretDown from "../components/Icon/IconCaretDown";
 import IconMail from "../components/Icon/IconMail";
 import IconLockDots from "../components/Icon/IconLockDots";
 
-
 import object1 from "../../public/assets/auth/coming-soon-object1.png";
 import object2 from "../../public/assets/auth/coming-soon-object2.png";
 import object3 from "../../public/assets/auth/coming-soon-object3.png";
@@ -27,56 +26,53 @@ import { useUserContext } from "../config/UserContext";
 import { toast } from "react-hot-toast";
 import { AdminResponse } from "../components/Admins/ListAdmins";
 
-
 interface Signin {
   email: string;
   password: string;
 }
 
 const Signin = () => {
-    
-    const { data, setData, setIsConnected , isConnected, setCurrentAdmin} = useUserContext() 
+  const { setIsConnected, isConnected, setCurrentAdmin } = useUserContext();
 
-    const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const [signinAdmin, setSigninAdmin] = useState<Signin>({
     email: "",
     password: "",
   });
 
-  console.log(signinAdmin)
+  console.log(signinAdmin);
 
   const handleChangeSignin = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSigninAdmin((prevState) => ({ ...prevState, [name]: value }));
   };
 
-
   useEffect(() => {
     if (isConnected) {
-      navigate("/Dashbord"); 
+      navigate("/Dashbord");
     }
   }, [isConnected]);
 
-
-  const handleSigninAdmin = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    axiosInstance
-    .post<AdminResponse>("/auth/admin/signin", {...signinAdmin})
-    .then((res) => {
-        console.log(res.data);
-        setCurrentAdmin(res.data.admin); 
-        setData(res.data.admin)
-        setIsConnected(true)
-        navigate('/Dashbord')
-        toast.success("Vous êtes connecté");
-    })
-    .catch((err) => {
-        console.log("erreur connexion", err)
-        toast.error("Une erreur s'est produite lors de la connexion Admin")
-    })
-  }, [signinAdmin, setCurrentAdmin]);
+  const handleSigninAdmin = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      axiosInstance
+        .post<{ data: AdminResponse }>("/auth/admin/signin", { ...signinAdmin })
+        .then(({ data }) => {
+          localStorage.setItem("isConnected", "true");
+          setCurrentAdmin(data.data.admin);
+          setIsConnected(true);
+          navigate("/Dashbord");
+          toast.success("Vous êtes connecté");
+        })
+        .catch((err) => {
+          console.log("erreur connexion", err);
+          toast.error("Une erreur s'est produite lors de la connexion Admin");
+        });
+    },
+    [signinAdmin, setCurrentAdmin]
+  );
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -212,16 +208,21 @@ const Signin = () => {
                   Enter your email and password to login
                 </p>
               </div>
-              <form className="space-y-5 dark:text-white"  onSubmit={handleSigninAdmin}>
+              <form
+                className="space-y-5 dark:text-white"
+                onSubmit={handleSigninAdmin}
+              >
                 <div>
                   <label htmlFor="Email">Email</label>
                   <div className="relative text-white-dark">
                     <input
-                    onChange={handleChangeSignin}
+                      onChange={handleChangeSignin}
                       id="Email"
                       type="email"
                       name="email"
                       value={signinAdmin.email}
+                      autoComplete="on"
+                      autoSave="true"
                       placeholder="Enter Email"
                       className="form-input ps-10 placeholder:text-white-dark"
                     />
@@ -234,11 +235,13 @@ const Signin = () => {
                   <label htmlFor="Password">Password</label>
                   <div className="relative text-white-dark">
                     <input
-                       onChange={handleChangeSignin}
+                      onChange={handleChangeSignin}
                       id="Password"
                       name="password"
                       type="password"
                       value={signinAdmin.password}
+                      autoComplete="on"
+                      autoSave="true"
                       placeholder="Enter Password"
                       className="form-input ps-10 placeholder:text-white-dark"
                     />

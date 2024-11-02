@@ -27,9 +27,11 @@ const Index = () => {
   // TOTAL ADMINS NUMBER
 
   useEffect(() => {
-    if(isConnected) {
+    const isConnectedLocalStr = localStorage.getItem("isConnected");
+    if (isConnected && isConnectedLocalStr == "true") {
+      console.log("Hello", currentAdmin, isConnected);
       axiosInstance
-        .get<{total: number}>("/admin/total")
+        .get<{ total: number }>("/admin/total")
         .then(({ data }) => {
           console.log(data);
           setTotalAdmins(data.total);
@@ -43,13 +45,13 @@ const Index = () => {
     }
   }, []);
 
-
   // TOTAL TEACHERS NUMBER
 
   useEffect(() => {
-    if(isConnected) {
+    const isConnectedLocalStr = localStorage.getItem("isConnected");
+    if (isConnected && isConnectedLocalStr == "true") {
       axiosInstance
-        .get<{total: number}>("/teacher/total")
+        .get<{ total: number }>("/teacher/total")
         .then(({ data }) => {
           console.log(data);
           setTotalTeachers(data.total);
@@ -63,27 +65,22 @@ const Index = () => {
     }
   }, []);
 
-
-  // TOTAL STUDNETS NUMBER 
+  // TOTAL STUDNETS NUMBER
 
   useEffect(() => {
-    if(isConnected) {
+    const isConnectedLocalStr = localStorage.getItem("isConnected");
+    if (isConnected && isConnectedLocalStr == "true") {
       axiosInstance
-        .get<{total: number}>("/student/total")
+        .get<{ total: number }>("/student/total")
         .then(({ data }) => {
           console.log(data);
           setTotalStudents(data.total);
         })
         .catch((error) => {
-          console.error(
-            "Erreur lors de la récupération des ètudiants",
-            error
-          );
+          console.error("Erreur lors de la récupération des ètudiants", error);
         });
     }
   }, []);
-
-
 
   return (
     <div>

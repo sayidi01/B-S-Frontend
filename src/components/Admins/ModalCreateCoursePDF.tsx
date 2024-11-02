@@ -109,6 +109,7 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     name: "file",
     showUploadList: false,
     onChange: handleFileChange,
+    beforeUpload: () => false,
   };
 
   return (

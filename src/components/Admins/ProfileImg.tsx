@@ -92,23 +92,17 @@ export default function ProfileImg({
   );
 
   if (!currentAdmin) return null;
-  
-  console.log(currentAdmin);
 
   return !isProfileImgEditing ? (
     <div className="relative w-min">
       <Avatar
         size="large"
-        src={
-          <img
-            src={`http://localhost:3000/profile-images/${currentAdmin.image}`}
-          />
-        }
+        src={`http://localhost:3000/profile-images/${currentAdmin.image}`}
         className="w-32 h-32"
-        
       >
-        {currentAdmin.fullName.split(" ")[0].toUpperCase()}
+        {currentAdmin.fullName.split(" ")[0].toUpperCase()[0]}
       </Avatar>
+
       <div className="group absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hover:bg-slate-400 hover:bg-opacity-30 h-full w-full rounded-full hover:flex justify-center items-center">
         <Button
           onClick={handleToggleImgEdit}
@@ -116,7 +110,6 @@ export default function ProfileImg({
           icon={<EditOutlined />}
           className="hidden group-hover:block"
         />
-        
       </div>
     </div>
   ) : (

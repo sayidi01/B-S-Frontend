@@ -9,19 +9,21 @@ import { useNavigate, Outlet } from "react-router-dom";
 import { AdminResponse } from "../components/Admins/ListAdmins";
 
 export default function PrivateRoutes() {
-  const { setData, isConnected, setIsConnected, setCurrentAdmin } =
+  const { isConnected, setIsConnected, setCurrentAdmin } =
     useUserContext();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isConnected)
+    const isConnectedLocalStr = localStorage.getItem("isConnected");
+
+    if (!isConnected && isConnectedLocalStr == "true")
       axiosInstance
         .get<AdminResponse>("/admin/current")
         .then(({ data }) => {
           setCurrentAdmin(data.admin);
-          setData(data.admin);
           setIsConnected(true);
+          localStorage.setItem("isConnected", "true");
         })
         .catch((err) => {
           navigate('/')

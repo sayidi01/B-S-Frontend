@@ -28,7 +28,7 @@ import { toast } from "react-hot-toast";
 const Header = () => {
   const navigate = useNavigate();
 
-  const { setData, setIsConnected, currentAdmin, setCurrentAdmin } = useUserContext();
+  const { setIsConnected, currentAdmin, setCurrentAdmin } = useUserContext();
 
   useEffect(() => {
     console.log("Current Admin:", currentAdmin);
@@ -89,9 +89,9 @@ const Header = () => {
         console.log(data);
         setIsConnected(false);
         setCurrentAdmin(null)
-        setData({});
         toast.success("Vous êtes Deconnecté");
         navigate("/");
+        localStorage.setItem("isConnected", "false");
       })
       .catch((err) => {
         console.error("Erreur lors de la déconnexion:", err);

@@ -154,7 +154,7 @@ const ModalCreateTeacher: React.FC<ModalCreateTeacherProps> = ({
         <Input
           name="password"
           value={formdataTeacher.password}
-          onChange={handleChangeFormTeacher}
+          disabled
           type="password"
           placeholder="Password"
           style={{ marginTop: "23px" }}
