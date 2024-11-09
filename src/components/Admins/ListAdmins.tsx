@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ModalCreateAdmin from "./ModalCreateAdmin";
 import ModalEditAdmin from "./ModalEditAdmin";
 import axiosInstance from "../../config/Api";
@@ -9,20 +9,20 @@ import IconPencil from "../Icon/IconPencil";
 import {
   EyeOutlined,
   EyeInvisibleOutlined,
-  DeleteOutlined,
-  EditOutlined,
 } from "@ant-design/icons";
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
 
 import { Admin } from "./ModalCreateAdmin";
-import { Modal } from "antd";
+import { Modal, Pagination } from "antd";
 
 export interface AdminResponse {
   admins: Admin[];
   admin: Admin;
   image: string;
 }
+
+const itemsPerPage = 9;
 
 const ListAdmins: React.FC = () => {
   const { isConnected, currentAdmin } = useUserContext();
@@ -40,6 +40,17 @@ const ListAdmins: React.FC = () => {
   const [visiblePasswords, setVisiblePasswords] = useState<{
     [key: string]: boolean;
   }>({});
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const paginatedAdmins = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return listAdmins.slice(startIndex, startIndex + itemsPerPage);
+  }, [listAdmins, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -127,10 +138,9 @@ const ListAdmins: React.FC = () => {
       });
   }, []);
 
-
   // CONFIRATION MODAL DELTE ADMIN
 
-  const confirmDelete = (adminId: string, ) => {
+  const confirmDelete = (adminId: string) => {
     Modal.confirm({
       title: "Confirm Deletion",
       content: "Are you sure you want to delete this Admin ?",
@@ -165,8 +175,8 @@ const ListAdmins: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {listAdmins.length > 0 ? (
-            listAdmins.map((admin, index) => (
+          {paginatedAdmins.length ? (
+            paginatedAdmins.map((admin, index) => (
               <tr key={admin._id || index}>
                 <td className="flex items-center">
                   <span className="flex justify-center items-center w-12 h-12 text-center rounded-full bg-orange-400 text-xl text-white mr-3">
@@ -203,14 +213,11 @@ const ListAdmins: React.FC = () => {
                       className="cursor-pointer"
                       onClick={() => showModalEdit(admin)}
                     >
-                      <IconPencil
-                        className="w-5 h-5"
-                        fill={true}
-                      />
+                      <IconPencil className="w-5 h-5" fill={true} />
                     </div>
                     <div
                       className="grid place-content-center w-14 h-14 rounded-md cursor-pointer"
-                      onClick={() => confirmDelete(admin._id )}
+                      onClick={() => confirmDelete(admin._id)}
                     >
                       <IconTrashLines className="w-5 h-5" />
                     </div>
@@ -226,6 +233,15 @@ const ListAdmins: React.FC = () => {
             </tr>
           )}
         </tbody>
+        {listAdmins.length > itemsPerPage ? (
+          <Pagination
+            className="custom-pagination"
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={listAdmins.length}
+            onChange={handlePageChange}
+          />
+        ) : null}
       </table>
 
       <ModalCreateAdmin
