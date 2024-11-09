@@ -1,29 +1,17 @@
 # Étape de construction
-FROM node:22 AS builder
+FROM node:20-alpine3.19 AS builder
 
 WORKDIR /app
-
 
 COPY package*.json ./
 RUN npm install
 
-
 COPY . .
-RUN npm run build
+RUN npm run build:prod
 
+FROM nginx:alpine
+COPY --from=0 /app/dist /usr/share/nginx/html
 
-FROM node:22-alpine
+EXPOSE 80
 
-WORKDIR /app
-
-
-COPY --from=builder /app .
-
-
-RUN npm install
-
-
-EXPOSE 5173
-
-
-CMD ["npx", "vite", "preview"]
+CMD ["nginx", "-g", "daemon off;"]
