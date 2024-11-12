@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ModalCreateTeacher from "./ModalCreateTeacher";
 import ModalEditTeacher from "./ModalEditTeacher";
 import { Teacher, TeacherResponse } from "./typesTeacher";
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../config/Api";
-import { Avatar, Modal } from "antd";
+import { Avatar, Modal, Pagination } from "antd";
 import IconTrashLines from "../Icon/IconTrashLines";
 import IconPencil from "../Icon/IconPencil";
 import {
@@ -14,6 +14,8 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
+
+const itemsPerPage = 9;
 
 function ListTeacher() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -30,6 +32,17 @@ function ListTeacher() {
   const [visiblePasswords, setVisiblePasswords] = useState<{
     [key: string]: boolean;
   }>({});
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const paginatedTeachers = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return listTeachers.slice(startIndex, startIndex + itemsPerPage);
+  }, [listTeachers, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   console.log(listTeachers);
 
@@ -161,7 +174,7 @@ function ListTeacher() {
           </tr>
         </thead>
         <tbody>
-          {listTeachers.map((teacher) => (
+          {paginatedTeachers.map((teacher) => (
             <tr key={teacher._id}>
               <td>
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -213,6 +226,15 @@ function ListTeacher() {
             </tr>
           ))}
         </tbody>
+        {listTeachers.length > itemsPerPage && (
+          <Pagination
+            className="custom-pagination"
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={listTeachers.length}
+            onChange={handlePageChange}
+          />
+        )}
       </table>
       <ModalCreateTeacher
         isModalOpen={isModalOpen}

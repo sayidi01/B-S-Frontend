@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
@@ -21,6 +21,8 @@ import ModalCreateStudent from "./ModalCreateStudent";
 
 import ModalEditStudent from "./ModalEditStudent";
 
+const itemsPerPage = 9;
+
 function ListStudent() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalEditOpen, setIsModaEditlOpen] = useState<boolean>(false);
@@ -36,6 +38,17 @@ function ListStudent() {
   const [visiblePasswords, setVisiblePasswords] = useState<{
     [key: string]: boolean;
   }>({});
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const paginatedStudents = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return listStudents.slice(startIndex, startIndex + itemsPerPage);
+  }, [listStudents, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   console.log(listStudents);
 
@@ -165,7 +178,7 @@ function ListStudent() {
           </tr>
         </thead>
         <tbody>
-          {listStudents.map((student) => (
+          {paginatedStudents.map((student) => (
             <tr key={student._id}>
               <td>
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -211,7 +224,7 @@ function ListStudent() {
                 </div>
 
                 <div
-                onClick={() => confirmDeleteStudent(student._id)}
+                  onClick={() => confirmDeleteStudent(student._id)}
                   className="cursor-pointer mx-2 inline-block"
                 >
                   <IconTrashLines className="w-6 h-6" />
@@ -220,6 +233,15 @@ function ListStudent() {
             </tr>
           ))}
         </tbody>
+        {listStudents.length > itemsPerPage && (
+          <Pagination
+            className="custom-pagination"
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={listStudents.length}
+            onChange={handlePageChange}
+          />
+        )}
       </table>
       <ModalCreateStudent
         isModalOpen={isModalOpen}
