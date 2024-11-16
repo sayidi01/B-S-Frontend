@@ -22,13 +22,14 @@ import IconUser from "../Icon/IconUser";
 import IconLogout from "../Icon/IconLogout";
 
 import { useUserContext } from "../../config/UserContext";
-import axiosInstance from "../../config/Api";
+import axiosInstance, { imageURL } from "../../config/Api";
 import { toast } from "react-hot-toast";
 
 const Header = () => {
   const navigate = useNavigate();
 
-  const { setIsConnected, currentAdmin, setCurrentAdmin, isConnected } = useUserContext();
+  const { setIsConnected, currentAdmin, setCurrentAdmin, isConnected } =
+    useUserContext();
 
   useEffect(() => {
     console.log("Current Admin:", currentAdmin);
@@ -80,7 +81,6 @@ const Header = () => {
   };
   const [flag, setFlag] = useState(themeConfig.locale);
 
-
   useEffect(() => {
     if (!isConnected) {
       navigate("/");
@@ -95,7 +95,7 @@ const Header = () => {
       .then((data) => {
         console.log(data);
         setIsConnected(false);
-        setCurrentAdmin(null)
+        setCurrentAdmin(null);
         localStorage.setItem("isConnected", "false");
         toast.success("Vous êtes Deconnecté");
         navigate("/");
@@ -271,7 +271,7 @@ const Header = () => {
                   currentAdmin && currentAdmin.image ? (
                     <img
                       className="w-9 h-9 rounded-full saturate-50"
-                      src={`http://localhost:3000/profile-images/${currentAdmin.image}`}
+                      src={`${imageURL}profile-images/${currentAdmin.image}`}
                       alt="userProfile"
                     />
                   ) : (
@@ -287,7 +287,7 @@ const Header = () => {
                       <span className="flex justify-center items-center w-12 h-12 text-center rounded-full bg-slate-400 text-xl text-white mr-3">
                         {currentAdmin && currentAdmin.image ? (
                           <img
-                            src={`http://localhost:3000/profile-images/${currentAdmin.image}`}
+                            src={`${imageURL}profile-images/${currentAdmin.image}`}
                             alt="Admin Profile"
                             className="w-full h-full object-cover rounded-full"
                           />
@@ -314,7 +314,10 @@ const Header = () => {
                     </div>
                   </li>
                   <li>
-                    <Link to="/Dashbord/Admin" className="dark:hover:text-white">
+                    <Link
+                      to="/Dashbord/Admin"
+                      className="dark:hover:text-white"
+                    >
                       <IconUser className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0" />
                       Profile
                     </Link>

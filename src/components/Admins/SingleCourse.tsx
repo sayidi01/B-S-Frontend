@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axiosInstance from "../../config/Api";
+import axiosInstance, { imageURL } from "../../config/Api";
 import { ICourse } from "../../types/course";
 import { isObject } from "lodash";
 import IconLoader from "../Icon/IconLoader";
@@ -47,7 +47,7 @@ export default function SingleCourse() {
       <div style={{ height: "100%" }}>
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
           <Viewer
-            fileUrl={`http://localhost:3000/Courses-pdfs/${course.url
+            fileUrl={`${imageURL}Courses-pdfs/${course.url
               .split("/")
               .pop()}`}
             plugins={[defaultLayout]}

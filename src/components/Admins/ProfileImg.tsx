@@ -6,6 +6,7 @@ import { EditOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { toast } from "react-hot-toast";
 import { IFormDataAdmin } from "./types";
 import { UploadChangeParam, UploadFile } from "antd/es/upload";
+import { imageURL } from "../../config/Api";
 
 const props: UploadProps = {
   name: "file",
@@ -97,7 +98,7 @@ export default function ProfileImg({
     <div className="relative w-min">
       <Avatar
         size="large"
-        src={`http://localhost:3000/profile-images/${currentAdmin.image}`}
+        src={`${imageURL}profile-images/${currentAdmin.image}`}
         className="w-32 h-32"
       >
         {currentAdmin.fullName.split(" ")[0].toUpperCase()[0]}

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import ModalCreateAdmin from "./ModalCreateAdmin";
 import ModalEditAdmin from "./ModalEditAdmin";
-import axiosInstance from "../../config/Api";
+import axiosInstance, { imageURL } from "../../config/Api";
 import { useCallback } from "react";
 
 import IconTrashLines from "../Icon/IconTrashLines";
@@ -182,7 +182,7 @@ const ListAdmins: React.FC = () => {
                   <span className="flex justify-center items-center w-12 h-12 text-center rounded-full bg-orange-400 text-xl text-white mr-3">
                     {admin.image ? (
                       <img
-                        src={`http://localhost:3000/profile-images/${admin.image}`}
+                        src={`${imageURL}profile-images/${admin.image}`}
                         alt="Admin Profile"
                         className="w-full h-full object-cover rounded-full"
                       />
