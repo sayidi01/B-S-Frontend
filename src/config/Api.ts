@@ -7,8 +7,8 @@ export const baseURL = isProd
   : "http://localhost:3000/api/v1/";
 
 export const imageURL = isProd
-? "http://learn-bs-institute.com/"
-: "http://localhost:3000/";
+? "http://learn-bs-institute.com/api/assets/"
+: "http://localhost:3000/api/assets/";
 
 export const axiosInstance = axios.create({
   baseURL,
