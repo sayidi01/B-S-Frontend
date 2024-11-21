@@ -76,7 +76,7 @@ const Signin = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(setPageTitle("Login Cover"));
+    dispatch(setPageTitle("learn-bs-institute.com"));
   });
 
   const isRtl =

@@ -42,7 +42,7 @@ interface ModalEditStudentProps {
       };
 
 
-      // EDIT DATA TEACHER
+      // EDIT DATA STUDENT
 
       const handleSumbitStudent = useCallback(() => {
         if (!editStudent) {

@@ -25,6 +25,8 @@ import { useUserContext } from "../../config/UserContext";
 import axiosInstance, { imageURL } from "../../config/Api";
 import { toast } from "react-hot-toast";
 
+import logoHeader from "../../../public/Silver Logo Sans BG.png"
+
 const Header = () => {
   const navigate = useNavigate();
 
@@ -115,13 +117,11 @@ const Header = () => {
         <div className="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-black">
           <div className="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
             <img
-              className="w-8 ltr:-ml-1 rtl:-mr-1 inline"
-              src="/assets/images/logo.svg"
+              className="w-20 ltr:-ml-1 rtl:-mr-1 inline"
+              src={logoHeader}
               alt="logo"
             />
-            <span className="text-2xl ltr:ml-1.5 rtl:mr-1.5  font-semibold  align-middle hidden md:inline dark:text-white-light transition-all duration-300">
-              VRISTO
-            </span>
+           
 
             <button
               type="button"

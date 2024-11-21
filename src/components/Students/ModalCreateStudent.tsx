@@ -126,7 +126,7 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
   return (
     <div>
          <Modal
-        title="Create New Teacher"
+        title="Create New Student"
         open={isModalOpen}
         onCancel={handleCancel}
         onOk={handlesubmitStudent}
