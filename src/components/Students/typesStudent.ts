@@ -8,6 +8,7 @@ export interface FormDataStudent {
      email: string;
      password: string;
      phone: string;
+     accountExpiryDate?: string
    }
    
    export interface Student {
@@ -18,7 +19,7 @@ export interface FormDataStudent {
      password: string;
      phone: string;
      image?: string; 
-     
+     accountExpiryDate?: string
    }
  
  

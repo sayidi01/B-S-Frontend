@@ -25,6 +25,7 @@ import { useUserContext } from "../config/UserContext";
 
 import { toast } from "react-hot-toast";
 import { AdminResponse } from "../components/Admins/ListAdmins";
+import { extractMsgFromError } from "../utils";
 
 interface Signin {
   email: string;
@@ -68,7 +69,7 @@ const Signin = () => {
         })
         .catch((err) => {
           console.log("erreur connexion", err);
-          toast.error("Une erreur s'est produite lors de la connexion Admin");
+          toast.error(extractMsgFromError(err));
         });
     },
     [signinAdmin, setCurrentAdmin]

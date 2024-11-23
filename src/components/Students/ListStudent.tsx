@@ -20,6 +20,7 @@ import Index from "../../pages/Index";
 import ModalCreateStudent from "./ModalCreateStudent";
 
 import ModalEditStudent from "./ModalEditStudent";
+import { formatDistance, isPast } from "date-fns";
 
 const itemsPerPage = 9;
 
@@ -174,6 +175,8 @@ function ListStudent() {
             <th>Email</th>
             <th>Password</th>
             <th>Phone</th>
+            <th>Expiry Date</th>
+
             <th className="text-center">Action</th>
           </tr>
         </thead>
@@ -215,6 +218,19 @@ function ListStudent() {
                 )}
               </td>
               <td>{student.phone}</td>
+              <td>
+                {student.accountExpiryDate && isPast(student.accountExpiryDate)
+                  ? `Expired ${formatDistance(
+                      student.accountExpiryDate,
+                      new Date()
+                    )}`
+                  : student.accountExpiryDate
+                  ? formatDistance(
+                      student.accountExpiryDate,
+                      new Date()
+                    ).concat(" remaining..")
+                  : null}
+              </td>
               <td className="text-center">
                 <div
                   onClick={() => showModalEditStudent(student)}
