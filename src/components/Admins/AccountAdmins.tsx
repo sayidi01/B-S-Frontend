@@ -4,6 +4,7 @@ import { setPageTitle } from "../../store/themeConfigSlice";
 import { useDispatch } from "react-redux";
 import IconHome from "../../components/Icon/IconHome";
 import IconPhone from "../../components/Icon/IconPhone";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import axiosInstance from "../../config/Api";
 import { AdminResponse } from "./ListAdmins";
 import { toast } from "react-hot-toast";
@@ -13,6 +14,7 @@ import ProfileImg from "./ProfileImg";
 import { IFormDataAdmin } from "./types";
 import { isObject } from "lodash";
 import { Admin } from "./ModalCreateAdmin";
+import { Input } from "antd";
 
 const AccountAdmins = () => {
   const { currentAdmin, setCurrentAdmin } = useUserContext();
@@ -22,12 +24,19 @@ const AccountAdmins = () => {
     setIsProfileImgEditing((prev) => !prev);
   }, []);
 
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
   const [formDataAdmin, setFormDataAdmin] = useState<IFormDataAdmin>({
     fullName: "",
     email: "",
     phone: "",
     img: null,
+    password: "",
   });
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prev) => !prev);
+  };
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -87,6 +96,7 @@ const AccountAdmins = () => {
         fullName: currentAdmin.fullName || "",
         email: currentAdmin.email || "",
         phone: currentAdmin.phone || "",
+        password: currentAdmin.password || "",
         img: null,
       });
     }
@@ -181,6 +191,31 @@ const AccountAdmins = () => {
                         onChange={handleInputChange}
                         className="form-input"
                       />
+                    </div>
+                    <div>
+                      <label htmlFor="password">Password</label>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <Input
+                          id="password"
+                          type={isPasswordVisible ? "text" : "password"}
+                          value={formDataAdmin.password}
+                          onChange={handleInputChange}
+                          className="form-input"
+                          suffix={
+                            isPasswordVisible ? (
+                              <EyeInvisibleOutlined
+                                onClick={togglePasswordVisibility}
+                                style={{ cursor: "pointer" }}
+                              />
+                            ) : (
+                              <EyeOutlined
+                                onClick={togglePasswordVisibility}
+                                style={{ cursor: "pointer" }}
+                              />
+                            )
+                          }
+                        />
+                      </div>
                     </div>
                     <div>
                       <label htmlFor="phone">Phone</label>
