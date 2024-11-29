@@ -15,15 +15,16 @@ import axiosInstance from "../../config/Api";
 import { Card, Col, Row } from "antd";
 import { Admin } from "./ModalCreateAdmin";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 import { toast } from "react-hot-toast";
 import ModalEditTitleCourse from "./ModalEditTitleCourse";
-import { ICourse } from "../../types/course";
+
 
 function UploadPdfCourses() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isModalEditTitleOpen, setIsModaEditTitleOpen] = useState<boolean>(false);
-  
+  const [isModalEditTitleOpen, setIsModaEditTitleOpen] =
+    useState<boolean>(false);
+
   const [titleCourses, setTitleCourses] = useState<Admin[]>([]);
 
   const [editTitleCourse, setEditTitleCourse] = useState<Admin | null>(null);
@@ -46,7 +47,6 @@ function UploadPdfCourses() {
   const handleEditCancel = () => {
     setIsModaEditTitleOpen(false);
   };
-
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -75,7 +75,7 @@ function UploadPdfCourses() {
 
   useEffect(() => {
     console.log("Course ID:", courseId);
-    if (courseId&& courseId.length > 0) {
+    if (courseId && courseId.length > 0) {
       axiosInstance
         .get(`/course/${courseId}`)
         .then(({ data }) => {
@@ -210,7 +210,7 @@ function UploadPdfCourses() {
                       </li>
                       <li>
                         <button
-                         onClick={() =>showModalEditTitleCourse(course)}
+                          onClick={() => showModalEditTitleCourse(course)}
                           type="button"
                           style={{
                             fontWeight: "bolder",
@@ -220,7 +220,6 @@ function UploadPdfCourses() {
                           }}
                         >
                           <IconPencil className="w-5 h-5" />
-                          
                           Edit
                         </button>
                       </li>
@@ -239,11 +238,10 @@ function UploadPdfCourses() {
         setTitleCourses={setTitleCourses}
       />
       <ModalEditTitleCourse
-       setTitleCourses={setTitleCourses}
-       isModalEditTitleOpen={isModalEditTitleOpen}
-       editTitleCourse={editTitleCourse}
-       handleEditCancel={ handleEditCancel}
-
+        setTitleCourses={setTitleCourses}
+        isModalEditTitleOpen={isModalEditTitleOpen}
+        editTitleCourse={editTitleCourse}
+        handleEditCancel={handleEditCancel}
       />
     </div>
   );

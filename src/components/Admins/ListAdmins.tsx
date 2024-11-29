@@ -25,7 +25,7 @@ export interface AdminResponse {
 const itemsPerPage = 9;
 
 const ListAdmins: React.FC = () => {
-  const { isConnected, currentAdmin } = useUserContext();
+  const { isConnected} = useUserContext();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 

@@ -10,12 +10,10 @@ import IconPencil from "../Icon/IconPencil";
 import {
   EyeOutlined,
   EyeInvisibleOutlined,
-  DeleteOutlined,
-  EditOutlined,
 } from "@ant-design/icons";
 import { Student, StudentResponse } from "./typesStudent";
 
-import Index from "../../pages/Index";
+
 
 import ModalCreateStudent from "./ModalCreateStudent";
 

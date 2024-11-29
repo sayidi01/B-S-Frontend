@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 
 import { Admin } from "../components/Admins/ModalCreateAdmin";
-import { Student } from "../components/Students/typesStudent";
+
 interface UserContextType {
     data: {};
     setData: React.Dispatch<React.SetStateAction<{}>>;

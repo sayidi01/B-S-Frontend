@@ -6,7 +6,7 @@ import { isObject } from "lodash";
 import IconLoader from "../Icon/IconLoader";
 import { Alert } from "antd";
 import Title from "antd/es/typography/Title";
-import { Text } from "@mantine/core";
+
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 

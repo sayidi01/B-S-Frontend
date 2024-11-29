@@ -1,6 +1,6 @@
 import { Avatar, Button, Upload, UploadProps } from "antd";
-import { useCallback } from "react";
-import { useState } from "react";
+import { useCallback,useState } from "react";
+
 import { useUserContext } from "../../config/UserContext";
 import { EditOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { toast } from "react-hot-toast";

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link,  useLocation, useNavigate } from "react-router-dom";
 import { IRootState } from "../../store";
 import {
   toggleRTL,
@@ -25,7 +25,7 @@ import { useUserContext } from "../../config/UserContext";
 import axiosInstance, { imageURL } from "../../config/Api";
 import { toast } from "react-hot-toast";
 
-import logoHeader from "../../../public/Silver Logo Sans BG.png"
+import logoHeader from "../../../public/favicon.png"
 
 const Header = () => {
   const navigate = useNavigate();
@@ -117,7 +117,7 @@ const Header = () => {
         <div className="relative bg-white flex w-full items-center px-5 py-2.5 dark:bg-black">
           <div className="horizontal-logo flex lg:hidden justify-between items-center ltr:mr-2 rtl:ml-2">
             <img
-              className="w-20 ltr:-ml-1 rtl:-mr-1 inline"
+              className="w-10 ltr:-ml-1 rtl:-mr-1 inline"
               src={logoHeader}
               alt="logo"
             />
