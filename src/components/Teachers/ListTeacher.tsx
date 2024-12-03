@@ -4,16 +4,12 @@ import ModalEditTeacher from "./ModalEditTeacher";
 import { Teacher, TeacherResponse } from "./typesTeacher";
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
-import axiosInstance from "../../config/Api";
-import { Avatar, Modal, Pagination } from "antd";
+import axiosInstance, { imageURL } from "../../config/Api";
+import { Modal, Pagination } from "antd";
 import IconTrashLines from "../Icon/IconTrashLines";
 import IconPencil from "../Icon/IconPencil";
-import {
-  EyeOutlined,
-  EyeInvisibleOutlined,
-  DeleteOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import IconEdit from "../Icon/IconEdit";
 
 const itemsPerPage = 9;
 
@@ -135,7 +131,6 @@ function ListTeacher() {
     }
   }, [searchTeacher]);
 
-
   // CONFIRMATION MODAL DELTE TEACHER
 
   const confirmDeleteTeacher = (teacherId: string) => {
@@ -176,15 +171,19 @@ function ListTeacher() {
         <tbody>
           {paginatedTeachers.map((teacher) => (
             <tr key={teacher._id}>
-              <td>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <Avatar
-                    style={{ backgroundColor: "#87d068", marginRight: "10px" }}
-                  >
-                    {teacher.firstName.charAt(0).toUpperCase()}
-                  </Avatar>
-                  <span>{teacher.firstName}</span>
-                </div>
+              <td className="flex items-center">
+                <span className="flex justify-center items-center w-12 h-12 text-center rounded-full bg-teal-400 text-xl text-white mr-3">
+                  {teacher.image ? (
+                    <img
+                      src={`${imageURL}teachers-images/${teacher.image}`}
+                      alt="Teacher Profile"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    teacher.firstName.charAt(0).toUpperCase()
+                  )}
+                </span>
+                {teacher.firstName}
               </td>
               <td>{teacher.lastName}</td>
               <td>{teacher.email}</td>
@@ -213,14 +212,14 @@ function ListTeacher() {
                   onClick={() => showModalEdit(teacher)}
                   className="cursor-pointer mx-2 inline-block"
                 >
-                  <IconPencil className="w-6 h-6" fill={true} />
+                   <IconEdit className="w-5 h-5"  />
                 </div>
 
                 <div
-                 onClick={() => confirmDeleteTeacher(teacher._id)}
+                  onClick={() => confirmDeleteTeacher(teacher._id)}
                   className="cursor-pointer mx-2 inline-block"
                 >
-                  <IconTrashLines className="w-6 h-6" />
+                  <IconTrashLines className="w-5 h-5" />
                 </div>
               </td>
             </tr>

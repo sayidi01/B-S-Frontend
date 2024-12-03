@@ -15,6 +15,7 @@ import { toast } from "react-hot-toast";
 
 import { Admin } from "./ModalCreateAdmin";
 import { Modal, Pagination } from "antd";
+import IconEdit from "../Icon/IconEdit";
 
 export interface AdminResponse {
   admins: Admin[];
@@ -213,7 +214,7 @@ const ListAdmins: React.FC = () => {
                       className="cursor-pointer"
                       onClick={() => showModalEdit(admin)}
                     >
-                      <IconPencil className="w-5 h-5" fill={true} />
+                      <IconEdit className="w-5 h-5"  />
                     </div>
                     <div
                       className="grid place-content-center w-14 h-14 rounded-md cursor-pointer"

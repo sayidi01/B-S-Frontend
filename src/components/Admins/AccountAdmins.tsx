@@ -6,7 +6,6 @@ import IconHome from "../../components/Icon/IconHome";
 import IconPhone from "../../components/Icon/IconPhone";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import axiosInstance from "../../config/Api";
-import { AdminResponse } from "./ListAdmins";
 import { toast } from "react-hot-toast";
 import { useUserContext } from "../../config/UserContext";
 
@@ -20,9 +19,7 @@ const AccountAdmins = () => {
   const { currentAdmin, setCurrentAdmin } = useUserContext();
   const [isProfileImgEditing, setIsProfileImgEditing] = useState(false);
 
-  const handleToggleImgEdit = useCallback(() => {
-    setIsProfileImgEditing((prev) => !prev);
-  }, []);
+ 
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 

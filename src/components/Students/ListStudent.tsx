@@ -3,22 +3,18 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
 import { Modal, Pagination } from "antd";
-import axiosInstance from "../../config/Api";
+import axiosInstance, { imageURL } from "../../config/Api";
 import { Avatar } from "antd";
 import IconTrashLines from "../Icon/IconTrashLines";
 import IconPencil from "../Icon/IconPencil";
-import {
-  EyeOutlined,
-  EyeInvisibleOutlined,
-} from "@ant-design/icons";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { Student, StudentResponse } from "./typesStudent";
-
-
 
 import ModalCreateStudent from "./ModalCreateStudent";
 
 import ModalEditStudent from "./ModalEditStudent";
 import { formatDistance, isPast } from "date-fns";
+import IconEdit from "../Icon/IconEdit";
 
 const itemsPerPage = 9;
 
@@ -181,18 +177,19 @@ function ListStudent() {
         <tbody>
           {paginatedStudents.map((student) => (
             <tr key={student._id}>
-              <td>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <Avatar
-                    style={{
-                      backgroundColor: "darkolivegreen",
-                      marginRight: "10px",
-                    }}
-                  >
-                    {student.firstName.charAt(0).toUpperCase()}
-                  </Avatar>
-                  <span>{student.firstName}</span>
-                </div>
+              <td className="flex items-center">
+                <span className="flex justify-center items-center w-12 h-12 text-center rounded-full bg-green-400 text-xl text-white mr-3">
+                  {student.image ? (
+                    <img
+                      src={`${imageURL}students-images/profiles/${student.image}`}
+                      alt="Student Profile"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    student.firstName.charAt(0).toUpperCase()
+                  )}
+                </span>
+                {student.firstName}
               </td>
               <td>{student.lastName}</td>
               <td>{student.email}</td>
@@ -234,14 +231,14 @@ function ListStudent() {
                   onClick={() => showModalEditStudent(student)}
                   className="cursor-pointer mx-2 inline-block"
                 >
-                  <IconPencil className="w-6 h-6" fill={true} />
+                  <IconEdit className="w-5 h-5" />
                 </div>
 
                 <div
                   onClick={() => confirmDeleteStudent(student._id)}
                   className="cursor-pointer mx-2 inline-block"
                 >
-                  <IconTrashLines className="w-6 h-6" />
+                  <IconTrashLines className="w-5 h-5" />
                 </div>
               </td>
             </tr>
