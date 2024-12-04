@@ -10,7 +10,7 @@ import IconPencil from "../Icon/IconPencil";
 import { Button, Modal } from "antd";
 
 import { useUserContext } from "../../config/UserContext";
-import axiosInstance from "../../config/Api";
+import axiosInstance, { imageURL } from "../../config/Api";
 
 import { Card, Col, Row } from "antd";
 import { Admin } from "./ModalCreateAdmin";
@@ -18,7 +18,6 @@ import { Link } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
 import ModalEditTitleCourse from "./ModalEditTitleCourse";
-
 
 function UploadPdfCourses() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -154,14 +153,29 @@ function UploadPdfCourses() {
         {titleCourses.map((course, index) => (
           <Col span={4} key={index}>
             <Card
-              title={course.title}
+              title={
+                <div style={{ fontSize: "18px", fontWeight: "bold",  }}>
+                  {course.title}
+                </div>
+              } 
               bordered={false}
               style={{
                 backgroundColor: "#f6f7f9",
                 boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
                 borderRadius: "8px",
+                width: "350px",
               }}
             >
+              <div style={{ marginBottom: "1rem" }}>
+                <img
+                  src={`${imageURL}courses-images/${course.imageCourse.replace(
+                    "/uploads/ImageCourse/",
+                    ""
+                  )}`}
+                  alt={course.imageCourse}
+                  style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+                />
+              </div>
               <div className="flex items-center">
                 <Link to={`/Dashbord/courses/${course._id}`}>
                   <Button
@@ -171,6 +185,7 @@ function UploadPdfCourses() {
                       color: "#fff",
                       border: "none",
                       cursor: "pointer",
+                      marginTop: "2rem",
                     }}
                   >
                     View Course
@@ -183,7 +198,7 @@ function UploadPdfCourses() {
                     button={
                       <Button
                         size="small"
-                        style={{ marginLeft: "5px" }}
+                        style={{ marginLeft: "5px", marginTop: "2rem" }}
                         className="p-0"
                       >
                         <IconHorizontalDots />

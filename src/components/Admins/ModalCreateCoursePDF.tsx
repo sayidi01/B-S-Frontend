@@ -4,14 +4,14 @@ import { Input, Modal } from "antd";
 
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
-import { Button, message, Upload } from "antd";
+import { Button, Upload } from "antd";
 import type { UploadChangeParam } from "antd/es/upload/interface";
 import axiosInstance from "../../config/Api";
 import type { UploadFile } from "antd/es/upload/interface";
 import { toast } from "react-hot-toast";
 
 import { Admin } from "./ModalCreateAdmin";
-import { useUserContext } from "../../config/UserContext";
+
 
 interface ModalCreatePDFProps {
   isModalOpen: boolean;
@@ -34,8 +34,9 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
   });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
-  const { data } = useUserContext();
+
 
   console.log(formCourse);
 
@@ -54,6 +55,14 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     }
   };
 
+
+  const handleImageChange = (info: UploadChangeParam<UploadFile>) => {
+    if (info.fileList.length > 0) {
+      setSelectedImage(info.fileList[0].originFileObj as File);
+    }
+  };
+
+
   const handleUploadPDF = useCallback(async () => {
     if (!formCourse.courseName) {
       toast.error("Veuillez entrer un nom de cours avant de télécharger.");
@@ -69,9 +78,17 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
       return;
     }
 
+    if (selectedImage && !selectedImage.type.startsWith("image/")) {
+      toast.error("Veuillez sélectionner une image valide.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("pdf", selectedFile);
     formData.append("title", formCourse.courseName);
+    if (selectedImage) {
+      formData.append("imageCourse", selectedImage);
+    }
 
     setFormCourse((prevState) => ({ ...prevState, isUploading: true }));
 
@@ -93,13 +110,14 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
       handleCancel();
       setFormCourse({ courseName: "", isUploading: false });
       setSelectedFile(null);
+      setSelectedImage(null);
     } catch (error) {
       console.error("Erreur lors du téléchargement du PDF :", error);
       toast.error("Erreur lors du téléchargement du PDF");
     } finally {
       setFormCourse((prevState) => ({ ...prevState, isUploading: false }));
     }
-  }, [formCourse.courseName, selectedFile, handleCancel]);
+  }, [formCourse.courseName, selectedFile, handleCancel, selectedImage]);
 
   const handleOk = () => {
     handleUploadPDF();
@@ -112,10 +130,17 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     beforeUpload: () => false,
   };
 
+  const imageUploadProps: UploadProps = {
+    name: "image",
+    showUploadList: false,
+    onChange: handleImageChange,
+    beforeUpload: () => false,
+  };
+
   return (
     <div>
       <Modal
-        title="Create New Courses PDF "
+        title="Create New Course PDF "
         open={isModalOpen}
         onCancel={handleCancel}
         onOk={handleOk}
@@ -129,7 +154,7 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
           value={formCourse.courseName}
           onChange={handleChange}
         />
-
+        <div style={{ display: "flex", gap: "1rem" }}>
         <Upload {...uploadProps}>
           <Button
             style={{
@@ -140,9 +165,23 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
             icon={<UploadOutlined />}
             disabled={formCourse.isUploading || !formCourse.courseName}
           >
-            Click to Upload
+             Upload Course PDF
           </Button>
         </Upload>
+
+        <Upload {...imageUploadProps}>
+          <Button
+            style={{
+              backgroundColor: "#e3f2fd",
+              marginTop: "2rem",
+            }}
+            icon={<UploadOutlined />}
+            disabled={formCourse.isUploading || !formCourse.courseName}
+          >
+           Upload Image Course
+          </Button>
+        </Upload>
+        </div>
       </Modal>
     </div>
   );

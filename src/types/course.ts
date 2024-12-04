@@ -4,4 +4,5 @@ export interface ICourse {
   updatedAt: string;
   url: string;
   _id: string;
+  imageCourse: string
 }
