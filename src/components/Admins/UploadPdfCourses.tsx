@@ -135,7 +135,7 @@ function UploadPdfCourses() {
           marginLeft: "4rem",
         }}
       >
-        Upload courses with PDF files
+        Course Manager and Upload Zone
       </p>
 
       <button

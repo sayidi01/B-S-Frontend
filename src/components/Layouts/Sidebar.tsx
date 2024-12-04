@@ -8,19 +8,19 @@ import { IRootState } from "../../store";
 import { useState, useEffect } from "react";
 import IconCaretsDown from "../Icon/IconCaretsDown";
 import IconCaretDown from "../Icon/IconCaretDown";
-import IconMenuDashboard from "../Icon/Menu/IconMenuDashboard";
+
 import IconMinus from "../Icon/IconMinus";
 import Logo from "../Icon/Logo-BS-Dash.png";
 import IconMenuUsers from "../Icon/Menu/IconMenuUsers";
 
-
 import IconUser from "../Icon/IconUser";
-import IconUserPlus from '../Icon/IconUserPlus';
+import IconUserPlus from "../Icon/IconUserPlus";
 import IconMenuPages from "../Icon/Menu/IconMenuPages";
+import IconMenuChat from "../Icon/Menu/IconMenuChat";
 
 const Sidebar = () => {
   const [currentMenu, setCurrentMenu] = useState<string>("");
-  const [errorSubMenu, setErrorSubMenu] = useState(false);
+
   const themeConfig = useSelector((state: IRootState) => state.themeConfig);
   const semidark = useSelector(
     (state: IRootState) => state.themeConfig.semidark
@@ -58,7 +58,7 @@ const Sidebar = () => {
     if (window.innerWidth < 1024 && themeConfig.sidebar) {
       dispatch(toggleSidebar());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [location]);
 
   return (
@@ -73,7 +73,7 @@ const Sidebar = () => {
             <NavLink to="/" className="main-logo flex items-center shrink-0">
               <img className="w-10 ml-[5px] flex-none" src={Logo} alt="logo" />
               <span className="text-2xl ltr:ml-1.5 rtl:mr-1.5 font-semibold align-middle lg:inline dark:text-white-light">
-                {t("Institut")}
+                {t("Institute")}
               </span>
             </NavLink>
 
@@ -87,8 +87,6 @@ const Sidebar = () => {
           </div>
           <PerfectScrollbar className="h-[calc(100vh-80px)] relative">
             <ul className="relative font-semibold space-y-0.5 p-4 py-0">
-             
-
               <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                 <IconMinus className="w-4 h-5 flex-none hidden" />
                 <span>{t("Admins")}</span>
@@ -103,8 +101,11 @@ const Sidebar = () => {
                   onClick={() => toggleMenu("Admins")}
                 >
                   <div className="flex items-center">
-                  <IconMenuUsers className="group-hover:!text-primary shrink-0 w-7 h-7" />
-                    <span  style={{ fontSize: 15 }} className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
+                    <IconMenuUsers className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                    <span
+                      style={{ fontSize: 15 }}
+                      className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                    >
                       {t("Admins")}
                     </span>
                   </div>
@@ -151,8 +152,11 @@ const Sidebar = () => {
                   onClick={() => toggleMenu("Teachers")}
                 >
                   <div className="flex items-center">
-                  <IconUser className="group-hover:!text-primary shrink-0 w-7 h-7" />
-                    <span  style={{ fontSize: 15 }} className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">
+                    <IconUser className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                    <span
+                      style={{ fontSize: 15 }}
+                      className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                    >
                       {t("Teachers")}
                     </span>
                   </div>
@@ -176,7 +180,6 @@ const Sidebar = () => {
                     <li>
                       <NavLink to="/Dashbord/ListTeacher">{t("List")}</NavLink>
                     </li>
-                   
                   </ul>
                 </AnimateHeight>
               </li>
@@ -195,7 +198,7 @@ const Sidebar = () => {
                   onClick={() => toggleMenu("Students")}
                 >
                   <div className="flex items-center">
-                  <IconUserPlus className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                    <IconUserPlus className="group-hover:!text-primary shrink-0 w-7 h-7" />
                     <span
                       style={{ fontSize: 15 }}
                       className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
@@ -223,7 +226,6 @@ const Sidebar = () => {
                     <li>
                       <NavLink to="/Dashbord/ListStudent">{t("List")}</NavLink>
                     </li>
-                  
                   </ul>
                 </AnimateHeight>
               </li>
@@ -243,7 +245,7 @@ const Sidebar = () => {
                   onClick={() => toggleMenu("Courses")}
                 >
                   <div className="flex items-center">
-                  <IconMenuPages className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                    <IconMenuPages className="group-hover:!text-primary shrink-0 w-7 h-7" />
                     <span
                       style={{ fontSize: 15 }}
                       className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
@@ -267,14 +269,66 @@ const Sidebar = () => {
                   duration={300}
                   height={currentMenu === "Courses" ? "auto" : 0}
                 >
-                    <ul className="sub-menu text-gray-500">
+                  <ul className="sub-menu text-gray-500">
                     <li>
-                      <NavLink to="/Dashbord/courses">{t("Create new Courses")}</NavLink>
+                      <NavLink to="/Dashbord/courses">
+                        {t("Create new Courses")}
+                      </NavLink>
                     </li>
-                  
                   </ul>
-                 
                 </AnimateHeight>
+                <AnimateHeight
+                  duration={300}
+                  height={currentMenu === "Courses" ? "auto" : 0}
+                >
+                  <ul className="sub-menu text-gray-500">
+                    <li>
+                      <NavLink to="/Dashbord/editorText">
+                        {t("Editor Text")}
+                      </NavLink>
+                    </li>
+                  </ul>
+                </AnimateHeight>
+              </li>
+
+              <li className="menu nav-item"></li>
+
+              <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
+                <IconMinus className="w-4 h-5 flex-none hidden" />
+                <span>{t("Chat")}</span>
+              </h2>
+
+              <li className="menu nav-item">
+                <button
+                  type="button"
+                  className={`${
+                    currentMenu === "Chat" ? "active" : ""
+                  } nav-link group w-full`}
+                  onClick={() => toggleMenu("Chat")}
+                >
+                  <div className="flex items-center">
+                    <IconMenuChat className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                    <span
+                      style={{ fontSize: 15 }}
+                      className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                    >
+                      {t("Chat")}
+                    </span>
+                  </div>
+
+                  <div
+                    className={
+                      currentMenu !== "Chat" ? "rtl:rotate-90 -rotate-90" : ""
+                    }
+                  >
+                    <IconCaretDown />
+                  </div>
+                </button>
+
+                <AnimateHeight
+                  duration={300}
+                  height={currentMenu === "Chat" ? "auto" : 0}
+                ></AnimateHeight>
               </li>
             </ul>
           </PerfectScrollbar>

@@ -11,11 +11,11 @@ const RevenueChart = () => {
     const revenueChart: any = {
         series: [
             {
-                name: 'Income',
+                name: 'Students',
                 data: [16800, 16800, 15500, 17800, 15500, 17000, 19000, 16000, 15000, 17000, 14000, 17000],
             },
             {
-                name: 'Expenses',
+                name: 'Courses',
                 data: [16500, 17500, 16200, 17300, 16000, 19500, 16000, 17000, 16000, 19000, 18000, 19000],
             },
         ],

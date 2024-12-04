@@ -25,7 +25,9 @@ import { useUserContext } from "../../config/UserContext";
 import axiosInstance, { imageURL } from "../../config/Api";
 import { toast } from "react-hot-toast";
 
-import logoHeader from "../../../public/favicon.png"
+import logoHeader from "../../../public/LOGO-TRNS.png"
+import IconCalendar from "../Icon/IconCalendar";
+import IconChatNotification from "../Icon/IconChatNotification";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -146,17 +148,10 @@ const Header = () => {
                 onSubmit={() => setSearch(false)}
               >
                 <div className="relative">
-                  <input
-                    type="text"
-                    className="form-input ltr:pl-9 rtl:pr-9 ltr:sm:pr-4 rtl:sm:pl-4 ltr:pr-9 rtl:pl-9 peer sm:bg-transparent bg-gray-100 placeholder:tracking-widest"
-                    placeholder="Search..."
-                  />
-                  <button
-                    type="button"
-                    className="absolute w-9 h-9 inset-0 ltr:right-auto rtl:left-auto appearance-none peer-focus:text-primary"
-                  >
-                    <IconSearch className="mx-auto" />
-                  </button>
+                <div style={{display: "flex", gap: 10}}>
+                <IconCalendar/>
+                <IconChatNotification/>
+              </div>
                   <button
                     type="button"
                     className="hover:opacity-80 sm:hidden block absolute top-1/2 -translate-y-1/2 ltr:right-2 rtl:left-2"
@@ -243,7 +238,7 @@ const Header = () => {
                           }`}
                           onClick={() => {
                             i18next.changeLanguage(item.code);
-                            // setFlag(item.code);
+                          
                             setLocale(item.code);
                           }}
                         >

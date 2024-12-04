@@ -4,9 +4,9 @@ import { useUserContext } from "../../config/UserContext";
 import { toast } from "react-hot-toast";
 import { Modal, Pagination } from "antd";
 import axiosInstance, { imageURL } from "../../config/Api";
-import { Avatar } from "antd";
+
 import IconTrashLines from "../Icon/IconTrashLines";
-import IconPencil from "../Icon/IconPencil";
+
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { Student, StudentResponse } from "./typesStudent";
 
