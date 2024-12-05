@@ -43,7 +43,11 @@ function App({ children }: PropsWithChildren) {
     }, [dispatch, themeConfig.theme, themeConfig.menu, themeConfig.layout, themeConfig.rtlClass, themeConfig.animation, themeConfig.navbar, themeConfig.locale, themeConfig.semidark]);
 
     if (!isLargeDevice) {
-        return <div>Accès limité aux appareils de taille tablette ou supérieure</div>;
+        return (
+            <div className="flex items-center justify-center h-screen w-screen text-center text-lg sm:text-xl md:text-2xl lg:text-3xl">
+                Accès limité aux appareils de taille tablette ou supérieure
+            </div>
+        );
     }
 
     return (

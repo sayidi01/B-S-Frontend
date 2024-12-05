@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link,  useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IRootState } from "../../store";
 import {
   toggleRTL,
@@ -25,7 +25,7 @@ import { useUserContext } from "../../config/UserContext";
 import axiosInstance, { imageURL } from "../../config/Api";
 import { toast } from "react-hot-toast";
 
-import logoHeader from "../../../public/LOGO-TRNS.png"
+import logoHeader from "../../../public/LOGO-TRNS.png";
 import IconCalendar from "../Icon/IconCalendar";
 import IconChatNotification from "../Icon/IconChatNotification";
 
@@ -123,7 +123,6 @@ const Header = () => {
               src={logoHeader}
               alt="logo"
             />
-           
 
             <button
               type="button"
@@ -148,10 +147,10 @@ const Header = () => {
                 onSubmit={() => setSearch(false)}
               >
                 <div className="relative">
-                <div style={{display: "flex", gap: 10}}>
-                <IconCalendar/>
-                <IconChatNotification/>
-              </div>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <IconCalendar />
+                    <IconChatNotification />
+                  </div>
                   <button
                     type="button"
                     className="hover:opacity-80 sm:hidden block absolute top-1/2 -translate-y-1/2 ltr:right-2 rtl:left-2"
@@ -238,7 +237,7 @@ const Header = () => {
                           }`}
                           onClick={() => {
                             i18next.changeLanguage(item.code);
-                          
+
                             setLocale(item.code);
                           }}
                         >
@@ -276,7 +275,7 @@ const Header = () => {
                   )
                 }
               >
-                <ul className="text-dark dark:text-white-dark !py-0 w-[230px] font-semibold dark:text-white-light/90">
+                <ul className="text-dark dark:text-white-dark !py-0 min-w-[230px] max-w-[400px] font-semibold dark:text-white-light/90">
                   <li>
                     <div className="flex items-center px-4 py-4">
                       <span className="flex justify-center items-center w-12 h-12 text-center rounded-full bg-slate-400 text-xl text-white mr-3">
@@ -296,7 +295,7 @@ const Header = () => {
                         <h4 className="text-base">
                           {currentAdmin?.fullName}
                           <span className="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">
-                            Pro
+                            Admin
                           </span>
                         </h4>
                         <button

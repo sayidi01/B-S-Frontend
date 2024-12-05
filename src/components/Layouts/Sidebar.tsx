@@ -17,6 +17,7 @@ import IconUser from "../Icon/IconUser";
 import IconUserPlus from "../Icon/IconUserPlus";
 import IconMenuPages from "../Icon/Menu/IconMenuPages";
 import IconMenuChat from "../Icon/Menu/IconMenuChat";
+import IconSafari from "../Icon/IconSafari";
 
 const Sidebar = () => {
   const [currentMenu, setCurrentMenu] = useState<string>("");
@@ -58,7 +59,6 @@ const Sidebar = () => {
     if (window.innerWidth < 1024 && themeConfig.sidebar) {
       dispatch(toggleSidebar());
     }
-   
   }, [location]);
 
   return (
@@ -328,6 +328,46 @@ const Sidebar = () => {
                 <AnimateHeight
                   duration={300}
                   height={currentMenu === "Chat" ? "auto" : 0}
+                ></AnimateHeight>
+              </li>
+
+              <li className="menu nav-item"></li>
+
+              <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
+                <IconMinus className="w-4 h-5 flex-none hidden" />
+                <span>{t("Sites Web")}</span>
+              </h2>
+
+              <li className="menu nav-item">
+                <button
+                  type="button"
+                  className={`${
+                    currentMenu === "Sites Web" ? "active" : ""
+                  } nav-link group w-full`}
+                  onClick={() => toggleMenu("Sites Web")}
+                >
+                  <div className="flex items-center">
+                    <IconSafari className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                    <span
+                      style={{ fontSize: 15 }}
+                      className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                    >
+                      {t("Vitrine")}
+                    </span>
+                  </div>
+
+                  <div
+                    className={
+                      currentMenu !== "Chat" ? "rtl:rotate-90 -rotate-90" : ""
+                    }
+                  >
+                    <IconCaretDown />
+                  </div>
+                </button>
+
+                <AnimateHeight
+                  duration={300}
+                  height={currentMenu === "Sites Web" ? "auto" : 0}
                 ></AnimateHeight>
               </li>
             </ul>

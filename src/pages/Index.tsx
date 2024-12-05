@@ -115,14 +115,14 @@ const Index = () => {
           marginTop: "3rem",
         }}
       >
-        <Card style={{ width: 250, backgroundColor: "#e3f2fd" }}>
-          <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#1e88e5" }}>
+        <Card style={{ width: 250, backgroundColor: "#e8f5e9" }}>
+          <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#43a047" }}>
             <IconMenuUsers />
             Total Admins : {totaleAdmins}
           </div>
         </Card>
-        <Card style={{ width: 250, backgroundColor: "#e8f5e9" }}>
-          <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#43a047" }}>
+        <Card style={{ width: 250,backgroundColor: "#e3f2fd" }}>
+          <div style={{ fontSize: 20, fontFamily: "Roboto",color: "#1e88e5" }}>
             <IconUser />
             Total Teachers : {totaleTeachers}
           </div>
