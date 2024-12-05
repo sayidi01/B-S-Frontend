@@ -8,15 +8,15 @@ function App({ children }: PropsWithChildren) {
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const dispatch = useDispatch();
 
-    const [isDesktop, setIsDesktop] = useState<boolean>(true);
+    const [isLargeDevice, setIsLargeDevice] = useState<boolean>(true);
 
 
 
     useEffect(() => {
         // Vérifier la largeur de la fenêtre lors du premier rendu
         const handleResize = () => {
-            // Seules les largeurs d'écran supérieures ou égales à 1366px sont considérées comme desktop (PC)
-            setIsDesktop(window.innerWidth > 1366); // Modifié pour exclure les tablettes et appareils entre 1024px et 1366px
+            // Autoriser les appareils avec une largeur supérieure ou égale à 1024px (tablettes grandes et ordinateurs)
+            setIsLargeDevice(window.innerWidth >= 1024);
         };
 
         // Ajouter l'écouteur d'événement lors du montage
@@ -42,8 +42,8 @@ function App({ children }: PropsWithChildren) {
         dispatch(toggleSemidark(localStorage.getItem('semidark') || themeConfig.semidark));
     }, [dispatch, themeConfig.theme, themeConfig.menu, themeConfig.layout, themeConfig.rtlClass, themeConfig.animation, themeConfig.navbar, themeConfig.locale, themeConfig.semidark]);
 
-    if (!isDesktop) {
-        return <div>Accès limité aux appareils de bureau</div>;
+    if (!isLargeDevice) {
+        return <div>Accès limité aux appareils de taille tablette ou supérieure</div>;
     }
 
     return (

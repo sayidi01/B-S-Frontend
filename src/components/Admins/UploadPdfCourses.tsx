@@ -147,14 +147,14 @@ function UploadPdfCourses() {
       </button>
 
       <Row
-        gutter={[16, 36]}
+        gutter={[16, 32]}
         style={{ marginTop: "4rem", gap: 10, marginLeft: "3rem" }}
       >
         {titleCourses.map((course, index) => (
           <Col span={4} key={index}>
             <Card
               title={
-                <div style={{ fontSize: "18px", fontWeight: "bold",  }}>
+                <div style={{ fontSize: "18px", fontWeight: "bold" , width: "200px",}}>
                   {course.title}
                 </div>
               } 
@@ -162,8 +162,7 @@ function UploadPdfCourses() {
               style={{
                 backgroundColor: "#f6f7f9",
                 boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-                borderRadius: "8px",
-                width: "350px",
+                
               }}
             >
               <div style={{ marginBottom: "1rem" }}>
@@ -173,7 +172,7 @@ function UploadPdfCourses() {
                     ""
                   )}`}
                   alt={course.imageCourse}
-                  style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+                  style={{  borderRadius: "8px" }}
                 />
               </div>
               <div className="flex items-center">
@@ -186,6 +185,7 @@ function UploadPdfCourses() {
                       border: "none",
                       cursor: "pointer",
                       marginTop: "2rem",
+                      marginLeft: '1rem'
                     }}
                   >
                     View Course
