@@ -180,7 +180,7 @@ function UploadPdfCourses() {
                   <Button
                     size="small"
                     style={{
-                      backgroundColor: "#FF4201",
+                      backgroundColor: '#1677ff',
                       color: "#fff",
                       border: "none",
                       cursor: "pointer",
