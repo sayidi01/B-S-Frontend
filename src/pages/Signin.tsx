@@ -252,13 +252,7 @@ const Signin = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="flex cursor-pointer items-center">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox bg-white dark:bg-black"
-                    />
-                   
-                  </label>
+                
                 </div>
                 <button
                   type="submit"

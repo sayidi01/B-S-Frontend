@@ -293,7 +293,14 @@ const Header = () => {
                       </span>
                       <div className="ltr:pl-4 rtl:pr-4 truncate">
                         <h4 className="text-base">
-                          {currentAdmin?.fullName}
+                          {currentAdmin?.fullName
+                            ?.split(" ")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() +
+                                word.slice(1).toLowerCase()
+                            )
+                            .join(" ")}
                           <span className="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">
                             Admin
                           </span>
@@ -302,7 +309,15 @@ const Header = () => {
                           type="button"
                           className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
                         >
-                          {currentAdmin?.email}
+                          {currentAdmin?.email
+                            ?.split("@")
+                            .map((part, index) =>
+                              index === 0
+                                ? part.charAt(0).toUpperCase() +
+                                  part.slice(1).toLowerCase()
+                                : part
+                            )
+                            .join("@")}
                         </button>
                       </div>
                     </div>
