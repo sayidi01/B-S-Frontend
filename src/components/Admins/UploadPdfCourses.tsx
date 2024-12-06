@@ -167,7 +167,7 @@ function UploadPdfCourses() {
             >
               <div style={{ marginBottom: "1rem" }}>
                 <img
-                  src={`${imageURL}courses-images/${course.imageCourse.replace(
+                  src={`${imageURL}courses-images/${course.imageCourse?.replace(
                     "/uploads/ImageCourse/",
                     ""
                   )}`}

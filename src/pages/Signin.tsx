@@ -257,9 +257,7 @@ const Signin = () => {
                       type="checkbox"
                       className="form-checkbox bg-white dark:bg-black"
                     />
-                    <span className="text-white-dark">
-                      Subscribe to weekly newsletter
-                    </span>
+                   
                   </label>
                 </div>
                 <button

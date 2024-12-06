@@ -1,13 +1,12 @@
 import React, { useCallback, useState } from "react";
 
-import { Input, Modal } from "antd";
 
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
-import { Button, Upload } from "antd";
-import type { UploadChangeParam } from "antd/es/upload/interface";
+import { Button, Upload,  Input, Modal  } from "antd";
+import type { UploadChangeParam , UploadFile } from "antd/es/upload/interface";
 import axiosInstance from "../../config/Api";
-import type { UploadFile } from "antd/es/upload/interface";
+
 import { toast } from "react-hot-toast";
 
 import { Admin } from "./ModalCreateAdmin";
