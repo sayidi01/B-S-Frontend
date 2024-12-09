@@ -180,7 +180,7 @@ const Signin = () => {
                             }`}
                             onClick={() => {
                               i18next.changeLanguage(item.code);
-                              // setFlag(item.code);
+                        
                               setLocale(item.code);
                             }}
                           >

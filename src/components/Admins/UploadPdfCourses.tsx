@@ -213,7 +213,6 @@ function UploadPdfCourses() {
                             confirmDeleteCourse(course._id, course.title)
                           }
                           style={{
-                            fontWeight: "bolder",
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
@@ -228,7 +227,6 @@ function UploadPdfCourses() {
                           onClick={() => showModalEditTitleCourse(course)}
                           type="button"
                           style={{
-                            fontWeight: "bolder",
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
