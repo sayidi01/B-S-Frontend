@@ -5,4 +5,5 @@ export interface ICourse {
   url: string;
   _id: string;
   imageCourse: string
+  description: string
 }

@@ -30,6 +30,7 @@ export interface Admin {
   course: []
   url: string
   imageCourse?: string
+  description: string
 }
 
 const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({

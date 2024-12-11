@@ -5,7 +5,6 @@ import { toast } from "react-hot-toast";
 
 import { Admin } from "./ModalCreateAdmin";
 
-
 interface ModalEditTitleCourseProps {
   isModalEditTitleOpen: boolean;
   handleEditCancel: () => void;
@@ -29,6 +28,15 @@ const ModalEditTitleCourse: React.FC<ModalEditTitleCourseProps> = ({
 
   const handleChangeEditTitleCourse = (
     e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    if (formData) {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleChangeEditdescriptionCourse = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     if (formData) {
@@ -66,20 +74,29 @@ const ModalEditTitleCourse: React.FC<ModalEditTitleCourseProps> = ({
   return (
     <div>
       <Modal
-        title="Edit Title Course "
+        title="Edit Course "
         open={isModalEditTitleOpen}
         onCancel={handleEditCancel}
         onOk={handleSumbitEditTitle}
-        style={{marginTop: 3}}
+        style={{ marginTop: 3 }}
       >
         {formData && (
           <>
             <Input
-            style={{marginTop: 5, marginBottom: 10}}
+              style={{ marginTop: 5, marginBottom: 10 }}
               onChange={handleChangeEditTitleCourse}
               value={formData.title}
               name="title"
               placeholder="Title"
+            />
+
+            <Input.TextArea
+              style={{ marginTop: 5, marginBottom: 10 }}
+              onChange={handleChangeEditdescriptionCourse}
+              value={formData.description}
+              name="description"
+              placeholder="Description"
+              rows={4}
             />
           </>
         )}

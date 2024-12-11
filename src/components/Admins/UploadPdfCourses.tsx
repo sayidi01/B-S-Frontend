@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import ModalCreateCoursePDF from "./ModalCreateCoursePDF";
 
@@ -7,17 +7,19 @@ import IconHorizontalDots from "../../components/Icon/IconHorizontalDots";
 import IconTrashLines from "../Icon/IconTrashLines";
 import IconPencil from "../Icon/IconPencil";
 
-import { Button, Modal } from "antd";
+import { Button, Modal, Pagination, Card, Col, Row  } from "antd";
 
 import { useUserContext } from "../../config/UserContext";
 import axiosInstance, { imageURL } from "../../config/Api";
 
-import { Card, Col, Row } from "antd";
+
 import { Admin } from "./ModalCreateAdmin";
 import { Link } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
 import ModalEditTitleCourse from "./ModalEditTitleCourse";
+
+const itemsPerPage = 4;
 
 function UploadPdfCourses() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -33,6 +35,18 @@ function UploadPdfCourses() {
   const { isConnected } = useUserContext();
 
   console.log(courseId);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const paginatedCourses = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return titleCourses.slice(startIndex, startIndex + itemsPerPage);
+  }, [titleCourses, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -150,29 +164,39 @@ function UploadPdfCourses() {
         gutter={[16, 32]}
         style={{ marginTop: "4rem", gap: 10, marginLeft: "3rem" }}
       >
-        {titleCourses.map((course, index) => (
+        {paginatedCourses.map((course, index) => (
           <Col span={4} key={index}>
             <Card
               title={
-                <div style={{ fontSize: "18px", fontWeight: "bold" , width: "200px",}}>
+                <div
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    width: "200px",
+                  }}
+                >
                   {course.title}
                 </div>
-              } 
+              }
               bordered={false}
               style={{
                 backgroundColor: "#f6f7f9",
                 boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-                
               }}
             >
-              <div style={{ marginBottom: "1rem" }}>
+              <div
+                style={{ fontSize: "13px", color: "#666"}}
+              >
+                {course.description}
+              </div>
+              <div style={{ marginBottom: "1rem", marginTop: '1rem' }}>
                 <img
                   src={`${imageURL}courses-images/${course.imageCourse?.replace(
                     "/uploads/ImageCourse/",
                     ""
                   )}`}
                   alt={course.imageCourse}
-                  style={{  borderRadius: "8px" }}
+                  style={{ borderRadius: "8px" }}
                 />
               </div>
               <div className="flex items-center">
@@ -180,12 +204,12 @@ function UploadPdfCourses() {
                   <Button
                     size="small"
                     style={{
-                      backgroundColor: '#1677ff',
+                      backgroundColor: "#1677ff",
                       color: "#fff",
                       border: "none",
                       cursor: "pointer",
                       marginTop: "2rem",
-                      marginLeft: '1rem'
+                      marginLeft: "1rem",
                     }}
                   >
                     View Course
@@ -243,6 +267,15 @@ function UploadPdfCourses() {
             </Card>
           </Col>
         ))}
+         {titleCourses.length > itemsPerPage && (
+          <Pagination
+            className="custom-pagination"
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={titleCourses.length}
+            onChange={handlePageChange}
+          />
+        )}
       </Row>
 
       <ModalCreateCoursePDF

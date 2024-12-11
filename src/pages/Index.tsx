@@ -145,31 +145,7 @@ const Index = () => {
         <RevenueChart />
       </div>
 
-      <div className="panel h-full">
-        <div className="flex items-center justify-between dark:text-white-light mb-5">
-          <h5 className="font-semibold text-lg">Summary</h5>
-        </div>
-        <div className="space-y-9">
-          <div className="flex items-center">
-            <div className="w-9 h-9 ltr:mr-3 rtl:ml-3">
-              <div className="bg-warning-light dark:bg-warning text-warning dark:text-warning-light rounded-full w-9 h-9 grid place-content-center">
-                <IconUserPlus />
-              </div>
-            </div>
-            <div className="flex-1">
-              <div className="flex font-semibold text-white-dark mb-2">
-                <h6>Progress Students</h6>
-              </div>
-              <div className="w-full rounded-full h-2 bg-dark-light dark:bg-[#1b2e4b] shadow">
-                <div
-                  className="bg-gradient-to-r from-[#f09819] to-[#ff5858] w-full h-full rounded-full"
-                  style={{ width: "80%" }}
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    
     </div>
   );
 };
