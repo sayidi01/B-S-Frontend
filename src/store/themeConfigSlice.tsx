@@ -17,7 +17,7 @@ const defaultState = {
     languageList: [
         { code: 'en', name: 'English' },
         { code: 'fr', name: 'French' },
-        { code: 'de', name: 'German' },
+        { code: 'ae', name: 'Arabic' },
        
     ],
     semidark: false,
@@ -38,7 +38,7 @@ const initialState = {
       
         { code: 'en', name: 'English' },
         { code: 'fr', name: 'French' },
-        { code: 'de', name: 'German' },
+        { code: 'ae', name: 'Arabic' },
         
     ],
 };

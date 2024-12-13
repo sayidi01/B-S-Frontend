@@ -164,6 +164,7 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
         <Input
           onChange={handleChangeFormStudent}
           value={formdataStudent.password}
+          disabled
           name="password"
           type="password"
           placeholder="Password"

@@ -1,7 +1,7 @@
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { toggleSidebar } from "../../store/themeConfigSlice";
 import AnimateHeight from "react-animate-height";
 import { IRootState } from "../../store";
@@ -18,7 +18,9 @@ import IconUserPlus from "../Icon/IconUserPlus";
 import IconMenuPages from "../Icon/Menu/IconMenuPages";
 import IconMenuChat from "../Icon/Menu/IconMenuChat";
 import IconSafari from "../Icon/IconSafari";
-import IconFolder from '../Icon/IconFolder';
+import IconFolder from "../Icon/IconFolder";
+import IconMenu from "../Icon/IconMenu";
+import IconMenuDashboard from "../Icon/Menu/IconMenuDashboard";
 
 const Sidebar = () => {
   const [currentMenu, setCurrentMenu] = useState<string>("");
@@ -70,7 +72,7 @@ const Sidebar = () => {
         }`}
       >
         <div className="bg-white dark:bg-black h-full">
-          <div className="flex justify-between items-center px-4 py-3">
+          <div className="flex justify-between items-center px-4 py-3 mb-2">
             <NavLink to="/" className="main-logo flex items-center shrink-0">
               <img className="w-10 ml-[5px] flex-none" src={Logo} alt="logo" />
               <span className="text-2xl ltr:ml-1.5 rtl:mr-1.5 font-semibold align-middle lg:inline dark:text-white-light">
@@ -86,6 +88,35 @@ const Sidebar = () => {
               <IconCaretsDown className="m-auto rotate-90" />
             </button>
           </div>
+
+          <Link
+            to="/" 
+            className={`${
+              currentMenu === "Dashborad" ? "active" : ""
+            } nav-link group w-full`}
+          >
+            <button
+              type="button"
+              onClick={() => toggleMenu("Dashborad")} 
+              className="w-full flex items-center" 
+            >
+              <div className="flex items-center">
+                <IconMenuDashboard className="group-hover:!text-primary shrink-0 w-5 h-5 ml-4 mb-2" />
+                <span
+                  style={{ fontSize: 17, fontWeight: "bold" }}
+                  className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark mb-2"
+                >
+                  {t("Dashbord")}
+                </span>
+              </div>
+
+              <div
+                className={
+                  currentMenu !== "Dashborad" ? "rtl:rotate-90 -rotate-90" : ""
+                }
+              ></div>
+            </button>
+          </Link>
           <PerfectScrollbar className="h-[calc(100vh-80px)] relative">
             <ul className="relative font-semibold space-y-0.5 p-4 py-0">
               <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
@@ -359,7 +390,9 @@ const Sidebar = () => {
 
                   <div
                     className={
-                      currentMenu !== "Vitrine" ? "rtl:rotate-90 -rotate-90" : ""
+                      currentMenu !== "Vitrine"
+                        ? "rtl:rotate-90 -rotate-90"
+                        : ""
                     }
                   >
                     <IconCaretDown />
@@ -372,9 +405,6 @@ const Sidebar = () => {
                 ></AnimateHeight>
               </li>
 
-
-
-              
               <li className="menu nav-item">
                 <button
                   type="button"
@@ -395,7 +425,9 @@ const Sidebar = () => {
 
                   <div
                     className={
-                      currentMenu !== "Form Students" ? "rtl:rotate-90 -rotate-90" : ""
+                      currentMenu !== "Form Students"
+                        ? "rtl:rotate-90 -rotate-90"
+                        : ""
                     }
                   >
                     <IconCaretDown />
@@ -407,11 +439,6 @@ const Sidebar = () => {
                   height={currentMenu === "Form Students" ? "auto" : 0}
                 ></AnimateHeight>
               </li>
-    
-
-
-
-              
             </ul>
           </PerfectScrollbar>
         </div>

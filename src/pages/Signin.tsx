@@ -1,4 +1,4 @@
-import { useCallback,  useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setPageTitle, toggleRTL } from "../store/themeConfigSlice";
@@ -26,6 +26,7 @@ import { useUserContext } from "../config/UserContext";
 import { toast } from "react-hot-toast";
 import { AdminResponse } from "../components/Admins/ListAdmins";
 import { extractMsgFromError } from "../utils";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 
 interface Signin {
   email: string;
@@ -41,6 +42,8 @@ const Signin = () => {
     email: "",
     password: "",
   });
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   console.log(signinAdmin);
 
@@ -95,6 +98,10 @@ const Signin = () => {
   };
   const [flag, setFlag] = useState(themeConfig.locale);
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prevState) => !prevState); // Bascule l'état de la visibilité du mot de passe
+  };
+
   return (
     <div>
       <div className="absolute inset-0">
@@ -141,7 +148,6 @@ const Signin = () => {
           </div>
           <div className="relative flex w-full flex-col items-center justify-center gap-6 px-4 pb-16 pt-6 sm:px-6 lg:max-w-[667px]">
             <div className="flex w-full max-w-[440px] items-center gap-2 lg:absolute lg:end-6 lg:top-6 lg:max-w-full">
-             
               <div className="dropdown ms-auto w-max">
                 <Dropdown
                   offset={[0, 8]}
@@ -178,7 +184,7 @@ const Signin = () => {
                             }`}
                             onClick={() => {
                               i18next.changeLanguage(item.code);
-                        
+
                               setLocale(item.code);
                             }}
                           >
@@ -237,21 +243,26 @@ const Signin = () => {
                       onChange={handleChangeSignin}
                       id="Password"
                       name="password"
-                      type="password"
+                      type={passwordVisible ? "text" : "password"}
                       value={signinAdmin.password}
                       autoComplete="on"
                       autoSave="true"
                       placeholder="Enter Password"
                       className="form-input ps-10 placeholder:text-white-dark"
                     />
-                    <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                      <IconLockDots fill={true} />
+                    <span
+                      onClick={togglePasswordVisibility}
+                      className="absolute end-4 top-1/2 -translate-y-1/2 cursor-pointer"
+                    >
+                      {passwordVisible ? (
+                        <EyeOutlined />
+                      ) : (
+                        <EyeInvisibleOutlined />
+                      )}
                     </span>
                   </div>
                 </div>
-                <div>
-                
-                </div>
+                <div></div>
                 <button
                   type="submit"
                   className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
