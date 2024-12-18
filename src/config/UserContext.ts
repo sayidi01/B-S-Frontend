@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react";
 
 import { Admin } from "../components/Admins/ModalCreateAdmin";
+import { ICourse } from "../types/course";
 
 interface UserContextType {
     data: {};
@@ -9,6 +10,8 @@ interface UserContextType {
     setIsConnected: React.Dispatch<React.SetStateAction<boolean | null>> ;
     currentAdmin: Admin | null; 
     setCurrentAdmin: React.Dispatch<React.SetStateAction<Admin | null>>;
+    courses: ICourse[]; 
+    setCourses: React.Dispatch<React.SetStateAction<ICourse[]>>; 
   
 }
 

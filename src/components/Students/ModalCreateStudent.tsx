@@ -24,9 +24,9 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
   setListStudents,
   setVisiblePasswords,
 }) => {
-  const { data } = useUserContext();
+  const { data, courses, setCourses } = useUserContext();
 
-  const [courses, setCourses] = useState<ICourse | null>(null);
+  
 
   const [formdataStudent, setFormDataStudent] = useState<FormDataStudent>({
     firstName: "",
@@ -94,7 +94,7 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
 
 useEffect(() => {
   axiosInstance
-    .get<ICourse>("/course/title")
+    .get<ICourse[]>("/course/title")
     .then(({ data }) => {
       console.log("Data loaded:", data);
       setCourses(data);

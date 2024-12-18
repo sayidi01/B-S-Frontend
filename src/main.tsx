@@ -21,13 +21,14 @@ import { Toaster } from "react-hot-toast";
 import UserContext from "./config/UserContext";
 import { MantineProvider } from "@mantine/core";
 import { Admin } from "./components/Admins/ModalCreateAdmin";
-import { Student } from "./components/Students/typesStudent";
+
+import { ICourse } from "./types/course";
 
 const App = () => {
   const [data, setData] = useState({});
   const [isConnected, setIsConnected] = useState<boolean | null>(false);
   const [currentAdmin, setCurrentAdmin] = useState<Admin | null>(null);
-  
+  const [courses, setCourses] = useState<ICourse[]>([]);
 
   return (
     <UserContext.Provider
@@ -38,6 +39,8 @@ const App = () => {
         setIsConnected,
         currentAdmin,
         setCurrentAdmin,
+        courses,
+        setCourses,
       }}
     >
       <RouterProvider router={router} />

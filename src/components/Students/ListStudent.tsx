@@ -23,9 +23,9 @@ function ListStudent() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalEditOpen, setIsModaEditlOpen] = useState<boolean>(false);
 
-  const [courses, setCourses] = useState<ICourse[]>([]);
+ 
 
-  const { isConnected } = useUserContext();
+  const { isConnected, courses, setCourses } = useUserContext();
 
   const [listStudents, setListStudents] = useState<Student[]>([]);
 
