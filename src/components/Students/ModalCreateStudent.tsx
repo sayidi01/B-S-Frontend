@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Input, Modal } from "antd";
+import { Input, Modal, DatePicker,   Select } from "antd";
 import axiosInstance from "../../config/Api";
 import { toast } from "react-hot-toast";
 import { useUserContext } from "../../config/UserContext";
 import isObject from "lodash/isObject";
 import { FormDataStudent, Student } from "./typesStudent";
 import type { DatePickerProps } from "antd";
-import { DatePicker, Space } from "antd";
+import { ICourse } from "../../types/course";
+
 
 interface ModalCreateStudentProps {
   isModalOpen: boolean;
@@ -25,6 +26,8 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
 }) => {
   const { data } = useUserContext();
 
+  const [courses, setCourses] = useState<ICourse | null>(null);
+
   const [formdataStudent, setFormDataStudent] = useState<FormDataStudent>({
     firstName: "",
     lastName: "",
@@ -32,6 +35,7 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
     password: "",
     phone: "",
     accountExpiryDate: "",
+    myCourses: "",
   });
 
   console.log(formdataStudent);
@@ -70,6 +74,14 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
     }));
   };
 
+
+  const handleCourseChange = (value: string) => {
+    setFormDataStudent((prevData) => ({
+      ...prevData,
+      myCourses: value,
+    }));
+  };
+
   const onChange: DatePickerProps["onChange"] = (_, dateString) => {
     if (typeof dateString == "string")
       setFormDataStudent((prev) => ({
@@ -77,6 +89,22 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
         accountExpiryDate: dateString,
       }));
   };
+
+// GET ALL COURSES
+
+useEffect(() => {
+  axiosInstance
+    .get<ICourse>("/course/title")
+    .then(({ data }) => {
+      console.log("Data loaded:", data);
+      setCourses(data);
+    })
+    .catch((err) => {
+      console.error("Failed to fetch courses:", err);
+    });
+}, []);
+
+
 
   // CREATE NEW STUDENT SEND EMAIL
 
@@ -89,7 +117,9 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
       !formdataStudent.firstName ||
       !formdataStudent.lastName ||
       !formdataStudent.email ||
-      !formdataStudent.phone
+      !formdataStudent.phone ||
+      !formdataStudent.myCourses
+      
     ) {
       toast.error("Please fill in all fields");
       return;
@@ -120,6 +150,7 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
             password: "",
             phone: "",
             accountExpiryDate: "",
+            myCourses: "",
           });
           handleCancel();
         } else {
@@ -177,6 +208,22 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
           name="phone"
           style={{ marginTop: "23px" }}
         />
+        <Select
+          style={{ marginTop: "23px", width: "100%" }}
+          onChange={handleCourseChange}
+          value={formdataStudent.myCourses}
+        >
+          <Select.Option value="">Select a course</Select.Option>
+
+          {courses &&
+            Array.isArray(courses) &&
+            courses.map((course) => (
+              <Select.Option key={course._id} value={course._id}>
+                {course.title}
+              </Select.Option>
+            ))}
+        </Select>
+
         <DatePicker
           onChange={onChange}
           name=" accountExpiryDate"

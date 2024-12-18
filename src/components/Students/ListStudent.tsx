@@ -15,12 +15,15 @@ import ModalCreateStudent from "./ModalCreateStudent";
 import ModalEditStudent from "./ModalEditStudent";
 import { formatDistance, isPast } from "date-fns";
 import IconEdit from "../Icon/IconEdit";
+import { ICourse } from "../../types/course";
 
 const itemsPerPage = 9;
 
 function ListStudent() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalEditOpen, setIsModaEditlOpen] = useState<boolean>(false);
+
+  const [courses, setCourses] = useState<ICourse[]>([]);
 
   const { isConnected } = useUserContext();
 
@@ -79,6 +82,41 @@ function ListStudent() {
   };
 
   console.log(listStudents.length);
+
+
+  // GET ALL COURSES 
+
+  useEffect(() => {
+    axiosInstance
+      .get<ICourse[]>("/course/title")
+      .then(({ data }) => {
+        console.log("Data loaded:", data);
+        setCourses(data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch courses:", err);
+      });
+  }, []);
+
+
+  // GET COURSE TITLE STUDENT 
+
+  const getCourseTitles = (courseIds: string[]): string => {
+    if (!Array.isArray(courseIds)) {
+      console.error("courseIds doit être un tableau mais est :", courseIds);
+      return "Aucun cours";
+    }
+  
+    const titles = courseIds
+      .map((courseId) => courses.find((course) => course._id === courseId)?.title)
+      .filter((title) => title); 
+  
+    return titles.length > 0 ? titles.join(", ") : "No Courses";
+  };
+
+
+
+
 
   // GET ALL STUDENTS
 
@@ -169,6 +207,7 @@ function ListStudent() {
             <th>Email</th>
             <th>Password</th>
             <th>Phone</th>
+            <th>Courses</th>
             <th>Expiry Date</th>
 
             <th className="text-center">Action</th>
@@ -213,6 +252,7 @@ function ListStudent() {
                 )}
               </td>
               <td>{student.phone}</td>
+              <td>{getCourseTitles(student.myCourses)}</td>
               <td>
                 {student.accountExpiryDate && isPast(student.accountExpiryDate)
                   ? `Expired ${formatDistance(
