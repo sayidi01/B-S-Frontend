@@ -7,11 +7,10 @@ import IconHorizontalDots from "../../components/Icon/IconHorizontalDots";
 import IconTrashLines from "../Icon/IconTrashLines";
 import IconPencil from "../Icon/IconPencil";
 
-import { Button, Modal, Pagination, Card, Col, Row  } from "antd";
+import { Button, Modal, Pagination, Card, Col, Row } from "antd";
 
 import { useUserContext } from "../../config/UserContext";
 import axiosInstance, { imageURL } from "../../config/Api";
-
 
 import { Admin } from "./ModalCreateAdmin";
 import { Link } from "react-router-dom";
@@ -46,7 +45,6 @@ function UploadPdfCourses() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -161,18 +159,17 @@ function UploadPdfCourses() {
       </button>
 
       <Row
-        gutter={[16, 32]}
-        style={{ marginTop: "4rem", gap: 10, marginLeft: "3rem" }}
+        gutter={[24, 48]}
+        style={{ marginTop: "2rem", gap: 10, marginLeft: "3rem" }}
       >
         {paginatedCourses.map((course, index) => (
-          <Col span={4} key={index}>
+          <Col span={5} key={index}>
             <Card
               title={
                 <div
                   style={{
                     fontSize: "18px",
                     fontWeight: "bold",
-                    width: "200px",
                   }}
                 >
                   {course.title}
@@ -182,22 +179,37 @@ function UploadPdfCourses() {
               style={{
                 backgroundColor: "#f6f7f9",
                 boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                width: "100%",
+                minHeight: "450px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between", 
               }}
             >
-              <div
-                style={{ fontSize: "13px", color: "#666"}}
-              >
-                {course.description}
-              </div>
-              <div style={{ marginBottom: "1rem", marginTop: '1rem' }}>
+             
+              <div style={{ marginBottom: "1rem" }}>
                 <img
                   src={`${imageURL}courses-images/${course.imageCourse?.replace(
                     "/uploads/ImageCourse/",
                     ""
                   )}`}
                   alt={course.imageCourse}
-                  style={{ borderRadius: "8px" }}
+                  style={{
+                    borderRadius: "8px",
+                    width: "100%",
+                    height: "150px",
+                    objectFit: "cover",
+                  }}
                 />
+              </div>
+              <div
+                style={{
+                  flex: 1, 
+                  fontSize: "13px",
+                  color: "#666",
+                }}
+              >
+                {course.description}
               </div>
               <div className="flex items-center">
                 <Link to={`/Dashbord/courses/${course._id}`}>
@@ -267,7 +279,7 @@ function UploadPdfCourses() {
             </Card>
           </Col>
         ))}
-         {titleCourses.length > itemsPerPage && (
+        {titleCourses.length > itemsPerPage && (
           <Pagination
             className="custom-pagination"
             current={currentPage}
