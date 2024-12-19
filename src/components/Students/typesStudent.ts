@@ -10,6 +10,7 @@ export interface FormDataStudent {
      phone: string;
      accountExpiryDate?: string
      myCourses: string; 
+     learningMode: "on-site" | "online"; 
    }
    
    export interface Student {
@@ -22,6 +23,7 @@ export interface FormDataStudent {
      image?: string; 
      accountExpiryDate?: string
      myCourses: string[]
+     learningMode: "on-site" | "online"; 
    }
  
  

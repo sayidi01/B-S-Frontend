@@ -207,8 +207,9 @@ function ListStudent() {
             <th>Email</th>
             <th>Password</th>
             <th>Phone</th>
+            <th > Mode</th>
             <th>Courses</th>
-            <th>Expiry Date</th>
+            <th>Expiry Session</th>
 
             <th className="text-center">Action</th>
           </tr>
@@ -252,6 +253,7 @@ function ListStudent() {
                 )}
               </td>
               <td>{student.phone}</td>
+              <td>{student.learningMode}</td>
               <td>{getCourseTitles(student.myCourses)}</td>
               <td>
                 {student.accountExpiryDate && isPast(student.accountExpiryDate)

@@ -36,6 +36,7 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
     phone: "",
     accountExpiryDate: "",
     myCourses: "",
+    learningMode: "online",
   });
 
   console.log(formdataStudent);
@@ -71,6 +72,13 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
         name === "firstName"
           ? value.charAt(0).toUpperCase() + value.slice(1)
           : value,
+    }));
+  };
+
+  const handleChangeLearningMode = (value: "on-site" | "online") => {
+    setFormDataStudent((prevState) => ({
+      ...prevState,
+      learningMode: value,
     }));
   };
 
@@ -118,7 +126,8 @@ useEffect(() => {
       !formdataStudent.lastName ||
       !formdataStudent.email ||
       !formdataStudent.phone ||
-      !formdataStudent.myCourses
+      !formdataStudent.myCourses ||
+      !formdataStudent.learningMode
       
     ) {
       toast.error("Please fill in all fields");
@@ -151,6 +160,7 @@ useEffect(() => {
             phone: "",
             accountExpiryDate: "",
             myCourses: "",
+            learningMode: "online",
           });
           handleCancel();
         } else {
@@ -208,6 +218,16 @@ useEffect(() => {
           name="phone"
           style={{ marginTop: "23px" }}
         />
+         <Select
+          style={{ marginTop: "23px", width: "100%" }}
+          placeholder="Select Learning Mode"
+          value={formdataStudent.learningMode}
+          onChange={handleChangeLearningMode}
+        >
+          <Select.Option value="on-site">On-site</Select.Option>
+          <Select.Option value="online">Online</Select.Option>
+        </Select>
+        
         <Select
           style={{ marginTop: "23px", width: "100%" }}
           onChange={handleCourseChange}
