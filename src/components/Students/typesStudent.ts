@@ -9,7 +9,8 @@ export interface FormDataStudent {
      password: string;
      phone: string;
      accountExpiryDate?: string
-     myCourses: string; 
+   
+     myCourses: { courseId: string; expiredDateCourse?: string }[];
      learningMode: "on-site" | "online"; 
    }
    
@@ -22,7 +23,8 @@ export interface FormDataStudent {
      phone: string;
      image?: string; 
      accountExpiryDate?: string
-     myCourses: string[]
+    
+     myCourses: { courseId: string; expiredDateCourse?: string }[];
      learningMode: "on-site" | "online"; 
    }
  

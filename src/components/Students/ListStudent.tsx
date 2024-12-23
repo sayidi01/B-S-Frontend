@@ -101,19 +101,19 @@ function ListStudent() {
 
   // GET COURSE TITLE STUDENT 
 
-  const getCourseTitles = (courseIds: string[]): string => {
-    if (!Array.isArray(courseIds)) {
-      console.error("courseIds doit être un tableau mais est :", courseIds);
+  const getCourseTitles = (myCourses: { courseId: string; expiredDateCourse?: string }[]): string => {
+    if (!Array.isArray(myCourses)) {
+      console.error("myCourses doit être un tableau mais est :", myCourses);
       return "Aucun cours";
     }
   
-    const titles = courseIds
-      .map((courseId) => courses.find((course) => course._id === courseId)?.title)
+    const titles = myCourses
+      .map((course) => courses.find((c) => c._id === course.courseId)?.title) 
       .filter((title) => title); 
   
     return titles.length > 0 ? titles.join(", ") : "No Courses";
   };
-
+  
 
 
 

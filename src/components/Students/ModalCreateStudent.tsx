@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Input, Modal, DatePicker,   Select } from "antd";
+import { Input, Modal, DatePicker, Select } from "antd";
 import axiosInstance from "../../config/Api";
 import { toast } from "react-hot-toast";
 import { useUserContext } from "../../config/UserContext";
@@ -7,7 +7,6 @@ import isObject from "lodash/isObject";
 import { FormDataStudent, Student } from "./typesStudent";
 import type { DatePickerProps } from "antd";
 import { ICourse } from "../../types/course";
-
 
 interface ModalCreateStudentProps {
   isModalOpen: boolean;
@@ -26,8 +25,6 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
 }) => {
   const { data, courses, setCourses } = useUserContext();
 
-  
-
   const [formdataStudent, setFormDataStudent] = useState<FormDataStudent>({
     firstName: "",
     lastName: "",
@@ -35,7 +32,7 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
     password: "",
     phone: "",
     accountExpiryDate: "",
-    myCourses: "",
+    myCourses: [],
     learningMode: "online",
   });
 
@@ -83,12 +80,18 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
   };
 
 
-  const handleCourseChange = (value: string) => {
+  // ONCHANGE COURSE STUDENT
+
+  const handleCourseChange = (value: string | string[]) => {
+    const courses = Array.isArray(value) ? value : [value];
     setFormDataStudent((prevData) => ({
       ...prevData,
-      myCourses: value,
+      myCourses: courses.map(courseId => ({ courseId, expiredDateCourse: "" }))
     }));
   };
+
+
+  // ONCHANGE SESSION STUDENT 
 
   const onChange: DatePickerProps["onChange"] = (_, dateString) => {
     if (typeof dateString == "string")
@@ -98,21 +101,35 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
       }));
   };
 
-// GET ALL COURSES
+  // ONCHANGE EXPIRED DATE COURSE STUDENT
 
-useEffect(() => {
-  axiosInstance
-    .get<ICourse[]>("/course/title")
-    .then(({ data }) => {
-      console.log("Data loaded:", data);
-      setCourses(data);
-    })
-    .catch((err) => {
-      console.error("Failed to fetch courses:", err);
-    });
-}, []);
+  const onExpiredDateCourseChange: DatePickerProps["onChange"] = (
+    _,
+    dateString
+  ) => {
+    if (typeof dateString === "string") {
+      setFormDataStudent((prev) => ({
+        ...prev,
+        myCourses: prev.myCourses.map((course, index) =>
+          index === 0 ? { ...course, expiredDateCourse: dateString } : course
+        ),
+      }));
+    }
+  };
 
+  // GET ALL COURSES
 
+  useEffect(() => {
+    axiosInstance
+      .get<ICourse[]>("/course/title")
+      .then(({ data }) => {
+        console.log("Data loaded:", data);
+        setCourses(data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch courses:", err);
+      });
+  }, []);
 
   // CREATE NEW STUDENT SEND EMAIL
 
@@ -128,11 +145,11 @@ useEffect(() => {
       !formdataStudent.phone ||
       !formdataStudent.myCourses ||
       !formdataStudent.learningMode
-      
     ) {
       toast.error("Please fill in all fields");
       return;
     }
+    
     axiosInstance
       .post("/student", formdataStudent)
       .then(({ data }) => {
@@ -159,8 +176,9 @@ useEffect(() => {
             password: "",
             phone: "",
             accountExpiryDate: "",
-            myCourses: "",
+            myCourses: [],
             learningMode: "online",
+            
           });
           handleCancel();
         } else {
@@ -218,7 +236,7 @@ useEffect(() => {
           name="phone"
           style={{ marginTop: "23px" }}
         />
-         <Select
+        <Select
           style={{ marginTop: "23px", width: "100%" }}
           placeholder="Select Learning Mode"
           value={formdataStudent.learningMode}
@@ -227,12 +245,12 @@ useEffect(() => {
           <Select.Option value="on-site">On-site</Select.Option>
           <Select.Option value="online">Online</Select.Option>
         </Select>
-        
+
         <Select
           style={{ marginTop: "23px", width: "100%" }}
+          
           onChange={handleCourseChange}
-          value={formdataStudent.myCourses}
-        >
+          value={formdataStudent.myCourses.map(course => course.courseId)}  >
           <Select.Option value="">Select a course</Select.Option>
 
           {courses &&
@@ -243,13 +261,24 @@ useEffect(() => {
               </Select.Option>
             ))}
         </Select>
-
-        <DatePicker
-          onChange={onChange}
-          name=" accountExpiryDate"
-          picker="date"
-          style={{ marginTop: "23px" }}
-        />
+        <div className="mt-4">
+          <p style={{ marginBottom: "4px" }}>Expiry Course</p>
+          <DatePicker
+            onChange={onExpiredDateCourseChange}
+            name="expiredDateCourse"
+            picker="date"
+            style={{ marginTop: "0px" }} 
+          />
+        </div>
+        <div className="mt-4">
+          <p style={{ marginBottom: "4px" }}>Expiry Session</p>
+          <DatePicker
+            onChange={onChange}
+            name="accountExpiryDate"
+            picker="date"
+            style={{ marginTop: "0px" }}
+          />
+        </div>
       </Modal>
     </div>
   );

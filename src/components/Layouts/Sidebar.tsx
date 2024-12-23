@@ -106,7 +106,7 @@ const Sidebar = () => {
                   style={{ fontSize: 17, fontWeight: "bold" }}
                   className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark mb-2"
                 >
-                  {t("Dashbord")}
+                  {t("Dashboard")}
                 </span>
               </div>
 
