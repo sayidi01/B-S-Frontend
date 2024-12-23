@@ -9,7 +9,6 @@ export interface FormDataStudent {
      password: string;
      phone: string;
      accountExpiryDate?: string
-   
      myCourses: { courseId: string; expiredDateCourse?: string }[];
      learningMode: "on-site" | "online"; 
    }

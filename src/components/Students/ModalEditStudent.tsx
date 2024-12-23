@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Input, Modal } from "antd";
+import { Input, Modal, Select } from "antd";
 import axiosInstance from "../../config/Api";
 import { toast } from "react-hot-toast";
 import { FormDataStudent, Student } from "./typesStudent";
@@ -30,6 +30,8 @@ const ModalEditStudent: React.FC<ModalEditStudentProps> = ({
         password: editStudent.password,
         phone: editStudent.phone,
         accountExpiryDate: editStudent.accountExpiryDate,
+        myCourses: editStudent.myCourses || [],
+        learningMode: editStudent.learningMode || "online",
       });
     }
   }, [editStudent]);
@@ -75,6 +77,8 @@ const ModalEditStudent: React.FC<ModalEditStudentProps> = ({
       new Date(formData.accountExpiryDate).toISOString().slice(0, 10)
     );
   }
+
+  
 
   return (
     <div>
@@ -150,6 +154,23 @@ const ModalEditStudent: React.FC<ModalEditStudentProps> = ({
             />
           </>
         )}
+        <Select
+          style={{ marginTop: "23px", width: "100%" }}
+          placeholder="Select Learning Mode"
+          value={formData?.learningMode}
+          onChange={(value) =>
+            setFormData((prev) =>
+              prev
+                ? { ...prev, learningMode: value as "on-site" | "online" }
+                : prev
+            )
+          }
+        >
+          <Select.Option value="on-site">On-site</Select.Option>
+          <Select.Option value="online">Online</Select.Option>
+        </Select>
+
+        
       </Modal>
     </div>
   );
