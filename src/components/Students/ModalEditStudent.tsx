@@ -66,7 +66,7 @@ const ModalEditStudent: React.FC<ModalEditStudentProps> = ({
               : student
           )
         );
-        toast.success("Teacher updated successfully");
+        toast.success("Student updated successfully");
         handleEditCancelStudent();
       })
       .catch((err) => {
