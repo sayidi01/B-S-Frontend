@@ -248,7 +248,7 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
 
         <Select
           style={{ marginTop: "23px", width: "100%" }}
-          
+          placeholder={'Select Course'}
           onChange={handleCourseChange}
           value={formdataStudent.myCourses.map(course => course.courseId)}  >
           <Select.Option value="">Select a course</Select.Option>

@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { FormDataStudent, Student } from "./typesStudent";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.css";
+import { useUserContext } from "../../config/UserContext";
 
 interface ModalEditStudentProps {
   isModalEditOpen: boolean;
@@ -19,6 +20,9 @@ const ModalEditStudent: React.FC<ModalEditStudentProps> = ({
   setListStudents,
   editStudent,
 }) => {
+
+  const {  courses} = useUserContext();
+
   const [formData, setFormData] = useState<FormDataStudent | null>(null);
 
   useEffect(() => {
@@ -78,8 +82,6 @@ const ModalEditStudent: React.FC<ModalEditStudentProps> = ({
     );
   }
 
-  
-
   return (
     <div>
       <Modal
@@ -126,6 +128,7 @@ const ModalEditStudent: React.FC<ModalEditStudentProps> = ({
               name="phone"
               style={{ marginTop: "23px", marginBottom: "23px" }}
             />
+            <div style={{ marginBottom: 3 }}>Expiry Session</div>
             <Flatpickr
               value={
                 formData.accountExpiryDate
@@ -169,7 +172,66 @@ const ModalEditStudent: React.FC<ModalEditStudentProps> = ({
           <Select.Option value="on-site">On-site</Select.Option>
           <Select.Option value="online">Online</Select.Option>
         </Select>
-
+        {formData?.myCourses.map((course, index) => (
+          <div key={course.courseId} style={{ marginTop: "23px" }}>
+            <div style={{ marginBottom: 3 }}>Expiry Course</div>
+            <Flatpickr
+              value={
+                course.expiredDateCourse
+                  ? new Date(course.expiredDateCourse).toLocaleDateString("en-CA")
+                  : undefined
+              }
+              options={{
+                dateFormat: "Y-m-d",
+                position: "auto left",
+              }}
+              className="form-input"
+              onChange={(date) =>
+                setFormData((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        myCourses: prev.myCourses.map((c, i) =>
+                          i === index
+                            ? {
+                                ...c,
+                                expiredDateCourse: new Date(date[0]).toLocaleDateString("en-CA"),
+                              }
+                            : c
+                        ),
+                      }
+                    : prev
+                )
+              }
+            />
+          </div>
+        ))}
+        <Select
+          style={{ marginTop: "23px", width: "100%" }}
+          placeholder="Select Course"
+          value={formData?.myCourses[0]?.courseId}
+          onChange={(value) =>
+            setFormData((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    myCourses: prev.myCourses.map((course, i) =>
+                      i === 0
+                        ? { ...course, courseId: value }
+                        : course
+                    ),
+                  }
+                : prev
+            )
+          }
+        >
+          {courses &&
+            courses.map((course) => (
+              <Select.Option key={course._id} value={course._id}>
+                {course.title}
+              </Select.Option>
+            ))}
+        </Select>
         
       </Modal>
     </div>
