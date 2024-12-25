@@ -28,6 +28,7 @@ import { toast } from "react-hot-toast";
 import logoHeader from "../../../public/LOGO-TRNS.png";
 import IconCalendar from "../Icon/IconCalendar";
 import IconChatNotification from "../Icon/IconChatNotification";
+import IconBellBing from "../Icon/IconBellBing";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -148,8 +149,13 @@ const Header = () => {
               >
                 <div className="relative">
                   <div style={{ display: "flex", gap: 10 }}>
+                    <Link to={'/Dashbord/calendar'}>
                     <IconCalendar />
+                    </Link>
+
+                    <Link to={'/Dashbord/chat'}>
                     <IconChatNotification />
+                    </Link>
                   </div>
                   <button
                     type="button"
@@ -167,7 +173,9 @@ const Header = () => {
               >
                 <IconSearch className="w-4.5 h-4.5 mx-auto dark:text-[#d0d2d6]" />
               </button>
+             
             </div>
+            <IconBellBing/>
             <div>
               {themeConfig.theme === "light" ? (
                 <button

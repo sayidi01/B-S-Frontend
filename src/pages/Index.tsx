@@ -7,6 +7,8 @@ import IconMenuUsers from "../components/Icon/Menu/IconMenuUsers";
 import IconUser from "../components/Icon/IconUser";
 import IconUserPlus from "../components/Icon/IconUserPlus";
 
+import OverviewListStudents from "../components/Students/OverviewListStudents";
+
 import { Card } from "antd";
 
 import RevenueChart from "./Chart";
@@ -144,8 +146,9 @@ const Index = () => {
       <div style={{ marginTop: "7rem", marginBottom: "5rem" }}>
         <RevenueChart />
       </div>
-
-    
+      <div>
+        <OverviewListStudents />
+      </div>
     </div>
   );
 };

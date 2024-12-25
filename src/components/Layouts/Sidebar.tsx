@@ -19,7 +19,7 @@ import IconMenuPages from "../Icon/Menu/IconMenuPages";
 import IconMenuChat from "../Icon/Menu/IconMenuChat";
 import IconSafari from "../Icon/IconSafari";
 import IconFolder from "../Icon/IconFolder";
-import IconMenu from "../Icon/IconMenu";
+
 import IconMenuDashboard from "../Icon/Menu/IconMenuDashboard";
 
 const Sidebar = () => {
@@ -338,6 +338,7 @@ const Sidebar = () => {
                   } nav-link group w-full`}
                   onClick={() => toggleMenu("Chat")}
                 >
+                  <Link to={'/Dashbord/chat'}>
                   <div className="flex items-center">
                     <IconMenuChat className="group-hover:!text-primary shrink-0 w-7 h-7" />
                     <span
@@ -347,6 +348,7 @@ const Sidebar = () => {
                       {t("Chat")}
                     </span>
                   </div>
+                  </Link>
 
                   <div
                     className={

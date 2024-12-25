@@ -1,6 +1,7 @@
-import { Layout } from "antd";
+
 import { lazy } from "react";
 import SingleCourse from "../components/Admins/SingleCourse";
+
 
 const Index = lazy(() => import("../pages/Index"));
 
@@ -21,6 +22,10 @@ const Signin = lazy(() => import("../pages/Signin"));
 const PrivateRoutes = lazy(() => import("../router/PrivateRoutes"));
 
 const EditorText = lazy(() => import("../pages/EditorText"));
+
+const Chat = lazy(() => import("../pages/Chat"));
+
+const Calendar  = lazy(() => import("../pages/Calendar"));
 
 const routes = [
   {
@@ -65,7 +70,18 @@ const routes = [
         path: "editorText",
         element: <EditorText/>,
         layout: "default",
-      }
+      },
+      {
+        path: "chat",
+        element: <Chat/>,
+        layout: "default",
+      },
+      {
+        path: "calendar",
+        element: <Calendar/>,
+        layout: "default",
+      },
+
      
     ],
   },
