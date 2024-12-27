@@ -1,16 +1,32 @@
 const Footer = () => {
     return (
-      <div className="fixed bottom-0 left-0 w-full  text-black text-center p-4">
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div style={{ flex: 1 }}>
+      
+      </div>
+      <div
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          textAlign: 'center',
+          backgroundColor: 'white',
+          padding: '1rem',
+          boxShadow: '0 -2px 5px rgba(0, 0, 0, 0.1)', 
+        }}
+      >
         © {new Date().getFullYear()}. B&S Institute All Rights Reserved. Design & Develop by{' '}
         <a
           href="https://touchtarget.net/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
+          style={{ color: 'blue', textDecoration: 'underline' }}
         >
           Touch Target
         </a>
       </div>
+    </div>
     );
   };
   

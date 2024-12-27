@@ -409,40 +409,7 @@ const Sidebar = () => {
                 ></AnimateHeight>
               </li>
 
-              <li className="menu nav-item">
-                <button
-                  type="button"
-                  className={`${
-                    currentMenu === "Form Students" ? "active" : ""
-                  } nav-link group w-full`}
-                  onClick={() => toggleMenu("Form Students")}
-                >
-                  <div className="flex items-center">
-                    <IconFolder className="group-hover:!text-primary shrink-0 w-7 h-7" />
-                    <span
-                      style={{ fontSize: 15 }}
-                      className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
-                    >
-                      {t("Form Students")}
-                    </span>
-                  </div>
-
-                  <div
-                    className={
-                      currentMenu !== "Form Students"
-                        ? "rtl:rotate-90 -rotate-90"
-                        : ""
-                    }
-                  >
-                    <IconCaretDown />
-                  </div>
-                </button>
-
-                <AnimateHeight
-                  duration={300}
-                  height={currentMenu === "Form Students" ? "auto" : 0}
-                ></AnimateHeight>
-              </li>
+             
             </ul>
           </PerfectScrollbar>
         </div>
