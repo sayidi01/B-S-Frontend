@@ -218,7 +218,7 @@ const Sidebar = () => {
 
               <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                 <IconMinus className="w-4 h-5 flex-none hidden" />
-                <span>{t("Students and pages")}</span>
+                <span>{t("Students")}</span>
               </h2>
 
               <li className="menu nav-item">
@@ -355,7 +355,7 @@ const Sidebar = () => {
                       currentMenu !== "Chat" ? "rtl:rotate-90 -rotate-90" : ""
                     }
                   >
-                    <IconCaretDown />
+                  
                   </div>
                 </button>
 
@@ -399,7 +399,7 @@ const Sidebar = () => {
                         : ""
                     }
                   >
-                    <IconCaretDown />
+                  
                   </div>
                 </button>
 

@@ -1,6 +1,6 @@
 const Footer = () => {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '50px' }}>
       <div style={{ flex: 1 }}>
       
       </div>
