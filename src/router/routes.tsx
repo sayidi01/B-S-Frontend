@@ -27,6 +27,8 @@ const Chat = lazy(() => import("../pages/Chat"));
 
 const Calendar  = lazy(() => import("../pages/Calendar"));
 
+const Vitrine =  lazy(() => import("../pages/Vitrine"));
+
 const routes = [
   {
     path: "/Dashbord",
@@ -81,6 +83,11 @@ const routes = [
         element: <Calendar/>,
         layout: "default",
       },
+      {
+        path: 'vitrine',
+        element: <Vitrine/>,
+        ayout: "default",
+      }
 
      
     ],

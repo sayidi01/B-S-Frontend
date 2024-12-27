@@ -382,12 +382,14 @@ const Sidebar = () => {
                 >
                   <div className="flex items-center">
                     <IconSafari className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                    <Link to={'/Dashbord/vitrine'}>
                     <span
                       style={{ fontSize: 15 }}
                       className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
                     >
                       {t("Vitrine")}
                     </span>
+                    </Link>
                   </div>
 
                   <div
