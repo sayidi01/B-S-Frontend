@@ -13,7 +13,7 @@ import { useUserContext } from "../../config/UserContext";
 import axiosInstance, { imageURL } from "../../config/Api";
 
 import { Admin } from "./ModalCreateAdmin";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
 import ModalEditTitleCourse from "./ModalEditTitleCourse";
@@ -32,6 +32,7 @@ function UploadPdfCourses() {
   const [courseId, setCourseId] = useState<Admin[]>([]);
 
   const { isConnected } = useUserContext();
+  const navigate = useNavigate();
 
   console.log(courseId);
 
@@ -183,10 +184,9 @@ function UploadPdfCourses() {
                 minHeight: "450px",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-between", 
+                justifyContent: "space-between",
               }}
             >
-             
               <div style={{ marginBottom: "1rem" }}>
                 <img
                   src={`${imageURL}courses-images/${course.imageCourse?.replace(
@@ -204,7 +204,7 @@ function UploadPdfCourses() {
               </div>
               <div
                 style={{
-                  flex: 1, 
+                  flex: 1,
                   fontSize: "13px",
                   color: "#666",
                 }}
@@ -244,18 +244,20 @@ function UploadPdfCourses() {
                     <ul className="!min-w-[130px]">
                       <li>
                         <button
-                          type="button"
                           onClick={() =>
-                            confirmDeleteCourse(course._id, course.title)
+                            navigate(
+                              `/Dashboard/courses/${course._id}/text-editor`
+                            )
                           }
+                          type="button"
                           style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
                           }}
                         >
-                          <IconTrashLines className="w-5 h-5" />
-                          Delete
+                          <IconPencil className="w-5 h-5" />
+                          Editeur de Text
                         </button>
                       </li>
                       <li>
@@ -270,6 +272,22 @@ function UploadPdfCourses() {
                         >
                           <IconPencil className="w-5 h-5" />
                           Edit
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            confirmDeleteCourse(course._id, course.title)
+                          }
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                        >
+                          <IconTrashLines className="w-5 h-5" />
+                          Delete
                         </button>
                       </li>
                     </ul>

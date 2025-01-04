@@ -1,6 +1,7 @@
 
 import { lazy } from "react";
 import SingleCourse from "../components/Admins/SingleCourse";
+import CourseTextEditor from "../components/Admins/CourseTextEditor";
 
 
 const Index = lazy(() => import("../pages/Index"));
@@ -67,6 +68,11 @@ const routes = [
       {
         path: "courses/:id",
         element: <SingleCourse />,
+      },
+      {
+        path: "courses/:id/text-editor",
+        element: <CourseTextEditor />,
+        layout: "default",
       },
       {
         path: "editorText",

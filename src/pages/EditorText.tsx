@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { Editor } from "@tinymce/tinymce-react";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -20,35 +21,65 @@ const QuillEditor = () => {
 
   return (
     <div>
-      <ul className="flex space-x-2 rtl:space-x-reverse">
-        <li>
-          <Link to="#" className="text-primary hover:underline">
-            Forms
-          </Link>
-        </li>
-        <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-          <span>Quill Editor</span>
-        </li>
-      </ul>
-      <div className="pt-5 space-y-8">
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-          {/*  With Tooltip */}
-          <div className="panel">
-            <div className="flex items-center justify-between mb-5"></div>
-            <div className="mb-5 w-auto">
-              <ReactQuill
-                theme="snow"
-                ref={quillRef}
-                value={value1}
-                onChange={setValue1}
-              />
-            </div>
-            <button type="button" className="btn btn-primary">
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
+      <Editor
+        apiKey="hs596mfw1xm1lq4bvoeyrjzc5tkl2mhsax8ecy6oi8guqxpd"
+        init={{
+          plugins: [
+            // Core editing features
+            "anchor",
+            "autolink",
+            "charmap",
+            "codesample",
+            "emoticons",
+            "image",
+            "link",
+            "lists",
+            "media",
+            "searchreplace",
+            "table",
+            "visualblocks",
+            "wordcount",
+            // Your account includes a free trial of TinyMCE premium features
+            // Try the most popular premium features until Jan 18, 2025:
+            "checklist",
+            "mediaembed",
+            "casechange",
+            "export",
+            "formatpainter",
+            "pageembed",
+            "a11ychecker",
+            "tinymcespellchecker",
+            "permanentpen",
+            "powerpaste",
+            "advtable",
+            "advcode",
+            "editimage",
+            "advtemplate",
+            "ai",
+            "mentions",
+            "tinycomments",
+            "tableofcontents",
+            "footnotes",
+            "mergetags",
+            "autocorrect",
+            "typography",
+            "inlinecss",
+            "markdown",
+            "importword",
+            "exportword",
+            "exportpdf",
+          ],
+          toolbar:
+            "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
+          tinycomments_mode: "embedded",
+          tinycomments_author: "Author name",
+          mergetags_list: [
+            { value: "First.Name", title: "First Name" },
+            { value: "Email", title: "Email" },
+          ],
+        }}
+        initialValue={"Hello World"}
+      />
     </div>
   );
 };
