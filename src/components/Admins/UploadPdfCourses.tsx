@@ -18,10 +18,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import ModalEditTitleCourse from "./ModalEditTitleCourse";
 
+import CourseTextEditor from "./CourseTextEditor";
+
 const itemsPerPage = 4;
 
 function UploadPdfCourses() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const [isModalEditTitleOpen, setIsModaEditTitleOpen] =
     useState<boolean>(false);
 
@@ -245,9 +248,9 @@ function UploadPdfCourses() {
                       <li>
                         <button
                           onClick={() =>
-                            navigate(
-                              `/Dashboard/courses/${course._id}/text-editor`
-                            )
+                            navigate(`/Dashbord/courses/${course._id}/edit`, {
+                              state: { course }, 
+                            })
                           }
                           type="button"
                           style={{
@@ -256,8 +259,8 @@ function UploadPdfCourses() {
                             gap: "5px",
                           }}
                         >
-                          <IconPencil className="w-5 h-5" />
-                          Editeur de Text
+                         
+                          Editor Text
                         </button>
                       </li>
                       <li>

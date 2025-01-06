@@ -23,6 +23,9 @@ import { MantineProvider } from "@mantine/core";
 import { Admin } from "./components/Admins/ModalCreateAdmin";
 
 import { ICourse } from "./types/course";
+import APIClient from "./api";
+
+const apiClient = new APIClient();
 
 const App = () => {
   const [data, setData] = useState({});
@@ -41,6 +44,7 @@ const App = () => {
         setCurrentAdmin,
         courses,
         setCourses,
+        apiClient,
       }}
     >
       <RouterProvider router={router} />

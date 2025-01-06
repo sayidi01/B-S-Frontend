@@ -22,7 +22,7 @@ const Signin = lazy(() => import("../pages/Signin"));
 
 const PrivateRoutes = lazy(() => import("../router/PrivateRoutes"));
 
-const EditorText = lazy(() => import("../pages/EditorText"));
+
 
 const Chat = lazy(() => import("../pages/Chat"));
 
@@ -70,13 +70,8 @@ const routes = [
         element: <SingleCourse />,
       },
       {
-        path: "courses/:id/text-editor",
+        path: "courses/:id/edit",
         element: <CourseTextEditor />,
-        layout: "default",
-      },
-      {
-        path: "editorText",
-        element: <EditorText/>,
         layout: "default",
       },
       {

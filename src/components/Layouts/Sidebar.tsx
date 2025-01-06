@@ -309,18 +309,7 @@ const Sidebar = () => {
                     </li>
                   </ul>
                 </AnimateHeight>
-                <AnimateHeight
-                  duration={300}
-                  height={currentMenu === "Courses" ? "auto" : 0}
-                >
-                  <ul className="sub-menu text-gray-500">
-                    <li>
-                      <NavLink to="/Dashbord/editorText">
-                        {t("Editor Text")}
-                      </NavLink>
-                    </li>
-                  </ul>
-                </AnimateHeight>
+              
               </li>
 
               <li className="menu nav-item"></li>

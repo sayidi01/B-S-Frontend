@@ -95,7 +95,7 @@ const Index = () => {
           alignItems: "center",
         }}
       >
-        Bonjour{" "}
+        Hello{" "}
         <img
           src={iconsHello}
           alt="Icône Bonjour"
@@ -114,7 +114,7 @@ const Index = () => {
               )
               .join(" ")
           : "Admin non trouvé"}
-        , bienvenue sur votre plateforme éducative.
+        ,Welcome to your educational platform.
       </h1>
       <div
         style={{

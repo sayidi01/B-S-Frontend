@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance, { imageURL } from "../../config/Api";
 import { ICourse } from "../../types/course";
@@ -17,6 +17,15 @@ export default function SingleCourse() {
   const { id } = useParams();
   const [course, setCourse] = useState<ICourse | null | false>(null);
   const defaultLayout = defaultLayoutPlugin();
+
+  const iframeRef = useRef(null);
+
+  useEffect(() => {
+    if (iframeRef.current && course) {
+      const doc = iframeRef.current.contentDocument;
+      doc.body.innerHTML = course.content;
+    }
+  }, [course]);
 
   useEffect(() => {
     console.log("Course ID:", id);
@@ -44,16 +53,35 @@ export default function SingleCourse() {
     <div>
       <Title level={3}>{course.title}</Title>
 
-      <div style={{ height: "100%" }}>
+      <iframe
+        ref={iframeRef}
+        style={{
+          width: '100%',
+          height: 'auto',
+          border: 'none',
+        }}
+        sandbox="allow-same-origin"
+      />
+      {/* <div className="content-wrapper">
+        <div dangerouslySetInnerHTML={{ __html: course.content }} />
+      </div> */}
+
+      <div style={{ height: "100%", marginTop: '50px' }}>
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
           <Viewer
-            fileUrl={`${imageURL}Courses-pdfs/${course.url
-              .split("/")
-              .pop()}`}
+            fileUrl={`${imageURL}Courses-pdfs/${course.url.split("/").pop()}`}
             plugins={[defaultLayout]}
           />
         </Worker>
       </div>
+
+      <style>
+        {`
+          .content-wrapper {
+            all: unset; /* Resets all inherited and applied styles */ display: revert; /* Reverts the default browser styles */
+          }
+        `}
+      </style>
     </div>
   );
 }
