@@ -154,7 +154,7 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
   return (
     <div>
       <Modal
-        title="Create New Course PDF "
+        title="Create New Course  "
         open={isModalOpen}
         onCancel={handleCancel}
         onOk={handleOk}
