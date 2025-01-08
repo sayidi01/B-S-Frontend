@@ -1,9 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Input, Modal } from "antd";
+import { Input, Modal, Upload,Button } from "antd";
 import axiosInstance from "../../config/Api";
 import { toast } from "react-hot-toast";
-
+import type { UploadChangeParam, UploadFile } from "antd/es/upload/interface";
 import { Admin } from "./ModalCreateAdmin";
+import type { UploadProps } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+
+
+interface ApiResponseCourseEdit {
+  _id: string;
+  title: string;
+  description: string;
+  content?: string;
+  imageCourse?: string;
+}
 
 interface ModalEditTitleCourseProps {
   isModalEditTitleOpen: boolean;
@@ -20,9 +31,12 @@ const ModalEditTitleCourse: React.FC<ModalEditTitleCourseProps> = ({
 }) => {
   const [formData, setFormData] = useState<Admin | null>(null);
 
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
   useEffect(() => {
     if (editTitleCourse) {
       setFormData(editTitleCourse);
+      setSelectedImage(null); 
     }
   }, [editTitleCourse]);
 
@@ -33,6 +47,25 @@ const ModalEditTitleCourse: React.FC<ModalEditTitleCourseProps> = ({
     if (formData) {
       setFormData({ ...formData, [name]: value });
     }
+  };
+
+
+  const handleImageChange = (info: UploadChangeParam<UploadFile>) => {
+    if (info.fileList.length > 0) {
+      const file = info.fileList[0].originFileObj as File;
+      console.log("Selected file:", file);
+      setSelectedImage(file);
+    } else {
+      setSelectedImage(null);
+    }
+  };
+
+
+  const imageUploadProps: UploadProps = {
+    name: "imageCourse",
+    showUploadList: false,
+    onChange: handleImageChange,
+    beforeUpload: () => false, 
   };
 
   const handleChangeEditdescriptionCourse = (
@@ -52,24 +85,52 @@ const ModalEditTitleCourse: React.FC<ModalEditTitleCourseProps> = ({
       return;
     }
 
+    if (!formData?.title || !formData?.description) {
+      toast.error("Title and description are required");
+      return;
+    }
+
+    if (!selectedImage) {
+      toast.error("Please select an image");
+      return;
+    }
+
+    const formDataToSend = new FormData();
+    if (formData) {
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("description", formData.description);
+    }
+    if (selectedImage) {
+      console.log("Image to upload:", selectedImage);
+      formDataToSend.append("imageCourse", selectedImage);
+    }
+
+    for (let [key, value] of formDataToSend.entries()) {
+      console.log(key, value);
+    }
+  
+   
+
     axiosInstance
-      .put(`/course/${editTitleCourse._id}`, { ...formData })
+      .put<ApiResponseCourseEdit>(`/course/${editTitleCourse._id}`, formDataToSend,{headers: {
+        "Content-Type": "multipart/form-data", 
+      },})
       .then(({ data }) => {
         console.log(data);
         setTitleCourses((prev) =>
           prev.map((course) =>
             course._id === editTitleCourse._id
-              ? { ...course, ...formData }
+              ? { ...course, ...formData,  imageCourse: data.imageCourse ,}
               : course
           )
         );
-        toast.success("Admin updated successfully");
+        toast.success("Course updated successfully");
         handleEditCancel();
       })
       .catch((err) => {
-        toast.error("Error in updating Admin", err);
+        toast.error("Error in updating Course", err);
       });
-  }, [formData, setTitleCourses, editTitleCourse]);
+  }, [formData, setTitleCourses, editTitleCourse , selectedImage]);
 
   return (
     <div>
@@ -100,6 +161,17 @@ const ModalEditTitleCourse: React.FC<ModalEditTitleCourseProps> = ({
             />
           </>
         )}
+         <Upload {...imageUploadProps}>
+              <Button
+                style={{
+                  backgroundColor: "#e3f2fd",
+                  marginTop: "2rem",
+                }}
+                icon={<UploadOutlined />}
+              >
+                Edit Image Course
+              </Button>
+            </Upload>
       </Modal>
     </div>
   );

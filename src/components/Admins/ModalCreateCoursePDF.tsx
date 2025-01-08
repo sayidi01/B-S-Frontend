@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 
 import { Admin } from "./ModalCreateAdmin";
 import TextArea from "antd/es/input/TextArea";
+import { useNavigate } from "react-router-dom";
 
 interface ModalCreatePDFProps {
   isModalOpen: boolean;
@@ -32,10 +33,12 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     isUploading: false,
   });
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   console.log(formCourse);
+
+  const navigate = useNavigate()
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement >
@@ -53,13 +56,13 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     }));
   };
 
-  const handleFileChange: (info: UploadChangeParam<UploadFile>) => void = (
-    info
-  ) => {
-    if (info.fileList.length > 0) {
-      setSelectedFile(info.fileList[0].originFileObj as File);
-    }
-  };
+  // const handleFileChange: (info: UploadChangeParam<UploadFile>) => void = (
+  //   info
+  // ) => {
+  //   if (info.fileList.length > 0) {
+  //     setSelectedFile(info.fileList[0].originFileObj as File);
+  //   }
+  // };
 
   const handleImageChange = (info: UploadChangeParam<UploadFile>) => {
     if (info.fileList.length > 0) {
@@ -72,15 +75,15 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
       toast.error("Veuillez entrer un nom de cours avant de télécharger.");
       return;
     }
-    if (!selectedFile) {
-      toast.error("Veuillez sélectionner un fichier avant de télécharger.");
-      return;
-    }
+    // if (!selectedFile) {
+    //   toast.error("Veuillez sélectionner un fichier avant de télécharger.");
+    //   return;
+    // }
 
-    if (selectedFile.type !== "application/pdf") {
-      toast.error("Veuillez sélectionner un fichier PDF valide.");
-      return;
-    }
+    // if (selectedFile.type !== "application/pdf") {
+    //   toast.error("Veuillez sélectionner un fichier PDF valide.");
+    //   return;
+    // }
 
     if (selectedImage && !selectedImage.type.startsWith("image/")) {
       toast.error("Veuillez sélectionner une image valide.");
@@ -88,7 +91,7 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     }
 
     const formData = new FormData();
-    formData.append("pdf", selectedFile);
+    // formData.append("pdf", selectedFile);
     formData.append("title", formCourse.courseName);
     formData.append("description", formCourse.description);
     if (selectedImage) {
@@ -111,10 +114,10 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
       const newCourseTitle = response.data.course;
 
       setTitleCourses((prev: Admin[]) => [...prev, newCourseTitle]);
-      toast.success("Course added Succefully");
+      navigate(`/Dashbord/courses/${response.data.course._id}/edit`);
       handleCancel();
       setFormCourse({ courseName: "", description: "", isUploading: false });
-      setSelectedFile(null);
+      // setSelectedFile(null);
       setSelectedImage(null);
     } catch (error) {
       console.error("Erreur lors du téléchargement du PDF :", error);
@@ -125,7 +128,7 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
   }, [
     formCourse.courseName,
     formCourse.description,
-    selectedFile,
+    // selectedFile,
     handleCancel,
     selectedImage,
   ]);
@@ -134,12 +137,12 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
     handleUploadPDF();
   };
 
-  const uploadProps: UploadProps = {
-    name: "file",
-    showUploadList: false,
-    onChange: handleFileChange,
-    beforeUpload: () => false,
-  };
+  // const uploadProps: UploadProps = {
+  //   name: "file",
+  //   showUploadList: false,
+  //   onChange: handleFileChange,
+  //   beforeUpload: () => false,
+  // };
 
   const imageUploadProps: UploadProps = {
     name: "image",
@@ -173,7 +176,7 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
           placeholder="Enter description Course"
         />
         <div style={{ display: "flex", gap: "1rem" }}>
-          <Upload {...uploadProps}>
+          {/* <Upload {...uploadProps}>
             <Button
               style={{
                 backgroundColor: "#e3f2fd",
@@ -185,7 +188,7 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
             >
               Upload Course PDF
             </Button>
-          </Upload>
+          </Upload> */}
 
           <Upload {...imageUploadProps}>
             <Button

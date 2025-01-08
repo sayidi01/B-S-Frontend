@@ -18,14 +18,22 @@ export default function SingleCourse() {
   const [course, setCourse] = useState<ICourse | null | false>(null);
   const defaultLayout = defaultLayoutPlugin();
 
-  const iframeRef = useRef(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
     if (iframeRef.current && course) {
       const doc = iframeRef.current.contentDocument;
-      doc.body.innerHTML = course.content;
+      if (doc) {
+        doc.body.innerHTML = course.content ?? "";
+      } else {
+        console.warn("Le document de l'iframe est null.");
+      }
     }
   }, [course]);
+
+  // GET SINGLE COURSE ID 
+
+
 
   useEffect(() => {
     console.log("Course ID:", id);
@@ -45,43 +53,47 @@ export default function SingleCourse() {
     }
   }, [id]);
 
+  
+
   if (course == null) return <IconLoader />;
   if (course == false)
     return <Alert message={"Failed to load course"} type="error" />;
 
   return (
     <div>
-      <Title level={3}>{course.title}</Title>
-
-      <iframe
-        ref={iframeRef}
-        style={{
-          width: '100%',
-          height: 'auto',
-          border: 'none',
-        }}
-        sandbox="allow-same-origin"
-      />
-      {/* <div className="content-wrapper">
-        <div dangerouslySetInnerHTML={{ __html: course.content }} />
-      </div> */}
-
-      <div style={{ height: "100%", marginTop: '50px' }}>
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-          <Viewer
-            fileUrl={`${imageURL}Courses-pdfs/${course.url.split("/").pop()}`}
-            plugins={[defaultLayout]}
-          />
-        </Worker>
+   <div>
+        <Title level={3}>{course.title}</Title>
+        {course.url && (
+          <div className="pdf-viewer-container">
+            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+              <Viewer
+                fileUrl={`${imageURL}Courses-pdfs/${course.url.split("/").pop()}`}
+                plugins={[defaultLayout]}
+              />
+            </Worker>
+          </div>
+        )}
       </div>
 
-      <style>
-        {`
-          .content-wrapper {
-            all: unset; /* Resets all inherited and applied styles */ display: revert; /* Reverts the default browser styles */
-          }
-        `}
-      </style>
-    </div>
+    <iframe
+      ref={iframeRef}
+      style={{
+        width: "100%",
+        height: "100vh",
+        border: "none",
+      }}
+      sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+
+    <style>
+      {`
+        .content-wrapper {
+          all: unset; /* Resets all inherited and applied styles */ display: revert; /* Reverts the default browser styles */
+        }
+      `}
+    </style>
+  </div>
   );
 }

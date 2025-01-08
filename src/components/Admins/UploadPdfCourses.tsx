@@ -18,7 +18,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import ModalEditTitleCourse from "./ModalEditTitleCourse";
 
-import CourseTextEditor from "./CourseTextEditor";
+
 
 const itemsPerPage = 4;
 
@@ -246,6 +246,7 @@ function UploadPdfCourses() {
                   >
                     <ul className="!min-w-[130px]">
                       <li>
+                        
                         <button
                           onClick={() =>
                             navigate(`/Dashbord/courses/${course._id}/edit`, {

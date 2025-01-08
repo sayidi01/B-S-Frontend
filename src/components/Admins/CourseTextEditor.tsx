@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "../../config/UserContext";
 import { ICourse } from "../../types/course";
 import { LoadingOverlay } from "@mantine/core";
@@ -9,6 +9,8 @@ import { toast } from "react-hot-toast";
 function CourseTextEditor() {
   const [currentCourse, setCurrentCourse] = useState<ICourse | null>(null);
   const [editorText, setEditorText] = useState("");
+
+  const navigate = useNavigate()
 
   const params = useParams();
   const { apiClient } = useUserContext();
@@ -35,10 +37,11 @@ function CourseTextEditor() {
       );
       console.log('sdsdf', response)
 
-      toast.success('Le contenu de cours est bien sauvegardé.')
+      toast.success('Course content is saved correctly.')
+      navigate("/Dashbord/courses")
     } catch (error) {
       console.log('error', error)
-      toast.error('Erreur lors de sauvegarde de contenu, essayer plus tard!')
+      toast.error('Error saving content, try again later!')
     }
   }, [editorText, currentCourse]);
 
@@ -49,7 +52,7 @@ function CourseTextEditor() {
       <Editor
         apiKey="hs596mfw1xm1lq4bvoeyrjzc5tkl2mhsax8ecy6oi8guqxpd"
         init={{
-          height: 700,
+          height: 900,
           plugins: [
             "anchor",
             "autolink",
@@ -89,8 +92,8 @@ function CourseTextEditor() {
             "inlinecss",
             "markdown",
             "importword",
-            "exportword",
-            "exportpdf",
+            // "exportword",
+            // "exportpdf",
           ],
           toolbar:
             "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
@@ -98,7 +101,7 @@ function CourseTextEditor() {
           tinycomments_author: "Author name",
           mergetags_list: [
             { value: "First.Name", title: "First Name" },
-            { value: "Email", title: "Email" },
+            { value: "Email",title: "Email" },
           ],
         }}
         value={editorText}

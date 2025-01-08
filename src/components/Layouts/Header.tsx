@@ -27,8 +27,7 @@ import { toast } from "react-hot-toast";
 
 import logoHeader from "../../../public/LOGO-TRNS.png";
 import IconCalendar from "../Icon/IconCalendar";
-import IconChatNotification from "../Icon/IconChatNotification";
-import IconBellBing from "../Icon/IconBellBing";
+
 
 const Header = () => {
   const navigate = useNavigate();
@@ -102,7 +101,7 @@ const Header = () => {
         setIsConnected(false);
         setCurrentAdmin(null);
         localStorage.setItem("isConnected", "false");
-        toast.success("Vous êtes Deconnecté");
+        toast.success("You are offline");
         navigate("/");
       })
       .catch((err) => {
@@ -153,9 +152,9 @@ const Header = () => {
                     <IconCalendar />
                     </Link>
 
-                    <Link to={'/Dashbord/chat'}>
+                    {/* <Link to={'/Dashbord/chat'}>
                     <IconChatNotification />
-                    </Link>
+                    </Link> */}
                   </div>
                   <button
                     type="button"
@@ -175,7 +174,7 @@ const Header = () => {
               </button>
              
             </div>
-            <IconBellBing/>
+            {/* <IconBellBing/> */}
             <div>
               {themeConfig.theme === "light" ? (
                 <button

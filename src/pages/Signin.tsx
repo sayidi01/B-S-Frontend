@@ -68,7 +68,7 @@ const Signin = () => {
           setCurrentAdmin(data.data.admin);
           setIsConnected(true);
           navigate("/Dashbord");
-          toast.success("Vous êtes connecté");
+          toast.success("You are connected");
         })
         .catch((err) => {
           console.log("erreur connexion", err);

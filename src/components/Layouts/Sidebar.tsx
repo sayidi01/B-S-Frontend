@@ -312,14 +312,14 @@ const Sidebar = () => {
               
               </li>
 
-              <li className="menu nav-item"></li>
+              {/* <li className="menu nav-item"></li>
 
               <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                 <IconMinus className="w-4 h-5 flex-none hidden" />
                 <span>{t("Chat")}</span>
-              </h2>
+              </h2> */}
 
-              <li className="menu nav-item">
+              {/* <li className="menu nav-item">
                 <button
                   type="button"
                   className={`${
@@ -352,9 +352,9 @@ const Sidebar = () => {
                   duration={300}
                   height={currentMenu === "Chat" ? "auto" : 0}
                 ></AnimateHeight>
-              </li>
+              </li> */}
 
-              <li className="menu nav-item"></li>
+              {/* <li className="menu nav-item"></li>
 
               <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                 <IconMinus className="w-4 h-5 flex-none hidden" />
@@ -396,7 +396,7 @@ const Sidebar = () => {
                   duration={300}
                   height={currentMenu === "Sites Web" ? "auto" : 0}
                 ></AnimateHeight>
-              </li>
+              </li> */}
 
              
             </ul>
