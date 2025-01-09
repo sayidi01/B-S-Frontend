@@ -29,7 +29,7 @@ export default function SingleCourse() {
   useEffect(() => {
     if (course && course.content) {
       const contentLength = course.content.length;
-      const pageSize = 3000;
+      const pageSize = 1000;
       const newPages = [];
       for (let i = 0; i < contentLength; i += pageSize) {
         newPages.push(course.content.slice(i, i + pageSize));
