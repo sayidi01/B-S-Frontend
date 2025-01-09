@@ -90,11 +90,6 @@ const ModalEditTitleCourse: React.FC<ModalEditTitleCourseProps> = ({
       return;
     }
 
-    if (!selectedImage) {
-      toast.error("Please select an image");
-      return;
-    }
-
     const formDataToSend = new FormData();
     if (formData) {
       formDataToSend.append("title", formData.title);
@@ -154,6 +149,7 @@ const ModalEditTitleCourse: React.FC<ModalEditTitleCourseProps> = ({
             <Input.TextArea
               style={{ marginTop: 5, marginBottom: 10 }}
               onChange={handleChangeEditdescriptionCourse}
+              maxLength={72}
               value={formData.description}
               name="description"
               placeholder="Description"

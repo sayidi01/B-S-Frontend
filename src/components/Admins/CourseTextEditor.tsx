@@ -10,7 +10,7 @@ function CourseTextEditor() {
   const [currentCourse, setCurrentCourse] = useState<ICourse | null>(null);
   const [editorText, setEditorText] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const params = useParams();
   const { apiClient } = useUserContext();
@@ -35,13 +35,13 @@ function CourseTextEditor() {
         currentCourse._id,
         editorText
       );
-      console.log('sdsdf', response)
+      console.log("sdsdf", response);
 
-      toast.success('Course content is saved correctly.')
-      navigate("/Dashbord/courses")
+      toast.success("Course content is saved correctly.");
+      navigate("/Dashbord/courses");
     } catch (error) {
-      console.log('error', error)
-      toast.error('Error saving content, try again later!')
+      console.log("error", error);
+      toast.error("Error saving content, try again later!");
     }
   }, [editorText, currentCourse]);
 
@@ -101,8 +101,40 @@ function CourseTextEditor() {
           tinycomments_author: "Author name",
           mergetags_list: [
             { value: "First.Name", title: "First Name" },
-            { value: "Email",title: "Email" },
+            { value: "Email", title: "Email" },
           ],
+          textcolor_map: [
+            "000000",
+            "Black", // Noir
+            "FFFFFF",
+            "White", // Blanc
+            "003366",
+            "Dark Blue", // Bleu foncé
+            "2566e8",
+            "Blue", // Bleu
+            "046307",
+            "Green", // Vert
+            "c02424",
+            "Red", // Rouge
+          ],
+          color_map: [
+            "000000",
+            "Black", // Noir
+            "FFFFFF",
+            "White", // Blanc
+            "003366",
+            "Dark Blue", // Bleu foncé
+            "2566e8",
+            "Blue", // Bleu
+            "046307",
+            "Green", // Vert
+            "c02424",
+            "Red", // Rouge
+          ],
+          font_formats:
+            "Times New Roman=Times New Roman, serif; Montserrat=Montserrat, sans-serif;",
+          font_family_formats:
+            "Times New Roman=Times New Roman, serif; Montserrat=Montserrat, sans-serif;",
         }}
         value={editorText}
         onEditorChange={(newValue) => setEditorText(newValue)}

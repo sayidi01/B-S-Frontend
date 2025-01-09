@@ -4,7 +4,7 @@ import axiosInstance, { imageURL } from "../../config/Api";
 import { ICourse } from "../../types/course";
 import { isObject } from "lodash";
 import IconLoader from "../Icon/IconLoader";
-import { Alert } from "antd";
+import { Alert, Button } from "antd";
 import Title from "antd/es/typography/Title";
 
 import { Worker, Viewer } from "@react-pdf-viewer/core";
@@ -16,24 +16,42 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 export default function SingleCourse() {
   const { id } = useParams();
   const [course, setCourse] = useState<ICourse | null | false>(null);
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pages, setPages] = useState<string[]>([]);
+  
   const defaultLayout = defaultLayoutPlugin();
 
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
+
+
   useEffect(() => {
-    if (iframeRef.current && course) {
+    if (course && course.content) {
+      const contentLength = course.content.length;
+      const pageSize = 3000;
+      const newPages = [];
+      for (let i = 0; i < contentLength; i += pageSize) {
+        newPages.push(course.content.slice(i, i + pageSize));
+      }
+      setPages(newPages);
+    }
+  }, [course]);
+
+  
+
+  useEffect(() => {
+    if (iframeRef.current && pages.length > 0) {
       const doc = iframeRef.current.contentDocument;
       if (doc) {
-        doc.body.innerHTML = course.content ?? "";
+        doc.body.innerHTML = pages[currentPage] ?? "";
       } else {
         console.warn("Le document de l'iframe est null.");
       }
     }
-  }, [course]);
+  }, [currentPage, pages]);
 
-  // GET SINGLE COURSE ID 
-
-
+  // GET SINGLE COURSE ID
 
   useEffect(() => {
     console.log("Course ID:", id);
@@ -61,13 +79,15 @@ export default function SingleCourse() {
 
   return (
     <div>
-   <div>
+      <div>
         <Title level={3}>{course.title}</Title>
         {course.url && (
           <div className="pdf-viewer-container">
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
               <Viewer
-                fileUrl={`${imageURL}Courses-pdfs/${course.url.split("/").pop()}`}
+                fileUrl={`${imageURL}Courses-pdfs/${course.url
+                  .split("/")
+                  .pop()}`}
                 plugins={[defaultLayout]}
               />
             </Worker>
@@ -75,25 +95,42 @@ export default function SingleCourse() {
         )}
       </div>
 
-    <iframe
-      ref={iframeRef}
-      style={{
-        width: "100%",
-        height: "100vh",
-        border: "none",
-      }}
-      sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
+      <iframe
+        ref={iframeRef}
+        style={{
+          width: "100%",
+          height: "100vh",
+          border: "none",
+        }}
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <Button
+          disabled={currentPage === 0}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          Previous page
+        </Button>
+        <span style={{ margin: '0 20px' }}>
+          Page {currentPage + 1} sur {pages.length}
+        </span>
+        <Button
+          disabled={currentPage === pages.length - 1}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+         Next page
+        </Button>
+      </div>
 
-    <style>
-      {`
+      <style>
+        {`
         .content-wrapper {
           all: unset; /* Resets all inherited and applied styles */ display: revert; /* Reverts the default browser styles */
         }
       `}
-    </style>
-  </div>
+      </style>
+    </div>
   );
 }

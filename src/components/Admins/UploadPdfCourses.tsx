@@ -20,7 +20,7 @@ import ModalEditTitleCourse from "./ModalEditTitleCourse";
 
 
 
-const itemsPerPage = 4;
+const itemsPerPage = 8;
 
 function UploadPdfCourses() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
