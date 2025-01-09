@@ -161,6 +161,7 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
         okButtonProps={{
           loading: formCourse.isUploading,
         }}
+        okText="Continue"
       >
         <Input
           placeholder="Name Course"
