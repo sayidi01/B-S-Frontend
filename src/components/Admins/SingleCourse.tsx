@@ -19,26 +19,34 @@ export default function SingleCourse() {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [pages, setPages] = useState<string[]>([]);
-  
+
   const defaultLayout = defaultLayoutPlugin();
 
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-
-
   useEffect(() => {
     if (course && course.content) {
-      const contentLength = course.content.length;
-      const pageSize = 1000;
+      const paragraphs = course.content.split(/(\n|\r\n)/);
+
       const newPages = [];
-      for (let i = 0; i < contentLength; i += pageSize) {
-        newPages.push(course.content.slice(i, i + pageSize));
+      let currentPageContent = "";
+
+      paragraphs.forEach((paragraph) => {
+        if ((currentPageContent + paragraph).length > 2000) {
+          newPages.push(currentPageContent);
+          currentPageContent = paragraph;
+        } else {
+          currentPageContent += paragraph;
+        }
+      });
+
+      if (currentPageContent) {
+        newPages.push(currentPageContent);
       }
+
       setPages(newPages);
     }
   }, [course]);
-
-  
 
   useEffect(() => {
     if (iframeRef.current && pages.length > 0) {
@@ -70,8 +78,6 @@ export default function SingleCourse() {
         });
     }
   }, [id]);
-
-  
 
   if (course == null) return <IconLoader />;
   if (course == false)
@@ -106,21 +112,23 @@ export default function SingleCourse() {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       />
-       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
+      >
         <Button
           disabled={currentPage === 0}
           onClick={() => setCurrentPage(currentPage - 1)}
         >
           Previous page
         </Button>
-        <span style={{ margin: '0 20px' }}>
+        <span style={{ margin: "0 20px" }}>
           Page {currentPage + 1} sur {pages.length}
         </span>
         <Button
           disabled={currentPage === pages.length - 1}
           onClick={() => setCurrentPage(currentPage + 1)}
         >
-         Next page
+          Next page
         </Button>
       </div>
 
