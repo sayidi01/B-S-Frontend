@@ -171,7 +171,7 @@ const ModalCreateCoursePDF: React.FC<ModalCreatePDFProps> = ({
         />
         <TextArea
           style={{ marginTop: "1rem" }}
-          maxLength={72}
+          maxLength={200}
           onChange={handleDescriptionChange}
           value={formCourse.description}
           placeholder="Enter description Course"

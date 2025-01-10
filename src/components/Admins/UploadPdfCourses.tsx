@@ -18,8 +18,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import ModalEditTitleCourse from "./ModalEditTitleCourse";
 
-
-
 const itemsPerPage = 8;
 
 function UploadPdfCourses() {
@@ -211,8 +209,13 @@ function UploadPdfCourses() {
                   fontSize: "13px",
                   color: "#666",
                 }}
+                onBlur={(e) => {
+                  console.log("Element lost focus");
+                }}
+                tabIndex={0} 
+                role="text" 
               >
-                {course.description}
+                {course.description.slice(0, 77)}{"..."}
               </div>
               <div className="flex items-center">
                 <Link to={`/Dashbord/courses/${course._id}`}>
@@ -246,11 +249,10 @@ function UploadPdfCourses() {
                   >
                     <ul className="!min-w-[130px]">
                       <li>
-                        
                         <button
                           onClick={() =>
                             navigate(`/Dashbord/courses/${course._id}/edit`, {
-                              state: { course }, 
+                              state: { course },
                             })
                           }
                           type="button"
@@ -260,7 +262,6 @@ function UploadPdfCourses() {
                             gap: "5px",
                           }}
                         >
-                         
                           Editor Text
                         </button>
                       </li>

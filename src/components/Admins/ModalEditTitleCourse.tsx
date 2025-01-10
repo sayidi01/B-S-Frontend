@@ -149,7 +149,7 @@ const ModalEditTitleCourse: React.FC<ModalEditTitleCourseProps> = ({
             <Input.TextArea
               style={{ marginTop: 5, marginBottom: 10 }}
               onChange={handleChangeEditdescriptionCourse}
-              maxLength={72}
+              maxLength={200}
               value={formData.description}
               name="description"
               placeholder="Description"

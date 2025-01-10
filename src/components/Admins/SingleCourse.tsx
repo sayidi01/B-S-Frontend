@@ -26,24 +26,23 @@ export default function SingleCourse() {
 
   useEffect(() => {
     if (course && course.content) {
-      const paragraphs = course.content.split(/(\n|\r\n)/);
-
+      const sentences = course.content.split(/(?<=[.!?])\s+/);
+  
       const newPages = [];
       let currentPageContent = "";
-
-      paragraphs.forEach((paragraph) => {
-        if ((currentPageContent + paragraph).length > 2000) {
+  
+      sentences.forEach((sentence) => {
+        if ((currentPageContent + sentence).length > 2000) {
           newPages.push(currentPageContent);
-          currentPageContent = paragraph;
+          currentPageContent = sentence;
         } else {
-          currentPageContent += paragraph;
+          currentPageContent += sentence + " ";
         }
       });
-
       if (currentPageContent) {
         newPages.push(currentPageContent);
       }
-
+  
       setPages(newPages);
     }
   }, [course]);
