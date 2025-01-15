@@ -16,9 +16,6 @@ import IconMenuUsers from "../Icon/Menu/IconMenuUsers";
 import IconUser from "../Icon/IconUser";
 import IconUserPlus from "../Icon/IconUserPlus";
 import IconMenuPages from "../Icon/Menu/IconMenuPages";
-import IconMenuChat from "../Icon/Menu/IconMenuChat";
-import IconSafari from "../Icon/IconSafari";
-import IconFolder from "../Icon/IconFolder";
 
 import IconMenuDashboard from "../Icon/Menu/IconMenuDashboard";
 
@@ -101,7 +98,7 @@ const Sidebar = () => {
               className="w-full flex items-center" 
             >
               <div className="flex items-center">
-                <IconMenuDashboard className="group-hover:!text-primary shrink-0 w-5 h-5 ml-4 mb-2" />
+                <IconMenuDashboard className="group-hover:!text-primary shrink-0 w-5 h-5 ml-7 mb-2 " />
                 <span
                   style={{ fontSize: 17, fontWeight: "bold" }}
                   className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark mb-2"

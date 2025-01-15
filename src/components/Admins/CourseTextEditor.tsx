@@ -69,7 +69,7 @@ function CourseTextEditor() {
             "wordcount",
           ],
           toolbar:
-            "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
+            "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | charmap | removeformat",
           tinycomments_mode: "embedded",
           tinycomments_author: "Author name",
           mergetags_list: [
@@ -121,6 +121,22 @@ function CourseTextEditor() {
           Save
         </button>
       </div>
+      <style>
+        {`
+          .tox-toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+          .tox-editor-container {
+            margin-top: 60px; /* Ajuste cette valeur en fonction de la hauteur de la barre d'outils */
+          }
+        `}
+      </style>
     </div>
   );
 }

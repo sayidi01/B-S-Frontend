@@ -25,12 +25,14 @@ import { useUserContext } from "../../config/UserContext";
 import axiosInstance, { imageURL } from "../../config/Api";
 import { toast } from "react-hot-toast";
 
-import logoHeader from "../../../public/LOGO-TRNS.png";
-import IconCalendar from "../Icon/IconCalendar";
+import logoHeader from "../Icon/Logo-BS-Dash.png"
+import { useTranslation } from "react-i18next";
+
 
 
 const Header = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { setIsConnected, currentAdmin, setCurrentAdmin, isConnected } =
     useUserContext();
@@ -123,6 +125,9 @@ const Header = () => {
               src={logoHeader}
               alt="logo"
             />
+             <span className="text-2xl ltr:ml-1.5 rtl:mr-1.5 font-semibold align-middle lg:inline dark:text-white-light">
+                {t("Institute")}
+              </span>
 
             <button
               type="button"
@@ -148,9 +153,9 @@ const Header = () => {
               >
                 <div className="relative">
                   <div style={{ display: "flex", gap: 10 }}>
-                    <Link to={'/Dashbord/calendar'}>
+                    {/* <Link to={'/Dashbord/calendar'}>
                     <IconCalendar />
-                    </Link>
+                    </Link> */}
 
                     {/* <Link to={'/Dashbord/chat'}>
                     <IconChatNotification />

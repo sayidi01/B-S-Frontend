@@ -172,6 +172,8 @@ function UploadPdfCourses() {
                   style={{
                     fontSize: "18px",
                     fontWeight: "bold",
+                    marginBottom: "0",
+                    paddingBottom: "0", 
                   }}
                 >
                   {course.title}
@@ -182,10 +184,11 @@ function UploadPdfCourses() {
                 backgroundColor: "#f6f7f9",
                 boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
                 width: "100%",
-                minHeight: "450px",
+                minHeight: "350px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
+                marginBottom: "35px",
               }}
             >
               <div style={{ marginBottom: "1rem" }}>
@@ -208,6 +211,8 @@ function UploadPdfCourses() {
                   flex: 1,
                   fontSize: "13px",
                   color: "#666",
+                  height: "100px", 
+                  overflow: "hidden", 
                 }}
                 onBlur={(e) => {
                   console.log("Element lost focus");
@@ -222,11 +227,11 @@ function UploadPdfCourses() {
                   <Button
                     size="small"
                     style={{
-                      backgroundColor: "#6439FF",
+                      backgroundColor: "#4261ee",
                       color: "#fff",
                       border: "none",
                       cursor: "pointer",
-                      marginTop: "2rem",
+                    
                       marginLeft: "1rem",
                     }}
                   >
@@ -240,7 +245,7 @@ function UploadPdfCourses() {
                     button={
                       <Button
                         size="small"
-                        style={{ marginLeft: "5px", marginTop: "2rem" }}
+                        style={{ marginLeft: "5px"}}
                         className="p-0"
                       >
                         <IconHorizontalDots />

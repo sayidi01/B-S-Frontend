@@ -6,6 +6,7 @@ import IconMenuUsers from "../components/Icon/Menu/IconMenuUsers";
 
 import IconUser from "../components/Icon/IconUser";
 import IconUserPlus from "../components/Icon/IconUserPlus";
+import IconMenuPages from "../components/Icon/Menu/IconMenuPages";
 
 import OverviewListStudents from "../components/Students/OverviewListStudents";
 
@@ -24,6 +25,8 @@ const Index = () => {
   const [totaleTeachers, setTotalTeachers] = useState<number | null>(null);
 
   const [totaleStudents, setTotalStudents] = useState<number | null>(null);
+
+  const [totalCourses, setTotalCourses] = useState<number | null>(null);
 
   // TOTAL ADMINS NUMBER
 
@@ -83,6 +86,24 @@ const Index = () => {
     }
   }, []);
 
+  // TOTAL COURSES NUMBERS
+
+  useEffect(() => {
+    const isConnectedLocalStr = localStorage.getItem("isConnected");
+    if (isConnected && isConnectedLocalStr == "true") {
+      console.log("Courses numbers", currentAdmin, isConnected);
+      axiosInstance
+        .get<{ total: number }>("/course/total")
+        .then(({ data }) => {
+          console.log(data);
+          setTotalCourses(data.total);
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la récupération des Cours", error);
+        });
+    }
+  }, []);
+
   return (
     <div>
       <h1
@@ -136,6 +157,12 @@ const Index = () => {
             Total Teachers : {totaleTeachers}
           </div>
         </Card>
+        <Card style={{ width: 250, backgroundColor: "rgba(255, 99, 71, 0.1)" }}>
+          <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#d32f2f" }}>
+            <IconMenuPages />
+            Total Courses : {totalCourses}
+          </div>
+        </Card>
         <Card style={{ width: 250, backgroundColor: "#fffde7" }}>
           <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#fbc02d" }}>
             <IconUserPlus />
@@ -149,7 +176,6 @@ const Index = () => {
       <div>
         <OverviewListStudents />
       </div>
-     
     </div>
   );
 };
