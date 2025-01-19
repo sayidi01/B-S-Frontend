@@ -1,8 +1,10 @@
-
 import { lazy } from "react";
 import SingleCourse from "../components/Admins/SingleCourse";
 import CourseTextEditor from "../components/Admins/CourseTextEditor";
-
+import Chapters from "../components/Admins/Course/Edit/Chapters";
+import Lessons from "../components/Admins/Course/Edit/Lessons";
+import Home from "../components/Admins/Course/Edit/Home";
+import Quiz from "../components/Admins/Course/Edit/Quiz";
 
 const Index = lazy(() => import("../pages/Index"));
 
@@ -22,13 +24,11 @@ const Signin = lazy(() => import("../pages/Signin"));
 
 const PrivateRoutes = lazy(() => import("../router/PrivateRoutes"));
 
-
-
 const Chat = lazy(() => import("../pages/Chat"));
 
-const Calendar  = lazy(() => import("../pages/Calendar"));
+const Calendar = lazy(() => import("../pages/Calendar"));
 
-const Vitrine =  lazy(() => import("../pages/Vitrine"));
+const Vitrine = lazy(() => import("../pages/Vitrine"));
 
 const routes = [
   {
@@ -73,24 +73,44 @@ const routes = [
         path: "courses/:id/edit",
         element: <CourseTextEditor />,
         layout: "default",
+        children: [
+          {
+            path: "",
+            element: <Home />,
+            layout: "default",
+          },
+          {
+            path: "chapters",
+            element: <Chapters />,
+            layout: "default",
+          },
+          {
+            path: "lessons",
+            element: <Lessons />,
+            layout: "default",
+          },
+          {
+            path: "quiz",
+            element: <Quiz />,
+            layout: "default",
+          },
+        ],
       },
       {
         path: "chat",
-        element: <Chat/>,
+        element: <Chat />,
         layout: "default",
       },
       {
         path: "calendar",
-        element: <Calendar/>,
+        element: <Calendar />,
         layout: "default",
       },
       {
-        path: 'vitrine',
-        element: <Vitrine/>,
+        path: "vitrine",
+        element: <Vitrine />,
         ayout: "default",
-      }
-
-     
+      },
     ],
   },
 ];

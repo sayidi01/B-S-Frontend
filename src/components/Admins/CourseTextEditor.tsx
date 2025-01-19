@@ -1,10 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "../../config/UserContext";
 import { ICourse } from "../../types/course";
 import { LoadingOverlay } from "@mantine/core";
 import { toast } from "react-hot-toast";
+import { Tab, TabGroup, TabList, TabPanels } from "@headlessui/react";
+import { editCourseTabs } from "./utils";
 
 function CourseTextEditor() {
   const [currentCourse, setCurrentCourse] = useState<ICourse | null>(null);
@@ -13,12 +15,14 @@ function CourseTextEditor() {
   const navigate = useNavigate();
 
   const params = useParams();
-  const { apiClient } = useUserContext();
+  const { courseApiClient } = useUserContext();
 
   useEffect(() => {
     const fetchingCourse = async () => {
       if (params.id) {
-        const response = (await apiClient.getCourseData(params.id)) as ICourse;
+        const response = (await courseApiClient.getCourseData(
+          params.id
+        )) as ICourse;
         console.log("response", response);
         setCurrentCourse(response);
         setEditorText(response.content ?? "");
@@ -31,7 +35,7 @@ function CourseTextEditor() {
   const saveTextEditor = useCallback(async () => {
     if (!currentCourse) return;
     try {
-      const response = await apiClient.updateCourseContent(
+      const response = await courseApiClient.updateCourseContent(
         currentCourse._id,
         editorText
       );
@@ -49,7 +53,33 @@ function CourseTextEditor() {
 
   return (
     <div>
-      <Editor
+      <TabGroup>
+        <TabList className="mt-3 flex flex-wrap">
+          {editCourseTabs.map((courseTab) => (
+            <Tab as={Fragment} key={courseTab.tabName}>
+              {({ selected }) => (
+                <Link to={courseTab.path}>
+                  <button
+                    className={`${
+                      selected
+                        ? "text-secondary !outline-none before:!w-full"
+                        : ""
+                    } relative -mb-[1px] flex items-center p-5 py-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:m-auto before:inline-block before:h-[1px] before:w-0 before:bg-secondary before:transition-all before:duration-700 hover:text-secondary hover:before:w-full`}
+                  >
+                    <courseTab.icon />
+                    <span className="ml-2">{courseTab.tabName}</span>
+                  </button>
+                </Link>
+              )}
+            </Tab>
+          ))}
+        </TabList>
+        <TabPanels>
+          <Outlet />
+        </TabPanels>
+      </TabGroup>
+
+      {/* <Editor
         apiKey="hs596mfw1xm1lq4bvoeyrjzc5tkl2mhsax8ecy6oi8guqxpd"
         init={{
           height: 900,
@@ -120,7 +150,7 @@ function CourseTextEditor() {
         >
           Save
         </button>
-      </div>
+      </div> */}
       <style>
         {`
           .tox-toolbar {

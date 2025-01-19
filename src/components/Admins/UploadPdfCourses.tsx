@@ -231,7 +231,6 @@ function UploadPdfCourses() {
                       color: "#fff",
                       border: "none",
                       cursor: "pointer",
-                    
                       marginLeft: "1rem",
                     }}
                   >

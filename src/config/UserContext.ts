@@ -3,6 +3,7 @@ import React, { createContext, useContext } from "react";
 import { Admin } from "../components/Admins/ModalCreateAdmin";
 import { ICourse } from "../types/course";
 import APIClient from "../api";
+import CourseAPIClient from "../api/CourseAPIClient";
 
 interface UserContextType {
   data: {};
@@ -14,6 +15,7 @@ interface UserContextType {
   courses: ICourse[];
   setCourses: React.Dispatch<React.SetStateAction<ICourse[]>>;
   apiClient: APIClient;
+  courseApiClient: CourseAPIClient;
 }
 
 const UserContext = createContext<UserContextType | null>(null);

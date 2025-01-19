@@ -24,8 +24,10 @@ import { Admin } from "./components/Admins/ModalCreateAdmin";
 
 import { ICourse } from "./types/course";
 import APIClient from "./api";
+import CourseAPIClient from "./api/CourseAPIClient";
 
 const apiClient = new APIClient();
+const courseApiClient = new CourseAPIClient();
 
 const App = () => {
   const [data, setData] = useState({});
@@ -45,6 +47,7 @@ const App = () => {
         courses,
         setCourses,
         apiClient,
+        courseApiClient,
       }}
     >
       <RouterProvider router={router} />
