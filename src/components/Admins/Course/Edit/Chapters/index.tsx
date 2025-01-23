@@ -1,12 +1,12 @@
 import { useState } from "react";
 import useFetchChapterData from "../../../../../hooks/api/chapter/UseFetchChapter";
 import { useParams } from "react-router-dom";
-import { FaTimes } from "react-icons/fa"; 
-import { IChapter } from "../../../../../types/chapter";
+import { FaEllipsisV, FaTimes } from "react-icons/fa"; 
+import { Dropdown, Menu, Button } from "antd";
 
 export default function Chapters() {
   const { id } = useParams();
-  const { chapterData, error, setError,isLoading , createChapter} = useFetchChapterData(id);
+  const { chapterData, error, setError,isLoading , createChapter, deleteChapter} = useFetchChapterData(id);
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
   const [newChapterTitle, setNewChapterTitle] = useState(""); 
 
@@ -43,6 +43,14 @@ export default function Chapters() {
       setError("Chapter title cannot be empty.");
     }
   };
+
+  const menuItems = (chapterId: string, ) => [
+    {
+      key: "delete",
+      label: "Delete",
+      onClick: () => deleteChapter(id as string, chapterId),
+    },
+  ];
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -87,23 +95,31 @@ export default function Chapters() {
         </div>
       </div>
 
-      {/* Liste des chapitres */}
+     
       <div className="space-y-6 max-w-3xl mx-auto">
         {chapterData.map((chapter) => (
           <div
             key={chapter._id}
             className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
           >
-            <div
-              className="flex justify-between items-center cursor-pointer"
-              onClick={() => toggleQuiz(chapter._id)}
-            >
-              <h2 className="text-xl font-semibold text-gray-800">
-                Chapter {chapter.title}
-              </h2>
-              <span className="text-gray-500">
-                {expandedChapter === chapter._id ? "▲" : "▼"}
-              </span>
+            <div className="flex justify-between items-center">
+              <div
+                className="flex justify-between items-center cursor-pointer w-full"
+                onClick={() => toggleQuiz(chapter._id)}
+              >
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Chapter :  {chapter.title}
+                </h2>
+                <span className="text-gray-500">
+                  {expandedChapter === chapter._id ? "▲" : "▼"}
+                </span>
+              </div>
+              <Dropdown
+                menu={{ items: menuItems(chapter._id) }} 
+                trigger={["click"]}
+              >
+                <Button type="text" icon={<FaEllipsisV />} />
+              </Dropdown>
             </div>
 
             {expandedChapter === chapter._id && (
@@ -138,5 +154,6 @@ export default function Chapters() {
         ))}
       </div>
     </div>
+   
   );
 }

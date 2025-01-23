@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useUserContext } from "../../../config/UserContext";
 import { IChapter } from "../../../types/chapter";
-
+import { toast } from "react-hot-toast";
 interface CreateChapterResponse {
   data: {
     chapter: IChapter;
@@ -42,15 +42,13 @@ export default function useFetchChapterData(id: string | undefined) {
 
   const createChapter = useCallback(
     async (title: string, courseId: string) => {
-      
-  
       setIsLoading(true);
       try {
         const response = (await chapterApiClient.createChapter(
           courseId,
           title
         )) as CreateChapterResponse;
-       
+
         setChapterData((prev) => {
           if (prev) {
             return [...prev, response.data.chapter];
@@ -58,7 +56,7 @@ export default function useFetchChapterData(id: string | undefined) {
             return [response.data.chapter];
           }
         });
-  
+
         setError(null);
       } catch (err) {
         setError("Failed to create chapter");
@@ -70,5 +68,30 @@ export default function useFetchChapterData(id: string | undefined) {
     [id, chapterApiClient]
   );
 
-  return { chapterData, error, isLoading, setError,createChapter };
+  const deleteChapter = useCallback(
+    (courseId: string, chapterId: string) => {
+      setIsLoading(true);
+      chapterApiClient
+        .deleteChapter(courseId,chapterId )
+        .then(() => {
+          setChapterData((prev) => {
+            if (prev) {
+              return prev.filter((chapter) => chapter._id !== chapterId);
+            }
+            return prev;
+          });
+          toast.success("Chapter deleted Successfully!");
+        })
+        .catch((err) => {
+          console.error("Error deleting chapter:", err);
+          setError("Failed to delete chapter");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [chapterApiClient, setChapterData]
+  );
+
+  return { chapterData, error, isLoading, setError, createChapter, deleteChapter };
 }
