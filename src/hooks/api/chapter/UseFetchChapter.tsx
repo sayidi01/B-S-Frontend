@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useUserContext } from "../../../config/UserContext";
 import { IChapter } from "../../../types/chapter";
 import { toast } from "react-hot-toast";
+
 interface CreateChapterResponse {
   data: {
     chapter: IChapter;
@@ -93,5 +94,36 @@ export default function useFetchChapterData(id: string | undefined) {
     [chapterApiClient, setChapterData]
   );
 
-  return { chapterData, error, isLoading, setError, createChapter, deleteChapter };
+  const updateChapter = useCallback(
+    (courseId: string, chapterID: string, title: string) => {
+      setIsLoading(true);
+      chapterApiClient
+        .updateChapter(courseId, chapterID, title)
+        .then(() => {
+          setChapterData((prev) => {
+            if (prev) {
+              return prev.map((chapter) => {
+                if (chapter._id === chapterID) {
+                  return { ...chapter, title }; 
+                }
+                return chapter;
+              });
+            }
+            return prev;
+          });
+          toast.success("Chapter Updated Successfully!");
+         
+        })
+        .catch((err) => {
+          console.error("Error updating chapter:", err);
+          setError("Failed to update chapter");
+          toast.error("Failed to update chapter");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [chapterApiClient, setChapterData]
+  );
+  return { chapterData, error, isLoading, setError, createChapter, deleteChapter, updateChapter };
 }

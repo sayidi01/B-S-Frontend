@@ -1,14 +1,27 @@
 import { useState } from "react";
 import useFetchChapterData from "../../../../../hooks/api/chapter/UseFetchChapter";
 import { useParams } from "react-router-dom";
-import { FaEllipsisV, FaTimes } from "react-icons/fa"; 
-import { Dropdown, Menu, Button } from "antd";
+import { FaEllipsisV, FaTimes } from "react-icons/fa";
+import { Dropdown, Button } from "antd";
+import UpdateChapterPopover from "./UpdateChapterPopover";
 
 export default function Chapters() {
   const { id } = useParams();
-  const { chapterData, error, setError,isLoading , createChapter, deleteChapter} = useFetchChapterData(id);
+  const {
+    chapterData,
+    error,
+    setError,
+    isLoading,
+    createChapter,
+    deleteChapter,
+    updateChapter,
+  } = useFetchChapterData(id);
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
-  const [newChapterTitle, setNewChapterTitle] = useState(""); 
+  const [newChapterTitle, setNewChapterTitle] = useState("");
+  const [updatePopoverData, setUpdatePopoverData] = useState<{
+    chapterId: string | null;
+    currentTitle: string;
+  }>({ chapterId: null, currentTitle: "" });
 
   if (isLoading) {
     return <div className="text-center py-8 text-gray-600">Loading...</div>;
@@ -34,7 +47,7 @@ export default function Chapters() {
     if (newChapterTitle.trim()) {
       try {
         await createChapter(newChapterTitle, id as string);
-        setNewChapterTitle(""); 
+        setNewChapterTitle("");
         document.getElementById("popover")?.classList.add("hidden");
       } catch (err) {
         setError("Failed to create chapter. Please try again.");
@@ -44,7 +57,14 @@ export default function Chapters() {
     }
   };
 
-  const menuItems = (chapterId: string, ) => [
+  const menuItems = (chapterId: string, chapterTitle: string) => [
+    {
+      key: "update",
+      label: "Update",
+      onClick: () => {
+        setUpdatePopoverData({ chapterId, currentTitle: chapterTitle });
+      },
+    },
     {
       key: "delete",
       label: "Delete",
@@ -65,7 +85,7 @@ export default function Chapters() {
           Add New Chapter
         </button>
       </div>
-    
+
       <div
         id="popover"
         className="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -94,8 +114,20 @@ export default function Chapters() {
           </button>
         </div>
       </div>
+      {updatePopoverData.chapterId && (
+        <UpdateChapterPopover
+          chapterId={updatePopoverData.chapterId}
+   
+          currentTitle={updatePopoverData.currentTitle}
+          onUpdate={(chapterId, title) =>
+            updateChapter(id as string, chapterId, title)
+          } 
+          onClose={() =>
+            setUpdatePopoverData({ chapterId: null, currentTitle: "" })
+          }
+        />
+      )}
 
-     
       <div className="space-y-6 max-w-3xl mx-auto">
         {chapterData.map((chapter) => (
           <div
@@ -108,14 +140,14 @@ export default function Chapters() {
                 onClick={() => toggleQuiz(chapter._id)}
               >
                 <h2 className="text-xl font-semibold text-gray-800">
-                  Chapter :  {chapter.title}
+                  Chapter : {chapter.title}
                 </h2>
                 <span className="text-gray-500">
                   {expandedChapter === chapter._id ? "▲" : "▼"}
                 </span>
               </div>
               <Dropdown
-                menu={{ items: menuItems(chapter._id) }} 
+                menu={{ items: menuItems(chapter._id, chapter.title) }}
                 trigger={["click"]}
               >
                 <Button type="text" icon={<FaEllipsisV />} />
@@ -154,6 +186,5 @@ export default function Chapters() {
         ))}
       </div>
     </div>
-   
   );
 }
