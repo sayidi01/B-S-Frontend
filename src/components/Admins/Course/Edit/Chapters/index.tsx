@@ -60,7 +60,7 @@ export default function Chapters() {
   const menuItems = (chapterId: string, chapterTitle: string) => [
     {
       key: "update",
-      label: "Update",
+      label: "Edit",
       onClick: () => {
         setUpdatePopoverData({ chapterId, currentTitle: chapterTitle });
       },
