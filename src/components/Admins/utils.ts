@@ -3,6 +3,9 @@ import IconEye from "../Icon/IconEye";
 import IconOpenBook from "../Icon/IconOpenBook";
 import IconSquareCheck from "../Icon/IconSquareCheck";
 
+
+
+
 export const editCourseTabs = [
   {
     tabName: "Course",

@@ -5,6 +5,7 @@ import { ICourse } from "../types/course";
 import APIClient from "../api";
 import CourseAPIClient from "../api/CourseAPIClient";
 import ChapterAPIClient from "../api/ChapterAPIClient";
+import { LessonAPIClient } from '../api/LessonAPIClient';
 
 interface UserContextType {
   data: {};
@@ -18,6 +19,7 @@ interface UserContextType {
   apiClient: APIClient;
   courseApiClient: CourseAPIClient;
   chapterApiClient: ChapterAPIClient
+  lessonAPIClient: LessonAPIClient
 }
 
 const UserContext = createContext<UserContextType | null>(null);

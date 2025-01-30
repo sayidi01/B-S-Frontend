@@ -17,6 +17,9 @@ function CourseTextEditor() {
   const params = useParams();
   const { courseApiClient } = useUserContext();
 
+  const {id,chapterId} = params
+  
+
   useEffect(() => {
     const fetchingCourse = async () => {
       if (params.id) {
@@ -58,7 +61,7 @@ function CourseTextEditor() {
           {editCourseTabs.map((courseTab) => (
             <Tab as={Fragment} key={courseTab.tabName}>
               {({ selected }) => (
-                <Link to={courseTab.path}>
+               <Link to={`/Dashbord/courses/${id}/edit/${courseTab.path}`}>
                   <button
                     className={`${
                       selected
@@ -79,94 +82,8 @@ function CourseTextEditor() {
         </TabPanels>
       </TabGroup>
 
-      {/* <Editor
-        apiKey="hs596mfw1xm1lq4bvoeyrjzc5tkl2mhsax8ecy6oi8guqxpd"
-        init={{
-          height: 900,
-          plugins: [
-            "anchor",
-            "autolink",
-            "charmap",
-            "codesample",
-            "emoticons",
-            "image",
-            "link",
-            "lists",
-            "media",
-            "searchreplace",
-            "table",
-            "visualblocks",
-            "wordcount",
-          ],
-          toolbar:
-            "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | charmap | removeformat",
-          tinycomments_mode: "embedded",
-          tinycomments_author: "Author name",
-          mergetags_list: [
-            { value: "First.Name", title: "First Name" },
-            { value: "Email", title: "Email" },
-          ],
-          textcolor_map: [
-            "000000",
-            "Black", // Noir
-            "FFFFFF",
-            "White", // Blanc
-            "003366",
-            "Dark Blue", // Bleu foncé
-            "2566e8",
-            "Blue", // Bleu
-            "046307",
-            "Green", // Vert
-            "c02424",
-            "Red", // Rouge
-          ],
-          color_map: [
-            "000000",
-            "Black", // Noir
-            "FFFFFF",
-            "White", // Blanc
-            "003366",
-            "Dark Blue", // Bleu foncé
-            "2566e8",
-            "Blue", // Bleu
-            "046307",
-            "Green", // Vert
-            "c02424",
-            "Red", // Rouge
-          ],
-          font_formats:
-            "Times New Roman=Times New Roman, serif; Montserrat=Montserrat, sans-serif;",
-          font_family_formats:
-            "Times New Roman=Times New Roman, serif; Montserrat=Montserrat, sans-serif;",
-        }}
-        value={editorText}
-        onEditorChange={(newValue) => setEditorText(newValue)}
-      />
-      <div className="mt-3">
-        <button
-          onClick={saveTextEditor}
-          type="button"
-          className="btn btn-primary"
-        >
-          Save
-        </button>
-      </div> */}
-      <style>
-        {`
-          .tox-toolbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          }
-          .tox-editor-container {
-            margin-top: 60px; /* Ajuste cette valeur en fonction de la hauteur de la barre d'outils */
-          }
-        `}
-      </style>
+    
+     
     </div>
   );
 }

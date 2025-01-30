@@ -5,6 +5,8 @@ import Chapters from "../components/Admins/Course/Edit/Chapters";
 import Lessons from "../components/Admins/Course/Edit/Lessons";
 import Home from "../components/Admins/Course/Edit/Home";
 import Quiz from "../components/Admins/Course/Edit/Quiz";
+import SingleChapter from "../components/Admins/Course/Edit/Chapters/SingleChapter";
+
 
 const Index = lazy(() => import("../pages/Index"));
 
@@ -29,6 +31,8 @@ const Chat = lazy(() => import("../pages/Chat"));
 const Calendar = lazy(() => import("../pages/Calendar"));
 
 const Vitrine = lazy(() => import("../pages/Vitrine"));
+
+
 
 const routes = [
   {
@@ -83,7 +87,16 @@ const routes = [
             path: "chapters",
             element: <Chapters />,
             layout: "default",
+            children: [
+              {
+                path: ":chapterId",
+                element: <SingleChapter />,
+                layout: "default",
+                
+              },
+            ]
           },
+          
           {
             path: "lessons",
             element: <Lessons />,
@@ -109,7 +122,7 @@ const routes = [
       {
         path: "vitrine",
         element: <Vitrine />,
-        ayout: "default",
+        layout: "default",
       },
     ],
   },

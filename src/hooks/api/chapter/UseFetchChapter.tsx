@@ -3,6 +3,7 @@ import { useUserContext } from "../../../config/UserContext";
 import { IChapter } from "../../../types/chapter";
 import { toast } from "react-hot-toast";
 
+
 interface CreateChapterResponse {
   data: {
     chapter: IChapter;
@@ -13,6 +14,7 @@ export default function useFetchChapterData(id: string | undefined) {
   const { chapterApiClient } = useUserContext();
 
   const [chapterData, setChapterData] = useState<null | IChapter[]>(null);
+  const [singleChapterData, setSingleChapterData] = useState<null | IChapter>(null); 
 
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +42,28 @@ export default function useFetchChapterData(id: string | undefined) {
         setIsLoading(false);
       });
   }, [id, chapterApiClient]);
+
+
+
+  const getSingleChapter = useCallback(
+    async (courseId: string, chapterId: string) => {
+      setIsLoading(true);
+      try {
+        const response = await chapterApiClient.getSingleChapter(courseId, chapterId);
+        setSingleChapterData((response as { data: { chapter: IChapter} }).data.chapter);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching single chapter:", err);
+        setError("Failed to retrieve single chapter data");
+        setSingleChapterData(null);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [chapterApiClient]
+  );
+
+
 
   const createChapter = useCallback(
     async (title: string, courseId: string) => {
@@ -125,5 +149,5 @@ export default function useFetchChapterData(id: string | undefined) {
     },
     [chapterApiClient, setChapterData]
   );
-  return { chapterData, error, isLoading, setError, createChapter, deleteChapter, updateChapter };
+  return { chapterData, error, isLoading, setError, createChapter, deleteChapter, updateChapter, getSingleChapter, singleChapterData };
 }

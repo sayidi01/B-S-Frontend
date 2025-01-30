@@ -27,11 +27,14 @@ import APIClient from "./api";
 import CourseAPIClient from "./api/CourseAPIClient";
 
 import ChapterAPIClient from "./api/ChapterAPIClient";
+import { LessonAPIClient } from './api/LessonAPIClient';
 
 const apiClient = new APIClient();
 const courseApiClient = new CourseAPIClient();
 
 const chapterApiClient = new ChapterAPIClient()
+
+const lessonAPIClient = new LessonAPIClient()
 
 const App = () => {
   const [data, setData] = useState({});
@@ -53,6 +56,7 @@ const App = () => {
         apiClient,
         courseApiClient,
         chapterApiClient,
+        lessonAPIClient
       }}
     >
       <RouterProvider router={router} />
