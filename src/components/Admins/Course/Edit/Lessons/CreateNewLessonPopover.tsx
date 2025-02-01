@@ -8,18 +8,18 @@ import { toast } from "react-hot-toast";
 import useFetchChapterData from '../../../../../hooks/api/chapter/UseFetchChapter';
 
 function CreateNewLessonPopover({ onClose }: { onClose: () => void }) {
-    const { id } = useParams<{ id: string; chapterId: string }>(); 
+    const { id: courseId } = useParams<{ id: string; chapterId: string }>(); 
 
-  const {createLesson,error,isLoading } = useFetchLessonData()
+    const [formDataLesson, setFormDataLesson] = useState({
+      title: '',
+      description: '',
+      chapterId: '',
+     
+    });
+  const {createLesson,error,isLoading } = useFetchLessonData(courseId as string, formDataLesson.chapterId)
 
-  const { chapterData, isLoading: isLoadingChapters} = useFetchChapterData(id);
+  const { chapterData, isLoading: isLoadingChapters} = useFetchChapterData(courseId);
 
-  const [formDataLesson, setFormDataLesson] = useState({
-    title: '',
-    description: '',
-    chapterId: '',
-   
-  });
 
  
   console.log(formDataLesson)
@@ -33,7 +33,7 @@ function CreateNewLessonPopover({ onClose }: { onClose: () => void }) {
   };
 
   const handleCreateLesson = async () => {
-    if (!id) {
+    if (!courseId) {
       console.error('Course ID missing');
       return;
     }
@@ -48,7 +48,7 @@ function CreateNewLessonPopover({ onClose }: { onClose: () => void }) {
       console.log('Payload:', formDataLesson);
       console.log('Chapter ID:', formDataLesson.chapterId);
       
-      const response = await createLesson(id, formDataLesson.chapterId, formDataLesson.title, formDataLesson.description);
+      const response = await createLesson(courseId, formDataLesson.chapterId, formDataLesson.title, formDataLesson.description);
     
       console.log('Lesson Created:', response);
       toast.success("Lesson Created Successfully");
