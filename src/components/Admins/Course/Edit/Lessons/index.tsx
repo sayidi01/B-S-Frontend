@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CreateNewLessonPopover from "./CreateNewLessonPopover";
 import useFetchLessonData from "../../../../../hooks/api/Lessons/useFetchLessonData";
 
@@ -13,21 +13,26 @@ export default function Lessons() {
     lessonId: string;
   }>();
 
+  const navigate = useNavigate()
+
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [expandedLesson, setExpandedLesson] = useState<string | null>(null);
 
-  const { lessonData, isLoading, deleteLesson } = useFetchLessonData(
-    id as string
-  
-  );
+  const fetchLessonDataMethods = useFetchLessonData(id as string);
+  const { lessonData, isLoading, deleteLesson } = fetchLessonDataMethods;
 
   useEffect(() => {
-    console.log("lessondata", lessonData)
-  },[lessonData])
+    console.log("lessondata", lessonData);
+  }, [lessonData]);
 
   const toggleLesson = (lessonId: string) => {
     setExpandedLesson(expandedLesson === lessonId ? null : lessonId);
   };
+
+
+  useEffect(() => {
+    console.log("lessondata", lessonData)
+  },[lessonData])
 
   useEffect(() => {
     if (!id) {
@@ -41,12 +46,14 @@ export default function Lessons() {
     {
       key: "update",
       label: "Edit",
+      onClick: () => {
+        navigate(`/Dashbord/courses/:id/edit/lessons/${lessonId}`);
+      },
     },
     {
       key: "delete",
       label: "Delete",
       onClick: () => {
-        console.log("Deleting lesson with ID:", lessonId); 
         deleteLesson(lessonId);
       },
     },
@@ -64,15 +71,14 @@ export default function Lessons() {
       </div>
 
       <div className="space-y-6 max-w-3xl mx-auto">
-        {lessonData && lessonData.length > 0
+        {lessonData
           ? lessonData.map((lesson) => (
               <div
-                key={lesson._id} 
+                key={lesson._id}
                 className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
               >
                 <div className="flex justify-between items-center">
                   <div
-                  
                     className="flex justify-between items-center cursor-pointer w-full"
                     onClick={() => toggleLesson(lesson._id)}
                   >
@@ -104,7 +110,6 @@ export default function Lessons() {
           : !isLoading && <p>No lessons found.</p>}
       </div>
 
-
       {isPopoverOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
@@ -115,7 +120,10 @@ export default function Lessons() {
               ✖
             </button>
             <h2 className="text-xl font-semibold mb-4">Create New Lesson</h2>
-            <CreateNewLessonPopover onClose={() => setIsPopoverOpen(false)} />
+            <CreateNewLessonPopover
+              {...fetchLessonDataMethods}
+              onClose={() => setIsPopoverOpen(false)}
+            />
           </div>
         </div>
       )}

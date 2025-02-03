@@ -6,7 +6,7 @@ import Lessons from "../components/Admins/Course/Edit/Lessons";
 import Home from "../components/Admins/Course/Edit/Home";
 import Quiz from "../components/Admins/Course/Edit/Quiz";
 import SingleChapter from "../components/Admins/Course/Edit/Chapters/SingleChapter";
-
+import EditLesson from "../components/Admins/Course/Edit/Lessons/EditLesson";
 
 const Index = lazy(() => import("../pages/Index"));
 
@@ -102,6 +102,12 @@ const routes = [
             element: <Lessons />,
             layout: "default",
           },
+          {
+            path: "lessons/:id", 
+            element: <EditLesson />,
+            layout: "default",
+          },
+
           {
             path: "quiz",
             element: <Quiz />,
