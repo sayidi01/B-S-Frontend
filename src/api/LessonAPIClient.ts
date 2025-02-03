@@ -20,5 +20,11 @@ export class LessonAPIClient extends APIClient {
       await this.axiosInstance.get(`/lessons/course/${courseId}`) 
     ).data;
   }
+
+  async deleteLesson(lessonId: string) {
+    return(
+      await this.axiosInstance.delete(`/lessons/${lessonId}`)
+    ).data;
+  }
   
 }
