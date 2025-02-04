@@ -1,8 +1,42 @@
 import { Button, Input, Select, Typography } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import TextArea from "antd/es/input/TextArea";
+import { useParams } from "react-router-dom";
+import useFetchLessonData from "../../../../../hooks/api/Lessons/useFetchLessonData";
+import { useEffect, useState } from "react";
+import useFetchSingleLesson from "../../../../../hooks/api/Lessons/useFetchSingleLesson";
+import useFetchChapterData from "../../../../../hooks/api/chapter/UseFetchChapter";
+
+// F had route
+// Fetchet 2 7wayj:
+// - Data dyal lesson
+// - Data dyal chapters
 
 function EditLesson() {
+  const { lessonID, id } = useParams();
+  const { isLoading, lessonData, error } = useFetchSingleLesson(
+    id as string,
+    lessonID as string
+  );
+  const {
+    chapterData: chaptersData,
+    isLoading: isLoadingChapters,
+    error: chaptersError,
+  } = useFetchChapterData(id);
+
+  const [formState, setFormState] = useState(lessonData);
+
+  useEffect(() => {
+    setFormState(lessonData);
+  }, [lessonData]);
+
+  if (isLoading || isLoadingChapters) return "Loading..."; // 7tta t9ad hadi mzn
+  if (error || chaptersError)
+    return "Error fetching lesson data, reason".concat(
+      error ?? chaptersError ?? ""
+    );
+  if (!lessonData || !chaptersData || !formState) return null;
+
   return (
     <div>
       <Typography
@@ -20,17 +54,29 @@ function EditLesson() {
         <label htmlFor="title" className="form-label">
           Title
         </label>
-        <Input id="title" name="title" placeholder="Enter lesson title" />
+        <Input
+          value={formState.title}
+          id="title"
+          name="title"
+          placeholder="Enter lesson title"
+        />
       </div>
       <div className="mb-3">
         <label htmlFor="chapterId" className="form-label">
           Chapter
         </label>
         <Select
+          value={formState.chapterId}
           id="chapterId"
           placeholder="Select a chapter"
           style={{ width: "100%" }}
-        ></Select>
+        >
+          {chaptersData.map((chapter) => (
+            <Select.Option key={chapter._id} value={chapter._id}>
+              {chapter.title}
+            </Select.Option>
+          ))}
+        </Select>
       </div>
 
       <div className="mb-3">
@@ -38,6 +84,7 @@ function EditLesson() {
           Description
         </label>
         <TextArea
+          value={formState.description}
           id="description"
           name="description"
           placeholder="Enter lesson description"
@@ -107,7 +154,7 @@ function EditLesson() {
         }}
       />
 
-      <Button type="primary" style={{ marginTop: "20px" }} >
+      <Button type="primary" style={{ marginTop: "20px" }}>
         Save
       </Button>
 

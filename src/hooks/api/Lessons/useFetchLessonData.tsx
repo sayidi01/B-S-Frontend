@@ -2,9 +2,16 @@ import { useCallback, useEffect, useState } from "react";
 import { useUserContext } from "../../../config/UserContext";
 import { ILesson } from "../../../components/Admins/Course/Edit/Lessons/TypesLessons";
 import { toast } from "react-hot-toast";
-import { S } from "@fullcalendar/core/internal-common";
 
-export default function useFetchLessonData(courseId: string,  lessonId?: string) {
+// Le hook smito useFetchLessonData
+// khass ykon taydir 7aja wa7da
+// khass yfetchi data dyal lesson, finition
+// hadok l actions b7al createLesson, deleteLesson, updateLesson..
+// ndirhom f class nsammiha LessonAPIClient
+
+// Ewa ra khass t7aydhom menhna
+
+export default function useFetchLessonData(courseId: string) {
   const { lessonAPIClient } = useUserContext();
   const [lessonData, setLessonData] = useState<ILesson[]>([]);
   const [error, setError] = useState<null | string>(null);

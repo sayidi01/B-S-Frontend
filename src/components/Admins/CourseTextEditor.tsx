@@ -17,8 +17,8 @@ function CourseTextEditor() {
   const params = useParams();
   const { courseApiClient } = useUserContext();
 
-  const {id,chapterId} = params
-  
+  const { id, chapterId } = params;
+  console.log("params", params);
 
   useEffect(() => {
     const fetchingCourse = async () => {
@@ -61,7 +61,7 @@ function CourseTextEditor() {
           {editCourseTabs.map((courseTab) => (
             <Tab as={Fragment} key={courseTab.tabName}>
               {({ selected }) => (
-               <Link to={`/Dashbord/courses/${id}/edit/${courseTab.path}`}>
+                <Link to={`/Dashbord/courses/${id}/edit/${courseTab.path}`}>
                   <button
                     className={`${
                       selected
@@ -81,9 +81,6 @@ function CourseTextEditor() {
           <Outlet />
         </TabPanels>
       </TabGroup>
-
-    
-     
     </div>
   );
 }

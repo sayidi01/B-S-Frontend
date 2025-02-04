@@ -103,7 +103,7 @@ const routes = [
             layout: "default",
           },
           {
-            path: "lessons/:id", 
+            path: "lessons/:lessonID", // mlli taykono 3ndi nested routes, koolla paramter dynamique doit avoir un nom unique !!
             element: <EditLesson />,
             layout: "default",
           },
