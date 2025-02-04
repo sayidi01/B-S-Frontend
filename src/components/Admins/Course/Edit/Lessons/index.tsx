@@ -13,7 +13,7 @@ export default function Lessons() {
     lessonId: string;
   }>();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [expandedLesson, setExpandedLesson] = useState<string | null>(null);
@@ -29,10 +29,9 @@ export default function Lessons() {
     setExpandedLesson(expandedLesson === lessonId ? null : lessonId);
   };
 
-
   useEffect(() => {
-    console.log("lessondata", lessonData)
-  },[lessonData])
+    console.log("lessondata", lessonData);
+  }, [lessonData]);
 
   useEffect(() => {
     if (!id) {
@@ -72,7 +71,7 @@ export default function Lessons() {
 
       <div className="space-y-6 max-w-3xl mx-auto">
         {lessonData
-          ? lessonData.map((lesson) => (
+          ? lessonData.map((lesson, index) => (
               <div
                 key={lesson._id}
                 className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
@@ -83,7 +82,7 @@ export default function Lessons() {
                     onClick={() => toggleLesson(lesson._id)}
                   >
                     <h2 className="text-xl font-semibold text-gray-800">
-                      Lesson: {lesson.title}
+                      Lesson {index + 1} : {lesson.title}
                     </h2>
                     <span className="text-gray-500">
                       {expandedLesson === lesson._id ? "▲" : "▼"}
@@ -103,6 +102,12 @@ export default function Lessons() {
                       Description
                     </h3>
                     <p className="text-gray-600">{lesson.description}</p>
+                    <button
+                      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                     
+                    >
+                      View Lesson
+                    </button>
                   </div>
                 )}
               </div>

@@ -2,12 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import { useUserContext } from "../../../config/UserContext";
 import { ILesson } from "../../../components/Admins/Course/Edit/Lessons/TypesLessons";
 import { toast } from "react-hot-toast";
+import { S } from "@fullcalendar/core/internal-common";
 
-export default function useFetchLessonData(courseId: string) {
+export default function useFetchLessonData(courseId: string,  lessonId?: string) {
   const { lessonAPIClient } = useUserContext();
   const [lessonData, setLessonData] = useState<ILesson[]>([]);
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+
 
   const createLesson = useCallback(
     async (
@@ -51,7 +54,6 @@ export default function useFetchLessonData(courseId: string) {
       .catch((err) => {
         console.error("Error fetching lesson data : ", err);
         setError("Failed to fetch lesson data ");
-        setLessonData([]);
         toast.error("Failed to fetch lessons");
         setIsLoading(false);
       });
@@ -81,5 +83,49 @@ export default function useFetchLessonData(courseId: string) {
     [lessonAPIClient]
   );
 
-  return { createLesson, lessonData, error, isLoading, deleteLesson };
+  const updateLesson = useCallback(
+    (
+      lessonId: string,
+      data: Partial<{
+        title: string;
+        description: string;
+        content: string;
+        courseId: string;
+        chapterId: string;
+      }>
+    ) => {
+      setIsLoading(true);
+      lessonAPIClient
+        .updateLesson(lessonId, data)
+        .then((response) => {
+          console.log(response, "lesson Update");
+          setLessonData((prev) =>
+            prev.map((lesson) =>
+              lesson._id === lessonId ? { ...lesson, ...data } : lesson
+            )
+          );
+          setError(null);
+          toast.success("Lesson Updated Successfully");
+        })
+        .catch((err) => {
+          console.log("Error updating Lesoon : ", err);
+          setError("Failed to update lesson");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [lessonAPIClient]
+  );
+
+
+  return {
+    createLesson,
+    lessonData,
+    error,
+    isLoading,
+    deleteLesson,
+    updateLesson,
+   
+  };
 }

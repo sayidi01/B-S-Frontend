@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
-import { Editor } from "@tinymce/tinymce-react";
+
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "../../config/UserContext";
 import { ICourse } from "../../types/course";
