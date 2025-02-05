@@ -46,7 +46,7 @@ export default function Lessons() {
       key: "update",
       label: "Edit",
       onClick: () => {
-        navigate(`/Dashbord/courses/${id}/edit/lessons/${lessonId}`); // hada howa lmochkil!!
+        navigate(`/Dashbord/courses/${id}/edit/lessons/${lessonId}`);
       },
     },
     {
@@ -72,7 +72,7 @@ export default function Lessons() {
       <div className="space-y-6 max-w-3xl mx-auto">
         {lessonData
           ? lessonData.map((lesson, index) => {
-              console.log("Hello:", lesson);
+            
               return (
                 <div
                   key={lesson._id}
@@ -104,7 +104,7 @@ export default function Lessons() {
                         Description
                       </h3>
                       <p className="text-gray-600">{lesson.description}</p>
-                      <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                      <button onClick={() =>  navigate(`/Dashbord/courses/${id}/edit/lesson/${lesson._id}`)} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
                         View Lesson
                       </button>
                     </div>

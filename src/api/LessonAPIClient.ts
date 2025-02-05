@@ -9,7 +9,7 @@ export class LessonAPIClient extends APIClient {
   ) {
     return (
       await this.axiosInstance.post(
-        `/course/${courseId}/chapters/${chapterId}/lessons`,
+        `/lessons`,
         { title, description, chapterId, courseId }
       )
     ).data;

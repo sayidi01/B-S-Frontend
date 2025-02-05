@@ -7,6 +7,7 @@ import Home from "../components/Admins/Course/Edit/Home";
 import Quiz from "../components/Admins/Course/Edit/Quiz";
 import SingleChapter from "../components/Admins/Course/Edit/Chapters/SingleChapter";
 import EditLesson from "../components/Admins/Course/Edit/Lessons/EditLesson";
+import SingleLesson from "../components/Admins/Course/Edit/Lessons/SingleLesson";
 
 const Index = lazy(() => import("../pages/Index"));
 
@@ -31,8 +32,6 @@ const Chat = lazy(() => import("../pages/Chat"));
 const Calendar = lazy(() => import("../pages/Calendar"));
 
 const Vitrine = lazy(() => import("../pages/Vitrine"));
-
-
 
 const routes = [
   {
@@ -92,19 +91,23 @@ const routes = [
                 path: ":chapterId",
                 element: <SingleChapter />,
                 layout: "default",
-                
               },
-            ]
+            ],
           },
-          
+
           {
             path: "lessons",
             element: <Lessons />,
             layout: "default",
           },
           {
-            path: "lessons/:lessonID", // mlli taykono 3ndi nested routes, koolla paramter dynamique doit avoir un nom unique !!
+            path: "lessons/:lessonID",
             element: <EditLesson />,
+            layout: "default",
+          },
+          {
+            path: "lesson/:lessonID",
+            element: <SingleLesson />,
             layout: "default",
           },
 

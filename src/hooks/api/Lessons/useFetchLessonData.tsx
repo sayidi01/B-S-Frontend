@@ -3,13 +3,7 @@ import { useUserContext } from "../../../config/UserContext";
 import { ILesson } from "../../../components/Admins/Course/Edit/Lessons/TypesLessons";
 import { toast } from "react-hot-toast";
 
-// Le hook smito useFetchLessonData
-// khass ykon taydir 7aja wa7da
-// khass yfetchi data dyal lesson, finition
-// hadok l actions b7al createLesson, deleteLesson, updateLesson..
-// ndirhom f class nsammiha LessonAPIClient
 
-// Ewa ra khass t7aydhom menhna
 
 export default function useFetchLessonData(courseId: string) {
   const { lessonAPIClient } = useUserContext();
@@ -40,13 +34,14 @@ export default function useFetchLessonData(courseId: string) {
       } catch (err) {
         console.error("Error creating lesson:", err);
         setError("Failed to create lesson");
-        setLessonData([]);
+      
       } finally {
         setIsLoading(false);
       }
     },
     [lessonAPIClient]
   );
+
 
   useEffect(() => {
     if (!courseId) return;
@@ -65,6 +60,8 @@ export default function useFetchLessonData(courseId: string) {
         setIsLoading(false);
       });
   }, [lessonAPIClient, courseId]);
+
+
 
   const deleteLesson = useCallback(
     (lessonId: string) => {
