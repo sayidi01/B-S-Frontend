@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Alert, Spin, Typography } from "antd";
 import useFetchCourseData from "../../../../hooks/api/course/useFetchCourseData";
 import { useParams } from "react-router-dom";

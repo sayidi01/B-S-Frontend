@@ -273,6 +273,7 @@ const Sidebar = () => {
                   } nav-link group w-full`}
                   onClick={() => toggleMenu("Courses")}
                 >
+                   <NavLink to="/Dashbord/courses">
                   <div className="flex items-center">
                     <IconMenuPages className="group-hover:!text-primary shrink-0 w-7 h-7" />
                     <span
@@ -282,7 +283,7 @@ const Sidebar = () => {
                       {t("Courses")}
                     </span>
                   </div>
-
+                  </NavLink>
                   <div
                     className={
                       currentMenu !== "Courses"
@@ -290,22 +291,11 @@ const Sidebar = () => {
                         : ""
                     }
                   >
-                    <IconCaretDown />
+                    {/* <IconCaretDown /> */}
                   </div>
                 </button>
 
-                <AnimateHeight
-                  duration={300}
-                  height={currentMenu === "Courses" ? "auto" : 0}
-                >
-                  <ul className="sub-menu text-gray-500">
-                    <li>
-                      <NavLink to="/Dashbord/courses">
-                        {t("Create new Courses")}
-                      </NavLink>
-                    </li>
-                  </ul>
-                </AnimateHeight>
+               
               
               </li>
 

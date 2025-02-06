@@ -156,6 +156,7 @@ function UploadPdfCourses() {
         className="btn btn-primary"
         style={{ marginTop: "3rem", marginLeft: "4rem" }}
         onClick={showModal}
+     
       >
         Add New +
       </button>
