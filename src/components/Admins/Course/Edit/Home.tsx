@@ -3,6 +3,7 @@ import useFetchCourseData from "../../../../hooks/api/course/useFetchCourseData"
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import EditCourse from '../../EditCourse';
+import { CloseOutlined, EditOutlined } from "@ant-design/icons";
 
 
 const { Title } = Typography;
@@ -45,13 +46,13 @@ export default function Home() {
           type="primary"
           onClick={handleEditClick} 
         >
-          {isEditCourse ? "Cancel Edit" : "Edit Course"}
+         {isEditCourse ? <CloseOutlined /> : <EditOutlined />} 
         </Button>
       </div>
 
     
       {isEditCourse ? (
-        <EditCourse />  
+        <EditCourse courseData={courseData} />  
       ) : (
         <div
           dangerouslySetInnerHTML={{

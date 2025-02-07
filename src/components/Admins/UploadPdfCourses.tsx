@@ -16,16 +16,14 @@ import { Admin } from "./ModalCreateAdmin";
 import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
-import ModalEditTitleCourse from "./EditCourse";
+
 
 const itemsPerPage = 8;
 
 const UploadPdfCourses: React.FC = () => {
  
 
-  const [isModalEditTitleOpen, setIsModaEditTitleOpen] =
-    useState<boolean>(false);
-
+  
  
 
  
@@ -49,15 +47,6 @@ const UploadPdfCourses: React.FC = () => {
   };
 
   
-
-  // const showModalEditTitleCourse = (course: Admin) => {
-  //   setEditTitleCourse(course);
-  //   setIsModaEditTitleOpen(true);
-  // };
-
-  // const handleEditCancel = () => {
-  //   setIsModaEditTitleOpen(false);
-  // };
 
   
 
