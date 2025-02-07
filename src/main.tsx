@@ -41,6 +41,7 @@ const App = () => {
   const [isConnected, setIsConnected] = useState<boolean | null>(false);
   const [currentAdmin, setCurrentAdmin] = useState<Admin | null>(null);
   const [courses, setCourses] = useState<ICourse[]>([]);
+  const [titleCourses, setTitleCourses] = useState<Admin[]>([]);
 
   return (
     <UserContext.Provider
@@ -56,7 +57,9 @@ const App = () => {
         apiClient,
         courseApiClient,
         chapterApiClient,
-        lessonAPIClient
+        lessonAPIClient,
+        titleCourses, 
+        setTitleCourses,
       }}
     >
       <RouterProvider router={router} />
@@ -65,7 +68,10 @@ const App = () => {
   );
 };
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+
+
+root.render(
   <React.StrictMode>
     <Suspense>
       <Provider store={store}>

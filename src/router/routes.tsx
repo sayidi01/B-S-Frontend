@@ -8,6 +8,7 @@ import Quiz from "../components/Admins/Course/Edit/Quiz";
 import SingleChapter from "../components/Admins/Course/Edit/Chapters/SingleChapter";
 import EditLesson from "../components/Admins/Course/Edit/Lessons/EditLesson";
 import SingleLesson from "../components/Admins/Course/Edit/Lessons/SingleLesson";
+import CreateNewCourse from "../components/Admins/CreateNewCourse";
 
 const Index = lazy(() => import("../pages/Index"));
 
@@ -67,6 +68,11 @@ const routes = [
       {
         path: "courses",
         element: <UploadPdfCourses />,
+      },
+      {
+        path: "newcourse",
+        element: <CreateNewCourse/>,
+        layout: "default"
       },
       {
         path: "courses/:id",

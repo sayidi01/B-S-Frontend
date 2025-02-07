@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import ModalCreateCoursePDF from "./ModalCreateCoursePDF";
+import CreateNewCourse from "./CreateNewCourse";
 
 import Dropdown from "../../components/Dropdown";
 import IconHorizontalDots from "../../components/Icon/IconHorizontalDots";
@@ -16,23 +16,23 @@ import { Admin } from "./ModalCreateAdmin";
 import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
-import ModalEditTitleCourse from "./ModalEditTitleCourse";
+import ModalEditTitleCourse from "./EditCourse";
 
 const itemsPerPage = 8;
 
-function UploadPdfCourses() {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+const UploadPdfCourses: React.FC = () => {
+ 
 
   const [isModalEditTitleOpen, setIsModaEditTitleOpen] =
     useState<boolean>(false);
 
-  const [titleCourses, setTitleCourses] = useState<Admin[]>([]);
+ 
 
-  const [editTitleCourse, setEditTitleCourse] = useState<Admin | null>(null);
+ 
 
   const [courseId, setCourseId] = useState<Admin[]>([]);
 
-  const { isConnected } = useUserContext();
+  const { isConnected, titleCourses, setTitleCourses } = useUserContext();
   const navigate = useNavigate();
 
   console.log(courseId);
@@ -48,22 +48,18 @@ function UploadPdfCourses() {
     setCurrentPage(page);
   };
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  
 
-  const showModalEditTitleCourse = (course: Admin) => {
-    setEditTitleCourse(course);
-    setIsModaEditTitleOpen(true);
-  };
+  // const showModalEditTitleCourse = (course: Admin) => {
+  //   setEditTitleCourse(course);
+  //   setIsModaEditTitleOpen(true);
+  // };
 
-  const handleEditCancel = () => {
-    setIsModaEditTitleOpen(false);
-  };
+  // const handleEditCancel = () => {
+  //   setIsModaEditTitleOpen(false);
+  // };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  
 
   // GET COUSRSES TITLE
 
@@ -140,6 +136,7 @@ function UploadPdfCourses() {
 
   return (
     <div>
+       
       <p
         style={{
           fontFamily: "ROBOTO",
@@ -155,7 +152,7 @@ function UploadPdfCourses() {
         type="button"
         className="btn btn-primary"
         style={{ marginTop: "3rem", marginLeft: "4rem" }}
-        onClick={showModal}
+        onClick={() => navigate("/Dashbord/newcourse")}
      
       >
         Add New +
@@ -272,7 +269,7 @@ function UploadPdfCourses() {
                       </li>
                       <li>
                         <button
-                          onClick={() => showModalEditTitleCourse(course)}
+                        
                           type="button"
                           style={{
                             display: "flex",
@@ -318,17 +315,8 @@ function UploadPdfCourses() {
         )}
       </Row>
 
-      <ModalCreateCoursePDF
-        isModalOpen={isModalOpen}
-        handleCancel={handleCancel}
-        setTitleCourses={setTitleCourses}
-      />
-      <ModalEditTitleCourse
-        setTitleCourses={setTitleCourses}
-        isModalEditTitleOpen={isModalEditTitleOpen}
-        editTitleCourse={editTitleCourse}
-        handleEditCancel={handleEditCancel}
-      />
+    
+   
     </div>
   );
 }

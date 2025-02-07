@@ -20,6 +20,8 @@ interface UserContextType {
   courseApiClient: CourseAPIClient;
   chapterApiClient: ChapterAPIClient
   lessonAPIClient: LessonAPIClient
+  titleCourses: Admin[]; 
+  setTitleCourses: React.Dispatch<React.SetStateAction<Admin[]>>;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
