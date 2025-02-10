@@ -28,6 +28,9 @@ import CourseAPIClient from "./api/CourseAPIClient";
 
 import ChapterAPIClient from "./api/ChapterAPIClient";
 import { LessonAPIClient } from './api/LessonAPIClient';
+import QuizAPIClient from './api/QuizAPIClient';
+
+
 
 const apiClient = new APIClient();
 const courseApiClient = new CourseAPIClient();
@@ -35,6 +38,8 @@ const courseApiClient = new CourseAPIClient();
 const chapterApiClient = new ChapterAPIClient()
 
 const lessonAPIClient = new LessonAPIClient()
+
+const quizAPIClient  = new QuizAPIClient()
 
 const App = () => {
   const [data, setData] = useState({});
@@ -60,6 +65,7 @@ const App = () => {
         lessonAPIClient,
         titleCourses, 
         setTitleCourses,
+        quizAPIClient
       }}
     >
       <RouterProvider router={router} />

@@ -6,6 +6,8 @@ import APIClient from "../api";
 import CourseAPIClient from "../api/CourseAPIClient";
 import ChapterAPIClient from "../api/ChapterAPIClient";
 import { LessonAPIClient } from '../api/LessonAPIClient';
+import QuizAPIClient from '../api/QuizAPIClient';
+
 
 interface UserContextType {
   data: {};
@@ -20,6 +22,7 @@ interface UserContextType {
   courseApiClient: CourseAPIClient;
   chapterApiClient: ChapterAPIClient
   lessonAPIClient: LessonAPIClient
+  quizAPIClient: QuizAPIClient
   titleCourses: Admin[]; 
   setTitleCourses: React.Dispatch<React.SetStateAction<Admin[]>>;
 }

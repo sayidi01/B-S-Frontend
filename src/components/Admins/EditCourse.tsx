@@ -199,6 +199,22 @@ const EditCourse: React.FC<EditCourseProps> = ({ courseData }) => {
       >
         Save
       </Button>
+      <style>
+        {`
+          .tox-toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+          .tox-editor-container {
+            margin-top: 60px; /* Ajuste cette valeur en fonction de la hauteur de la barre d'outils */
+          }
+        `}
+      </style>
     </div>
   );
 };

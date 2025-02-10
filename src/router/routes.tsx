@@ -9,6 +9,7 @@ import SingleChapter from "../components/Admins/Course/Edit/Chapters/SingleChapt
 import EditLesson from "../components/Admins/Course/Edit/Lessons/EditLesson";
 import SingleLesson from "../components/Admins/Course/Edit/Lessons/SingleLesson";
 import CreateNewCourse from "../components/Admins/CreateNewCourse";
+import CretaNewQuiz from "../components/Admins/Course/Edit/Quiz/CreateNewQuiz"
 
 const Index = lazy(() => import("../pages/Index"));
 
@@ -122,6 +123,11 @@ const routes = [
             element: <Quiz />,
             layout: "default",
           },
+          {
+            path: "create-quiz",
+            element: <CretaNewQuiz courseId={""} />,
+            layout: "default",
+          }
         ],
       },
       {
