@@ -9,6 +9,7 @@ interface UseQuizReturn {
     quizData: CreateQuizData;
     loading: boolean;
     error: string | null;
+    setQuizData: React.Dispatch<React.SetStateAction<CreateQuizData>>
     addQuestion: (question: QuizQuestion) => void;
     removeQuestion: (index: number) => void;
     updateQuizType: (type: string) => void;
@@ -71,6 +72,7 @@ interface UseQuizReturn {
         removeQuestion,
         updateQuizType,
         createQuiz,
+        setQuizData
       };
       
   }

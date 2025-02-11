@@ -1,4 +1,5 @@
 export interface QuizQuestion {
+  type: string;
     question: string;
     options?: {
       text: string;
@@ -13,6 +14,7 @@ export interface QuizQuestion {
 
 
   export interface CreateQuizData {
+  
     type: string;
     questions: QuizQuestion[];
   }

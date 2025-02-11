@@ -2,46 +2,68 @@ import React, { useState } from "react";
 import { QuizQuestion } from "./quiz.types";
 
 interface QuestionFormProps {
-  question: QuizQuestion;
-  type: string;
-  onRemove: () => void;
+    question: QuizQuestion;
+    index: number; 
+    onRemove: () => void;
+    onUpdate: (updatedQuestion: QuizQuestion) => void; 
 }
 
-const QuestionForm: React.FC<QuestionFormProps> = ({ question, type, onRemove }) => {
+const QuestionForm: React.FC<QuestionFormProps> = ({ question, onRemove, index, onUpdate }) => {
   const [currentQuestion, setCurrentQuestion] = useState(question);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentQuestion((prev) => ({
-      ...prev,
+    const updatedQuestion = {
+      ...currentQuestion,
       [e.target.name]: e.target.value,
-    }));
+    };
+    setCurrentQuestion(updatedQuestion);
+    onUpdate(updatedQuestion);
+    console.log(`Updated Question[${index}]`, updatedQuestion);
   };
 
-  const handleOptionChange = (index: number, field: string, value: string | boolean) => {
-    setCurrentQuestion((prev) => {
-      const updatedOptions = prev.options?.map((opt, i) =>
-        i === index ? { ...opt, [field]: value } : opt
-      );
-      return { ...prev, options: updatedOptions };
-    });
+  const handleOptionChange = (
+    optionIndex: number,
+    field: string,
+    value: string | boolean
+  ) => {
+    const updatedOptions = currentQuestion.options?.map((opt, i) =>
+      i === optionIndex ? { ...opt, [field]: value } : opt
+    );
+    const updatedQuestion = {
+      ...currentQuestion,
+      options: updatedOptions,
+    };
+    setCurrentQuestion(updatedQuestion);
+    onUpdate(updatedQuestion);
+    console.log(`Updated Options for Question[${index}]`, updatedQuestion);
   };
 
+  
   const addOption = () => {
-    setCurrentQuestion((prev) => ({
-      ...prev,
+    const updatedQuestion = {
+      ...currentQuestion,
       options: [
-        ...(prev.options || []),
+        ...(currentQuestion.options || []),
         { text: "", isCorrect: false },
       ],
-    }));
+    };
+    setCurrentQuestion(updatedQuestion);
+    onUpdate(updatedQuestion); 
+  };
+  const removeOption = (optionIndex: number) => {
+    const updatedOptions = [...(currentQuestion.options || [])];
+    updatedOptions.splice(optionIndex, 1);
+    const updatedQuestion = {
+      ...currentQuestion,
+      options: updatedOptions,
+    };
+    setCurrentQuestion(updatedQuestion);
+    onUpdate(updatedQuestion); 
   };
 
-  const removeOption = (index: number) => {
-    setCurrentQuestion((prev) => {
-      const updatedOptions = [...(prev.options || [])];
-      updatedOptions.splice(index, 1);
-      return { ...prev, options: updatedOptions };
-    });
+
+  const updateType = (type: string) => {
+    setCurrentQuestion((prev) => ({ ...prev, type }));
   };
 
   return (
@@ -56,6 +78,27 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ question, type, onRemove })
         </button>
       </div>
 
+      {/* Sélection du type de question */}
+      <div className="mb-4">
+        <label className="block font-medium mb-2">Select Question Type:</label>
+        <select
+          value={currentQuestion.type}
+          onChange={(e) => updateType(e.target.value)}
+          className="border p-2 w-full"
+        >
+          <option value="">-- Select Question Type --</option>
+          <option value="true_false">True/False</option>
+          <option value="multiple_choice">Multiple Choice</option>
+          <option value="single_choice">Single Choice</option>
+          <option value="short_answer">Short Answer</option>
+          <option value="fill_in_the_blank">Fill in the Blank</option>
+          <option value="matching">Matching</option>
+          <option value="text_with_questions">Text with Questions</option>
+          <option value="grammar_quiz">Grammar Quiz</option>
+        </select>
+      </div>
+
+      {/* Texte de la question */}
       <input
         type="text"
         name="question"
@@ -65,7 +108,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ question, type, onRemove })
         className="border p-2 w-full mb-4"
       />
 
-      {["true_false", "multiple_choice", "single_choice", "matching"].includes(type) && (
+      {/* Options ou Réponse Correcte */}
+      {["true_false", "multiple_choice", "single_choice", "matching"].includes(
+        currentQuestion.type
+      ) && (
         <div>
           <h4 className="font-medium mb-2">Options</h4>
           {currentQuestion.options?.map((option, index) => (
@@ -103,7 +149,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ question, type, onRemove })
         </div>
       )}
 
-      {["short_answer", "fill_in_the_blank", "text_with_questions", "grammar_quiz"].includes(type) && (
+      {["short_answer", "fill_in_the_blank", "text_with_questions", "grammar_quiz"].includes(
+        currentQuestion.type
+      ) && (
         <div>
           <h4 className="font-medium mb-2">Correct Answer</h4>
           <input
