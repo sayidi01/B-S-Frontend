@@ -9,4 +9,6 @@ export default class QuizAPIClient extends APIClient {
             await this.axiosInstance.post(`/quiz`, {...data, courseId})
         ).data
     }
+
+   
 } 

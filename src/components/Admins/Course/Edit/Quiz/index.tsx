@@ -1,9 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom"
+import useFetchQuizzesByCourseData from "../../../../../hooks/api/course/useFetchQuizzesByCourseData";
 
 
 export default function Quiz() {
   const {  id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const {courseData} = useFetchQuizzesByCourseData(id as string)
+
+console.log(courseData)
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
        <div className="flex justify-end mb-6">
@@ -14,6 +20,9 @@ export default function Quiz() {
           Add New Quiz
         </button>
       </div>
+
+    
+
     </div>
   )
 }

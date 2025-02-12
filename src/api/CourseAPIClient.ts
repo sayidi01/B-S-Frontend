@@ -8,4 +8,10 @@ export default class CourseAPIClient extends APIClient {
   async updateCourseContent(id: string, content: string) {
     return (await this.axiosInstance.put(`/course/${id}`, { content })).data;
   }
+
+  async getAllQuizzesByCourse(courseID: string) {
+    return(
+        await this.axiosInstance.get(`/course/${courseID}/quiz`)
+    ).data
+}
 }
