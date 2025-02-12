@@ -1,61 +1,54 @@
-import React from 'react'
-import useQuiz from '../../../../../hooks/api/Quiz/useQuiz';
-import { QuizQuestion } from './quiz.types';
-import QuestionForm from './QuestionForm';
+import React from "react";
+import useQuiz from "../../../../../hooks/api/Quiz/useQuiz";
+import { QuizQuestion } from "./quiz.types";
+import QuestionForm from "./QuestionForm";
 import { toast } from "react-hot-toast";
+import { uniqueId } from "lodash";
+import { useParams } from "react-router-dom";
 
-interface CreateNewQuizProps {
-    courseId: string;
-  }
+interface CreateNewQuizProps {}
 
-const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({ courseId }) => {
-    const {
-        quizData,
-        loading,
-        error,
-        addQuestion,
-        removeQuestion,
-        createQuiz,
-        setQuizData
-        
-      } = useQuiz();
+const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
+  const { id: courseId } = useParams();
+  const {
+    quizData,
+    loading,
+    error,
+    updateQuestion,
+    addQuestion,
+    removeQuestion,
+    createQuiz,
+  } = useQuiz();
 
-     
+  console.log(quizData);
 
-      const handleAddQuestion = () => {
-        const newQuestion: QuizQuestion = {
-            type: "", 
-          question: "",
-          options: [],
-          correctAnswer: "",
-          matchingPairs: [],
-        };
-        console.log("New Question Added:", newQuestion);
-        addQuestion(newQuestion);
-      };
+  const handleAddQuestion = () => {
+    const newQuestion: QuizQuestion = {
+      id: uniqueId("question"),
+      type: "",
+      question: "",
+      options: [],
+      correctAnswer: "",
+      matchingPairs: [],
+    };
 
-      const handleUpdateQuestion = (index: number, updatedQuestion: QuizQuestion) => {
-        setQuizData((prev) => {
-          const updatedQuestions = [...prev.questions];
-          updatedQuestions[index] = updatedQuestion;
-          return { ...prev, questions: updatedQuestions };
-        });
-      };
-    
-      const handleSubmit = async () => {
-        if (quizData.questions.length === 0) {
-          toast.error("Please add at least one question.");
-          return;
-        }
-    
-        try {
-          await createQuiz(courseId);
-          toast.success("Quiz created successfully!");
-        } catch (error) {
-          toast.error("Failed to create quiz.");
-        }
-      };
-    
+    addQuestion(newQuestion);
+  };
+
+  const handleSubmit = async () => {
+    if (quizData.questions.length === 0) {
+      toast.error("Please add at least one question.");
+      return;
+    }
+
+    try {
+      await createQuiz(courseId as string);
+      toast.success("Quiz created successfully!");
+    } catch (error) {
+      toast.error("Failed to create quiz.");
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Create New Quiz</h1>
@@ -65,15 +58,12 @@ const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({ courseId }) => {
         <h2 className="text-xl font-medium mb-4">Questions</h2>
         {quizData.questions.map((question, index) => (
           <div key={index} className="mb-4 border p-4 rounded-md">
-          <QuestionForm
-            question={question}
-            index={index} 
-            onRemove={() => removeQuestion(index)}
-            onUpdate={(updatedQuestion) =>
-              handleUpdateQuestion(index, updatedQuestion)
-            } 
-          />
-        </div>
+            <QuestionForm
+              question={question}
+              updateQuestion={updateQuestion}
+              onRemove={() => removeQuestion(index)}
+            />
+          </div>
         ))}
         <button
           onClick={handleAddQuestion}
@@ -94,9 +84,7 @@ const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({ courseId }) => {
 
       {error && <p className="text-red-500 mt-4">{error}</p>}
     </div>
+  );
+};
 
-
-  )
-}
-
-export default CreateNewQuiz
+export default CreateNewQuiz;

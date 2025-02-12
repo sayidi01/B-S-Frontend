@@ -125,7 +125,7 @@ const routes = [
           },
           {
             path: "create-quiz",
-            element: <CretaNewQuiz courseId={""} />,
+            element: <CretaNewQuiz />,
             layout: "default",
           }
         ],

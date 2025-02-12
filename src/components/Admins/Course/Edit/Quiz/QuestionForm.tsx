@@ -2,78 +2,90 @@ import React, { useState } from "react";
 import { QuizQuestion } from "./quiz.types";
 
 interface QuestionFormProps {
-    question: QuizQuestion;
-    index: number; 
-    onRemove: () => void;
-    onUpdate: (updatedQuestion: QuizQuestion) => void; 
+  question: QuizQuestion;
+  onRemove: () => void;
+  updateQuestion: (questionID: string, newData: QuizQuestion) => void;
 }
 
-const QuestionForm: React.FC<QuestionFormProps> = ({ question, onRemove, index, onUpdate }) => {
+const QuestionForm: React.FC<QuestionFormProps> = ({
+  question,
+  onRemove,
+  updateQuestion,
+}) => {
   const [currentQuestion, setCurrentQuestion] = useState(question);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedQuestion = {
-      ...currentQuestion,
+    setCurrentQuestion((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    };
-    setCurrentQuestion(updatedQuestion);
-    onUpdate(updatedQuestion);
-    console.log(`Updated Question[${index}]`, updatedQuestion);
-  };
+    }));
 
+    const update = { ...currentQuestion, [e.target.name]: e.target.value };
+    updateQuestion(currentQuestion.id, update);
+  };
   const handleOptionChange = (
-    optionIndex: number,
+    index: number,
     field: string,
     value: string | boolean
   ) => {
-    const updatedOptions = currentQuestion.options?.map((opt, i) =>
-      i === optionIndex ? { ...opt, [field]: value } : opt
-    );
-    const updatedQuestion = {
+    setCurrentQuestion((prev) => {
+      const updatedOptions = prev.options?.map((opt, i) =>
+        i === index ? { ...opt, [field]: value } : opt
+      );
+      return { ...prev, options: updatedOptions };
+    });
+
+    const update = {
       ...currentQuestion,
-      options: updatedOptions,
+      options: currentQuestion.options?.map((opt, i) =>
+        i === index ? { ...opt, [field]: value } : opt
+      ),
     };
-    setCurrentQuestion(updatedQuestion);
-    onUpdate(updatedQuestion);
-    console.log(`Updated Options for Question[${index}]`, updatedQuestion);
+    updateQuestion(currentQuestion.id, update);
   };
 
-  
   const addOption = () => {
-    const updatedQuestion = {
+    setCurrentQuestion((prev) => ({
+      ...prev,
+      options: [...(prev.options || []), { text: "", isCorrect: false }],
+    }));
+
+    const update = {
       ...currentQuestion,
-      options: [
-        ...(currentQuestion.options || []),
-        { text: "", isCorrect: false },
-      ],
+      options: [...(currentQuestion.options || []), { text: "", isCorrect: false }],
     };
-    setCurrentQuestion(updatedQuestion);
-    onUpdate(updatedQuestion); 
-  };
-  const removeOption = (optionIndex: number) => {
-    const updatedOptions = [...(currentQuestion.options || [])];
-    updatedOptions.splice(optionIndex, 1);
-    const updatedQuestion = {
-      ...currentQuestion,
-      options: updatedOptions,
-    };
-    setCurrentQuestion(updatedQuestion);
-    onUpdate(updatedQuestion); 
+    updateQuestion(currentQuestion.id, update);
   };
 
+  const removeOption = (index: number) => {
+    setCurrentQuestion((prev) => {
+      const updatedOptions = [...(prev.options || [])];
+      updatedOptions.splice(index, 1);
+      return { ...prev, options: updatedOptions };
+    });
+
+    const update = {
+      ...currentQuestion,
+      options: [...(currentQuestion.options || [])],
+    };
+    update.options?.splice(index, 1);
+    updateQuestion(currentQuestion.id, update);
+  };
 
   const updateType = (type: string) => {
     setCurrentQuestion((prev) => ({ ...prev, type }));
+
+    const update = { ...currentQuestion, type };
+    updateQuestion(currentQuestion.id, update);
   };
+
+  console.log(currentQuestion);
 
   return (
     <div>
       <div className="flex justify-between items-center mb-2">
         <h3 className="font-medium">Question {currentQuestion.question}</h3>
-        <button
-          onClick={onRemove}
-          className="text-red-500 hover:text-red-700"
-        >
+        <button onClick={onRemove} className="text-red-500 hover:text-red-700">
           Remove
         </button>
       </div>
@@ -120,7 +132,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ question, onRemove, index, 
                 type="text"
                 name="text"
                 value={option.text}
-                onChange={(e) => handleOptionChange(index, "text", e.target.value)}
+                onChange={(e) =>
+                  handleOptionChange(index, "text", e.target.value)
+                }
                 placeholder={`Option ${index + 1}`}
                 className="border p-2 mr-2"
               />
@@ -128,7 +142,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ question, onRemove, index, 
                 type="checkbox"
                 name="isCorrect"
                 checked={option.isCorrect}
-                onChange={(e) => handleOptionChange(index, "isCorrect", e.target.checked)}
+                onChange={(e) =>
+                  handleOptionChange(index, "isCorrect", e.target.checked)
+                }
                 className="mr-2"
               />
               <span>Correct</span>
@@ -149,9 +165,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ question, onRemove, index, 
         </div>
       )}
 
-      {["short_answer", "fill_in_the_blank", "text_with_questions", "grammar_quiz"].includes(
-        currentQuestion.type
-      ) && (
+      {[
+        "short_answer",
+        "fill_in_the_blank",
+        "text_with_questions",
+        "grammar_quiz",
+      ].includes(currentQuestion.type) && (
         <div>
           <h4 className="font-medium mb-2">Correct Answer</h4>
           <input

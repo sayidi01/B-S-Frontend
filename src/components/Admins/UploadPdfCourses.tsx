@@ -147,6 +147,7 @@ const UploadPdfCourses: React.FC = () => {
         Add New +
       </button>
 
+        {/* Kon ghir derti l flex 7ssan lik */}
       <Row
         gutter={[24, 48]}
         style={{ marginTop: "2rem", gap: 10, marginLeft: "3rem" }}
