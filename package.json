@@ -40,6 +40,7 @@
         "date-fns": "^4.1.0",
         "html2pdf.js": "^0.10.2",
         "lodash": "^4.17.21",
+        "lucide-react": "^0.475.0",
         "mantine-datatable": "^7.12.4",
         "pdfjs-dist": "^3.11.174",
         "react": "^18.2.0",

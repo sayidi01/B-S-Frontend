@@ -62,7 +62,8 @@ export default function Lessons() {
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="flex justify-end mb-6">
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200"
+          type="button"
+          className="btn btn-primary"
           onClick={() => setIsPopoverOpen(true)}
         >
           Add New Lesson
@@ -72,7 +73,6 @@ export default function Lessons() {
       <div className="space-y-6 max-w-3xl mx-auto">
         {lessonData
           ? lessonData.map((lesson, index) => {
-            
               return (
                 <div
                   key={lesson._id}
@@ -104,7 +104,14 @@ export default function Lessons() {
                         Description
                       </h3>
                       <p className="text-gray-600">{lesson.description}</p>
-                      <button onClick={() =>  navigate(`/Dashbord/courses/${id}/edit/lesson/${lesson._id}`)} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                      <button
+                        onClick={() =>
+                          navigate(
+                            `/Dashbord/courses/${id}/edit/lesson/${lesson._id}`
+                          )
+                        }
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                      >
                         View Lesson
                       </button>
                     </div>

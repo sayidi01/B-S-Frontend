@@ -80,8 +80,8 @@ export default function Chapters() {
             const popover = document.getElementById("popover");
             if (popover) popover.classList.toggle("hidden");
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200"
-        >
+          type="button"
+          className="btn btn-primary"        >
           Add New Chapter
         </button>
       </div>
