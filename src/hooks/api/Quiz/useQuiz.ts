@@ -20,6 +20,7 @@ interface UseQuizReturn {
   removeQuestion: (index: number) => void;
   createQuiz: (courseId: string) => Promise<any>;
   updateQuestion: (questionID: string, newData: QuizQuestion) => void;
+  handleNameChange: (newName: string) => void;
 }
 
 const useQuiz = (): UseQuizReturn => {
@@ -30,6 +31,7 @@ const useQuiz = (): UseQuizReturn => {
 
   const [quizData, setQuizData] = useState<CreateQuizData>({
     questions: [],
+    name: ""
   });
 
   const addQuestion = (question: QuizQuestion) => {
@@ -56,6 +58,11 @@ const useQuiz = (): UseQuizReturn => {
     });
   };
 
+  const handleNameChange = (newName: string) => {
+    setQuizData((prev) => ({ ...prev, name: newName }));
+  };
+
+
   const createQuiz = useCallback(
     async (courseId: string) => {
       setLoading(true);
@@ -66,6 +73,7 @@ const useQuiz = (): UseQuizReturn => {
           quizData
         )) as CreateQuizResponse;
         console.log("Quiz created successfully:", response);
+        
         setQuizData((prev) => ({
           ...prev,
           ...response.data.quiz,
@@ -88,6 +96,7 @@ const useQuiz = (): UseQuizReturn => {
     removeQuestion,
     createQuiz,
     updateQuestion,
+    handleNameChange,
   };
 };
 export default useQuiz;

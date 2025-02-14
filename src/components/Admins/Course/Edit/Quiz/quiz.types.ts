@@ -16,10 +16,12 @@ export interface QuizQuestion {
 
 export interface CreateQuizData {
   questions: QuizQuestion[];
+  name: string
 }
 
 
 export interface IQuiz {
+  name: string
   courseId: string
   _id: string;
   type: string;

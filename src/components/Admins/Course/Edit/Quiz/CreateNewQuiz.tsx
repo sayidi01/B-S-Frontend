@@ -4,11 +4,13 @@ import { QuizQuestion } from "./quiz.types";
 import QuestionForm from "./QuestionForm";
 import { toast } from "react-hot-toast";
 import { uniqueId } from "lodash";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface CreateNewQuizProps {}
 
 const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
+    const navigate = useNavigate()
+
   const { id: courseId } = useParams();
   const {
     quizData,
@@ -18,6 +20,7 @@ const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
     addQuestion,
     removeQuestion,
     createQuiz,
+    handleNameChange,
   } = useQuiz();
 
   console.log(quizData);
@@ -44,6 +47,7 @@ const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
     try {
       await createQuiz(courseId as string);
       toast.success("Quiz created successfully!");
+       navigate(`/Dashbord/courses/${courseId}/edit/quiz`)
     } catch (error) {
       toast.error("Failed to create quiz.");
     }
@@ -56,6 +60,14 @@ const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
       {/* Questions List */}
       <div>
         <h2 className="text-xl font-medium mb-4">Questions</h2>
+        <input
+          type="text"
+          value={quizData.name}
+          onChange={(e) => handleNameChange(e.target.value)}
+          placeholder="Enter quiz name"
+          className="border p-2 w-full mb-4"
+        />
+
         {quizData.questions.map((question, index) => (
           <div key={index} className="mb-4 border p-4 rounded-md">
             <QuestionForm
