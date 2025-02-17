@@ -71,6 +71,11 @@ export default function Quiz() {
                     <button
                       className="hover:opacity-80 mr-3"
                       title="Voir les détails"
+                      onClick={() =>
+                        navigate(
+                          `/Dashbord/courses/${id}/edit/quiz/${quiz._id}`
+                        )
+                      }
                     >
                       <IconEye />
                     </button>

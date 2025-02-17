@@ -21,6 +21,7 @@ interface UseQuizReturn {
   createQuiz: (courseId: string) => Promise<any>;
   updateQuestion: (questionID: string, newData: QuizQuestion) => void;
   handleNameChange: (newName: string) => void;
+ 
 }
 
 const useQuiz = (): UseQuizReturn => {
@@ -97,6 +98,7 @@ const useQuiz = (): UseQuizReturn => {
     createQuiz,
     updateQuestion,
     handleNameChange,
+
   };
 };
 export default useQuiz;

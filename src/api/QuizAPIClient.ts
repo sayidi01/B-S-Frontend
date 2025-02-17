@@ -10,5 +10,11 @@ export default class QuizAPIClient extends APIClient {
         ).data
     }
 
+    async getSingleQuizById(quizID: string) {
+        return(
+            await this.axiosInstance.get(`/quiz/${quizID}`)
+        ).data
+    }
+
    
 } 

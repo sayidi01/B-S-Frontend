@@ -25,7 +25,7 @@ export interface IQuiz {
   courseId: string
   _id: string;
   type: string;
-  questions: string;
+  questions: QuizQuestion[]; 
   options?: {
     text: string;
     isCorrect: boolean;
