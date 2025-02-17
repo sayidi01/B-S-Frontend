@@ -16,5 +16,11 @@ export default class QuizAPIClient extends APIClient {
         ).data
     }
 
+    async deleteQuizById(quizID: string) {
+        return (
+            await this.axiosInstance.delete(`/quiz/${quizID}`)
+        )
+    }
+
    
 } 
