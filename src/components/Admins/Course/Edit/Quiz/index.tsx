@@ -1,19 +1,34 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import useFetchQuizzesByCourseData from "../../../../../hooks/api/course/useFetchQuizzesByCourseData";
 import { BookOpen, Clock } from "lucide-react";
 import IconTrashLines from "../../../../Icon/IconTrashLines";
 import IconEdit from "../../../../Icon/IconEdit";
 import IconEye from "../../../../Icon/IconEye";
+import UseFetchDeleteQuiz from "../../../../../hooks/api/Quiz/UseFetchDeleteQuiz";
 
 export default function Quiz() {
-  const { id } = useParams();
+  const { id,quizId} = useParams();
   const navigate = useNavigate();
-
   const { courseData } = useFetchQuizzesByCourseData(id as string);
+  const { deleteQuiz } = UseFetchDeleteQuiz(quizId as string);
+  
+  const [quizzesData, setQuizzesData] = useState(courseData?.data?.quizzes || []);
 
-  const quizzes = courseData?.data?.quizzes || [];
+  useEffect(() => {
+    if (courseData?.data?.quizzes) {
+      setQuizzesData(courseData.data.quizzes);
+    }
+  }, [courseData]);
 
-  console.log(courseData);
+  const handleDeleteQuiz = async (quizID: string) => {
+    try {
+      await deleteQuiz(quizID);
+      setQuizzesData((prevQuizzes) => prevQuizzes.filter((quiz) => quiz._id !== quizID));
+    } catch (error) {
+      console.error("Erreur lors de la suppression du quiz :", error);
+    }
+  };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -26,7 +41,7 @@ export default function Quiz() {
           Add New Quiz
         </button>
       </div>
-      {quizzes.length > 0 ? (
+      {quizzesData.length > 0 ? (
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <table className="w-full">
             <thead className="bg-gray-100">
@@ -34,7 +49,6 @@ export default function Quiz() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   name
                 </th>
-             
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Questions
                 </th>
@@ -47,11 +61,8 @@ export default function Quiz() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {quizzes.map((quiz, index) => (
-                <tr
-                  key={quiz._id}
-                  className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                >
+              {quizzesData.map((quiz, index) => (
+                <tr key={quiz._id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {quiz.name}
                   </td>
@@ -71,18 +82,18 @@ export default function Quiz() {
                     <button
                       className="hover:opacity-80 mr-3"
                       title="Voir les détails"
-                      onClick={() =>
-                        navigate(
-                          `/Dashbord/courses/${id}/edit/quiz/${quiz._id}`
-                        )
-                      }
+                      onClick={() => navigate(`/Dashbord/courses/${id}/edit/quiz/${quiz._id}`)}
                     >
                       <IconEye />
                     </button>
                     <button className="hover:opacity-80 mr-3" title="Modifier">
                       <IconEdit />
                     </button>
-                    <button className="hover:opacity-80" title="Supprimer">
+                    <button
+                      onClick={() => handleDeleteQuiz(quiz._id)}
+                      className="hover:opacity-80"
+                      title="Supprimer"
+                    >
                       <IconTrashLines />
                     </button>
                   </td>
@@ -98,8 +109,7 @@ export default function Quiz() {
             Aucun quiz n'a été créé pour le moment.
           </p>
           <p className="text-gray-600 mt-2">
-            Commencez par créer un nouveau quiz en utilisant le bouton ci-dessus
-            !
+            Commencez par créer un nouveau quiz en utilisant le bouton ci-dessus !
           </p>
         </div>
       )}

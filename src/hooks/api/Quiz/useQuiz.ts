@@ -64,6 +64,7 @@ const useQuiz = (): UseQuizReturn => {
     setQuizData((prev) => ({ ...prev, name: newName }));
   };
 
+  
  
 
   const createQuiz = useCallback(
