@@ -22,5 +22,10 @@ export default class QuizAPIClient extends APIClient {
         )
     }
 
+    async updateQuiz(quizID: string, data: CreateQuizData) {
+        return (
+            await this.axiosInstance.put(`/quiz/${quizID}`, {data})
+        ).data
+    }
    
 } 

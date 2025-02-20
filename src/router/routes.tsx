@@ -11,6 +11,7 @@ import SingleLesson from "../components/Admins/Course/Edit/Lessons/SingleLesson"
 import CreateNewCourse from "../components/Admins/CreateNewCourse";
 import CretaNewQuiz from "../components/Admins/Course/Edit/Quiz/CreateNewQuiz"
 import SingleQuiz from "../components/Admins/Course/Edit/Quiz/SingleQuiz";
+import UpdateQuizData from "../components/Admins/Course/Edit/Quiz/UpdateQuizData";
 
 const Index = lazy(() => import("../pages/Index"));
 
@@ -133,7 +134,12 @@ const routes = [
             path: "quiz/:quizID",
             element: <SingleQuiz/>,
             layout: "default"
-          }
+          },
+          {
+            path: "quizzes/:quizID",
+            element: <UpdateQuizData/>,
+            layout: "default"
+          },
         ],
       },
       {
