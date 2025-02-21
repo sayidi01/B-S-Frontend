@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { QuizQuestion } from "./quiz.types";
+import _ from "lodash";
 
 interface QuestionFormProps {
   question: QuizQuestion;
@@ -21,7 +22,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     }));
 
     const update = { ...currentQuestion, [e.target.name]: e.target.value };
-    updateQuestion(currentQuestion.id, update);
+    updateQuestion(currentQuestion._id, update);
   };
   const handleOptionChange = (
     index: number,
@@ -41,20 +42,27 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         i === index ? { ...opt, [field]: value } : opt
       ),
     };
-    updateQuestion(currentQuestion.id, update);
+    updateQuestion(currentQuestion._id, update);
   };
 
   const addOption = () => {
-    setCurrentQuestion((prev) => ({
-      ...prev,
-      options: [...(prev.options || []), { text: "", isCorrect: false }],
-    }));
+    setCurrentQuestion((prev) => {
+      const options = prev.options || [];
+
+      return {
+        ...prev,
+        options: [
+          ...options,
+          { _id: String(options.length + 1), text: "", isCorrect: false },
+        ],
+      };
+    });
 
     const update = {
       ...currentQuestion,
-      options: [...(currentQuestion.options || []), { text: "", isCorrect: false }],
+      options: currentQuestion.options,
     };
-    updateQuestion(currentQuestion.id, update);
+    updateQuestion(currentQuestion._id, update);
   };
 
   const removeOption = (index: number) => {
@@ -69,14 +77,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       options: [...(currentQuestion.options || [])],
     };
     update.options?.splice(index, 1);
-    updateQuestion(currentQuestion.id, update);
+    updateQuestion(currentQuestion._id, update);
   };
 
   const updateType = (type: string) => {
     setCurrentQuestion((prev) => ({ ...prev, type }));
 
     const update = { ...currentQuestion, type };
-    updateQuestion(currentQuestion.id, update);
+    updateQuestion(currentQuestion._id, update);
   };
 
   console.log(currentQuestion);
@@ -98,7 +106,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           onChange={(e) => updateType(e.target.value)}
           className="border p-2 w-full"
         >
-          <option value="">-- Select Question Type --</option>
+          <option disabled value="">
+            -- Select Question Type --
+          </option>
           <option value="true_false">True/False</option>
           <option value="multiple_choice">Multiple Choice</option>
           <option value="single_choice">Single Choice</option>

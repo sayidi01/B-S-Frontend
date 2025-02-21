@@ -1,8 +1,9 @@
 export interface QuizQuestion {
-  id: string;
+  _id: string;
   type: string;
   question: string;
   options?: {
+    _id: string;
     text: string;
     isCorrect: boolean;
   }[];
@@ -11,21 +12,19 @@ export interface QuizQuestion {
     left: string;
     right: string;
   }[];
- 
 }
 
 export interface CreateQuizData {
   questions: QuizQuestion[];
-  name: string
+  name: string;
 }
 
-
 export interface IQuiz {
-  name: string
-  courseId: string
+  name: string;
+  courseId: string;
   _id: string;
   type: string;
-  questions: QuizQuestion[]; 
+  questions: QuizQuestion[];
   options?: {
     text: string;
     isCorrect: boolean;
@@ -35,5 +34,5 @@ export interface IQuiz {
     left: string;
     right: string;
   }[];
-  createdAt: string
+  createdAt: string;
 }

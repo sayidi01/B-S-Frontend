@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 interface CreateNewQuizProps {}
 
 const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { id: courseId } = useParams();
   const {
@@ -27,7 +27,7 @@ const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
 
   const handleAddQuestion = () => {
     const newQuestion: QuizQuestion = {
-      id: uniqueId("question"),
+      _id: uniqueId("question"),
       type: "",
       question: "",
       options: [],
@@ -47,7 +47,7 @@ const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
     try {
       await createQuiz(courseId as string);
       toast.success("Quiz created successfully!");
-       navigate(`/Dashbord/courses/${courseId}/edit/quiz`)
+      navigate(`/Dashbord/courses/${courseId}/edit/quiz`);
     } catch (error) {
       toast.error("Failed to create quiz.");
     }

@@ -1,21 +1,25 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useUserContext } from "../../../config/UserContext";
-import { CreateQuizData } from "../../../components/Admins/Course/Edit/Quiz/quiz.types";
+import { IQuiz } from "../../../components/Admins/Course/Edit/Quiz/quiz.types";
 
+export default function UseFetchUpdateQuiz() {
+  const { quizAPIClient } = useUserContext();
 
+  const [isLoading, setIsLoading] = useState(false);
 
+  const updateQuiz = useCallback(
+    async (data: IQuiz) => {
+      setIsLoading(true);
 
+      try {
+        const response = await quizAPIClient.updateQuiz(data._id, data);
+        return response;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [quizAPIClient, isLoading]
+  );
 
-
-export default function UseFetchUpdateQuiz(quizID: string) {
-  const {quizAPIClient} = useUserContext()
-
-
-  const updateQuiz = useCallback((data: CreateQuizData) => {
-    quizAPIClient
-    .updateQuiz(quizID, data)
-
-  },[])
-
-  return {updateQuiz }
+  return { updateQuiz, isLoading };
 }
