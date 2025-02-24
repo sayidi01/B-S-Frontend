@@ -9,7 +9,13 @@ function SingleQuiz() {
   const { isLoading, error, quizData } = UseFetchSingleQuiz(courseID as string, quizID as string);
 
   if (isLoading) {
-    return <Spin tip="Loading Quiz..." style={{ marginTop: '20px' }} />;
+    return (
+      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <Spin tip="Loading Quiz...">
+          <div style={{ height: '100px' }} /> 
+        </Spin>
+      </div>
+    );
   }
 
   if (error) {
@@ -26,8 +32,10 @@ function SingleQuiz() {
         Quiz Details
       </Title>
       {quizData.questions.map((question, index) => (
-        <Card key={index} title={`Question ${index + 1}`} style={{ marginBottom: '20px' }}>
-          <Text strong>{question.question}</Text>
+        
+        <Card key={index} title={`Question ${index + 1}`} style={{ marginBottom: '20px' }} >
+         <Text strong style={{ display: 'block' }}> Type:  {question.type}</Text>
+         <Text strong style={{ display: 'block' }}> Question : {question.question}</Text>
           <Radio.Group
             style={{ marginTop: '10px' }}
             disabled 
@@ -39,6 +47,7 @@ function SingleQuiz() {
               </Radio>
             ))}
           </Radio.Group>
+          
         </Card>
       ))}
     </div>

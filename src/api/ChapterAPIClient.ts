@@ -12,6 +12,10 @@ export  default class ChapterAPIClient extends APIClient {
      return (await this.axiosInstance.get(`/course/${courseId}/chapters/${chapterId}`)).data;
    }
 
+   async addQuizToChpter(courseId: string, chapterId: string, quizID: string) {
+    return(await this.axiosInstance.post(`/course/${courseId}/chapters/quiz/${quizID}/${chapterId}`)).data
+   }
+
    async createChapter(courseId: string, title: string) {
     return (
       await this.axiosInstance.post(`/course/${courseId}/chapters`, { title, courseId })

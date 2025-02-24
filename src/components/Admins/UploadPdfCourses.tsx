@@ -259,20 +259,6 @@ const UploadPdfCourses: React.FC = () => {
                       </li>
                       <li>
                         <button
-                        
-                          type="button"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                          }}
-                        >
-                          <IconPencil className="w-5 h-5" />
-                          Edit
-                        </button>
-                      </li>
-                      <li>
-                        <button
                           type="button"
                           onClick={() =>
                             confirmDeleteCourse(course._id, course.title)

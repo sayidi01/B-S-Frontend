@@ -1,5 +1,5 @@
 import UseFetchSingleQuiz from "../../../../../hooks/api/Quiz/UseFetchSingleQuiz";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import QuestionForm from "./QuestionForm";
 
 import { QuizQuestion } from "./quiz.types";
@@ -14,9 +14,8 @@ function UpdateQuizData() {
   const { id: courseID, quizID } = useParams();
 
   const { quizData } = UseFetchSingleQuiz(courseID as string, quizID as string);
-  // J'utilise cette quizData que pour la recuperation de donnees de quiz
-  // and that's it
-  // man3tihach l JSX
+ 
+  const navigate = useNavigate()
 
   const { updateQuiz, isLoading: isLoadingUpdatingQuiz } = UseFetchUpdateQuiz();
 
@@ -49,6 +48,7 @@ function UpdateQuizData() {
         throw new Error("Failed to update quiz, internal error");
 
       toast.success("Successfully updated quiz");
+      navigate(`/Dashbord/courses/${courseID}/edit/quiz`);
     } catch (error) {
       const msg = extractMsgFromError(error);
       toast.error("Failed to update quiz, reason: ".concat(msg));
