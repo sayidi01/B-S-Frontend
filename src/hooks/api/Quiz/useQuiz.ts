@@ -46,7 +46,7 @@ const useQuiz = (): UseQuizReturn => {
   const updateQuestion = (questionID: string, newData: QuizQuestion) => {
     setQuizData((prev) => {
       const updatedQuestions = prev.questions.map((question) =>
-        question.id === questionID ? newData : question
+        question._id === questionID ? newData : question
       );
       return { ...prev, questions: updatedQuestions };
     });

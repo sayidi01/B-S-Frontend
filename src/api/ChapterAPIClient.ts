@@ -1,35 +1,46 @@
 import APIClient from ".";
 
+export default class ChapterAPIClient extends APIClient {
+  async getAllChapterDataById(id: string) {
+    return (await this.axiosInstance.get(`/course/${id}/chapters`)).data;
+  }
 
-
-
-export  default class ChapterAPIClient extends APIClient {
-   async getAllChapterDataById(id: string) {
-    return (await this.axiosInstance.get(`/course/${id}/chapters`)).data
-   }
-   
-   async getSingleChapter(courseId: string, chapterId: string) {
-     return (await this.axiosInstance.get(`/course/${courseId}/chapters/${chapterId}`)).data;
-   }
-
-   async addQuizToChpter(courseId: string, chapterId: string, quizID: string) {
-    return(await this.axiosInstance.post(`/course/${courseId}/chapters/quiz/${quizID}/${chapterId}`)).data
-   }
-
-   async createChapter(courseId: string, title: string) {
+  async getSingleChapter(courseId: string, chapterId: string) {
     return (
-      await this.axiosInstance.post(`/course/${courseId}/chapters`, { title, courseId })
+      await this.axiosInstance.get(`/course/${courseId}/chapters/${chapterId}`)
+    ).data;
+  }
+ 
+  async  addQuizToChpter (courseId: string,  chapterId: string, quizID: string,afterLessonIndex: number) {
+    return(
+      await this.axiosInstance.post(`/course/${courseId}/chapters/${quizID}/${chapterId}`,{afterLessonIndex})
+    ).data
+  }
+  
+
+  async createChapter(courseId: string, title: string) {
+    return (
+      await this.axiosInstance.post(`/course/${courseId}/chapters`, {
+        title,
+        courseId,
+      })
     ).data;
   }
 
   async deleteChapter(courseId: string, chapterId: string) {
-    return (await this.axiosInstance.delete(`/course/${courseId}/chapters/${chapterId}`)).data;
+    return (
+      await this.axiosInstance.delete(
+        `/course/${courseId}/chapters/${chapterId}`
+      )
+    ).data;
   }
 
   async updateChapter(courseId: string, chapterId: string, title: string) {
-    return(
-      await this.axiosInstance.put(`/course/${courseId}/chapters/${chapterId}`,{title})
-    ).data
+    return (
+      await this.axiosInstance.put(
+        `/course/${courseId}/chapters/${chapterId}`,
+        { title }
+      )
+    ).data;
   }
-  
-} 
+}

@@ -5,6 +5,9 @@ import { useParams } from "react-router-dom";
 import { FaEllipsisV, FaTimes } from "react-icons/fa";
 import { Dropdown, Button } from "antd";
 import UpdateChapterPopover from "./UpdateChapterPopover";
+import ModalAssignQuizToChapter from "./ModalAssignQuizToChapter";
+
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 
 export default function Chapters() {
   const { id } = useParams();
@@ -23,6 +26,9 @@ export default function Chapters() {
     chapterId: string | null;
     currentTitle: string;
   }>({ chapterId: null, currentTitle: "" });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedChapter, setSelectedChapter] = useState<string | null>(null);
 
   if (isLoading) {
     return <div className="text-center py-8 text-gray-600">Loading...</div>;
@@ -82,7 +88,8 @@ export default function Chapters() {
             if (popover) popover.classList.toggle("hidden");
           }}
           type="button"
-          className="btn btn-primary"        >
+          className="btn btn-primary"
+        >
           Add New Chapter
         </button>
       </div>
@@ -118,11 +125,10 @@ export default function Chapters() {
       {updatePopoverData.chapterId && (
         <UpdateChapterPopover
           chapterId={updatePopoverData.chapterId}
-   
           currentTitle={updatePopoverData.currentTitle}
           onUpdate={(chapterId, title) =>
             updateChapter(id as string, chapterId, title)
-          } 
+          }
           onClose={() =>
             setUpdatePopoverData({ chapterId: null, currentTitle: "" })
           }
@@ -160,6 +166,17 @@ export default function Chapters() {
                 <h3 className="text-lg font-medium text-gray-700 mb-3">
                   Quizzes
                 </h3>
+                <div className="flex justify-end">
+                  <button
+                    className="bg-green-500 text-white px-4 py-1 rounded-md hover:bg-green-600 transition-colors duration-200 mb-3"
+                    onClick={() => {
+                      setSelectedChapter(chapter._id);
+                      setIsModalOpen(true);
+                    }}
+                  >
+                    Assign Quiz → Chapter
+                  </button>
+                </div>
                 <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100">
                   <ul className="space-y-2">
                     {chapter.quizzes.map((quiz) => (
@@ -167,13 +184,22 @@ export default function Chapters() {
                         key={quiz._id}
                         className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"
                       >
+                        <div>
+                          <button className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                            <ArrowUpOutlined />
+                          </button>
+                          <button className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                            <ArrowDownOutlined />
+                          </button>
+                        </div>
                         <span className="text-gray-700">
-                          Quiz: {quiz.title} (After Lesson:{" "}
+                          Quiz: {quiz.name} (After Lesson:{" "}
                           {quiz.afterLessonIndex})
                         </span>
+
                         <button
                           className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200"
-                          onClick={() => alert(`Starting quiz: ${quiz.title}`)}
+                          onClick={() => alert(`Starting quiz: ${quiz.name}`)}
                         >
                           View Quiz
                         </button>
@@ -186,6 +212,11 @@ export default function Chapters() {
           </div>
         ))}
       </div>
+      <ModalAssignQuizToChapter
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        chapterId={selectedChapter}
+      />
     </div>
   );
 }
