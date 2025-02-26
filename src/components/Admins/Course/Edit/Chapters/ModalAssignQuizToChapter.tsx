@@ -39,10 +39,10 @@ const ModalAssignQuizToChapter: React.FC<ModalAssignQuizToChapterProps> = ({
   const handleQuizAssign = async () => {
     if (!selectedQuiz || !chapterId) return;
     
-    const afterLessonIndex = quizzes.length; 
+    const orderQuiz = quizzes.length; 
 
     try {
-      await addQuizTocChapter(courseID as string,chapterId, selectedQuiz,  afterLessonIndex);
+      await addQuizTocChapter(courseID as string,chapterId, selectedQuiz,  orderQuiz);
       console.log("Quiz added to chapter successfuly")
       onClose();
     } catch (error) {

@@ -19,6 +19,7 @@ export default function Chapters() {
     createChapter,
     deleteChapter,
     updateChapter,
+    handleMoveOrderQuiz,
   } = useFetchChapterData(id);
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
   const [newChapterTitle, setNewChapterTitle] = useState("");
@@ -179,22 +180,51 @@ export default function Chapters() {
                 </div>
                 <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100">
                   <ul className="space-y-2">
-                    {chapter.quizzes.map((quiz) => (
+                    {chapter.quizzes.map((quiz, index) => (
                       <li
-                        key={quiz._id}
+                      key={quiz._id || index}
                         className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"
                       >
                         <div>
-                          <button className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                          <button
+                            className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                            onClick={() => {
+                              console.log(
+                                "Moving quiz:",
+                                quiz._id,
+                                "Direction: up"
+                              );
+                              handleMoveOrderQuiz(
+                                quiz._id,
+                                quiz.orderQuiz,
+                                chapter._id,
+                                "up"
+                              );
+                            }}
+                          >
                             <ArrowUpOutlined />
                           </button>
-                          <button className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                          <button
+                            className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                            onClick={() => {
+                              console.log(
+                                "Moving quiz:",
+                                quiz._id,
+                                "Direction: down"
+                              );
+                              handleMoveOrderQuiz(
+                                quiz._id,
+                                quiz.orderQuiz,
+                                chapter._id,
+                                "down"
+                              );
+                            }}
+                          >
                             <ArrowDownOutlined />
                           </button>
                         </div>
                         <span className="text-gray-700">
-                          Quiz: {quiz.name} (After Lesson:{" "}
-                          {quiz.afterLessonIndex})
+                          Quiz: {quiz.name} (After Chapter: {quiz.orderQuiz})
                         </span>
 
                         <button

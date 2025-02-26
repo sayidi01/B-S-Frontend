@@ -149,5 +149,36 @@ export default function useFetchChapterData(id: string | undefined) {
     },
     [chapterApiClient, setChapterData]
   );
-  return { chapterData, error, isLoading, setError, createChapter, deleteChapter, updateChapter, getSingleChapter, singleChapterData };
+  
+  const handleMoveOrderQuiz = (quizId: string, orderQuiz: number, chapterId: string, direction: "up" | "down") => {
+    const updatedChapterData = chapterData?.map((chapter) => {
+      if (chapter._id === chapterId) {
+        const updatedQuizzes = [...chapter.quizzes];
+        const currentIndex = updatedQuizzes.findIndex((quiz) => quiz._id === quizId);
+  
+        if (direction === "up" && currentIndex > 0) {
+          [updatedQuizzes[currentIndex], updatedQuizzes[currentIndex - 1]] = [
+            updatedQuizzes[currentIndex - 1],
+            updatedQuizzes[currentIndex],
+          ];
+        } else if (direction === "down" && currentIndex < updatedQuizzes.length - 1) {
+          [updatedQuizzes[currentIndex], updatedQuizzes[currentIndex + 1]] = [
+            updatedQuizzes[currentIndex + 1],
+            updatedQuizzes[currentIndex],
+          ];
+        }
+        console.log("Après swap", updatedQuizzes);
+  
+        return { ...chapter, quizzes: updatedQuizzes };
+      }
+      return chapter;
+    });
+  
+    if (updatedChapterData) {
+      setChapterData(updatedChapterData); 
+    }
+  };
+
+
+  return { chapterData, error, isLoading, setError, createChapter, deleteChapter, updateChapter, getSingleChapter, singleChapterData, handleMoveOrderQuiz };
 }

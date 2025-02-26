@@ -11,9 +11,9 @@ export default class ChapterAPIClient extends APIClient {
     ).data;
   }
  
-  async  addQuizToChpter (courseId: string,  chapterId: string, quizID: string,afterLessonIndex: number) {
+  async  addQuizToChpter (courseId: string,  chapterId: string, quizID: string,orderQuiz: number) {
     return(
-      await this.axiosInstance.post(`/course/${courseId}/chapters/${quizID}/${chapterId}`,{afterLessonIndex})
+      await this.axiosInstance.post(`/course/${courseId}/chapters/${quizID}/${chapterId}`,{orderQuiz})
     ).data
   }
   

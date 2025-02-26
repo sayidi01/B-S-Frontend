@@ -5,7 +5,7 @@ export interface IChapter {
   quizzes: {
     _id: string
     quizId: string;
-    title: string; 
-    afterLessonIndex: number;
+    name: string; 
+    orderQuiz: number;
   }[];
 }
