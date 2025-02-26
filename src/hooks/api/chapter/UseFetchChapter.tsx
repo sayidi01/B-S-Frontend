@@ -3,18 +3,25 @@ import { useUserContext } from "../../../config/UserContext";
 import { IChapter } from "../../../types/chapter";
 import { toast } from "react-hot-toast";
 
-
 interface CreateChapterResponse {
   data: {
     chapter: IChapter;
   };
 }
 
+const moveItem = (arr: any[], fromIndex: number, toIndex: number) => {
+  const item = arr.splice(fromIndex, 1)[0]; // Remove item
+  arr.splice(toIndex, 0, item); // Insert item at new index
+  return arr;
+};
+
 export default function useFetchChapterData(id: string | undefined) {
   const { chapterApiClient } = useUserContext();
 
   const [chapterData, setChapterData] = useState<null | IChapter[]>(null);
-  const [singleChapterData, setSingleChapterData] = useState<null | IChapter>(null); 
+  const [singleChapterData, setSingleChapterData] = useState<null | IChapter>(
+    null
+  );
 
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,14 +50,17 @@ export default function useFetchChapterData(id: string | undefined) {
       });
   }, [id, chapterApiClient]);
 
-
-
   const getSingleChapter = useCallback(
     async (courseId: string, chapterId: string) => {
       setIsLoading(true);
       try {
-        const response = await chapterApiClient.getSingleChapter(courseId, chapterId);
-        setSingleChapterData((response as { data: { chapter: IChapter} }).data.chapter);
+        const response = await chapterApiClient.getSingleChapter(
+          courseId,
+          chapterId
+        );
+        setSingleChapterData(
+          (response as { data: { chapter: IChapter } }).data.chapter
+        );
         setError(null);
       } catch (err) {
         console.error("Error fetching single chapter:", err);
@@ -62,8 +72,6 @@ export default function useFetchChapterData(id: string | undefined) {
     },
     [chapterApiClient]
   );
-
-
 
   const createChapter = useCallback(
     async (title: string, courseId: string) => {
@@ -97,7 +105,7 @@ export default function useFetchChapterData(id: string | undefined) {
     (courseId: string, chapterId: string) => {
       setIsLoading(true);
       chapterApiClient
-        .deleteChapter(courseId,chapterId )
+        .deleteChapter(courseId, chapterId)
         .then(() => {
           setChapterData((prev) => {
             if (prev) {
@@ -128,7 +136,7 @@ export default function useFetchChapterData(id: string | undefined) {
             if (prev) {
               return prev.map((chapter) => {
                 if (chapter._id === chapterID) {
-                  return { ...chapter, title }; 
+                  return { ...chapter, title };
                 }
                 return chapter;
               });
@@ -136,7 +144,6 @@ export default function useFetchChapterData(id: string | undefined) {
             return prev;
           });
           toast.success("Chapter Updated Successfully!");
-         
         })
         .catch((err) => {
           console.error("Error updating chapter:", err);
@@ -149,36 +156,42 @@ export default function useFetchChapterData(id: string | undefined) {
     },
     [chapterApiClient, setChapterData]
   );
-  
-  const handleMoveOrderQuiz = (quizId: string, orderQuiz: number, chapterId: string, direction: "up" | "down") => {
-    const updatedChapterData = chapterData?.map((chapter) => {
-      if (chapter._id === chapterId) {
-        const updatedQuizzes = [...chapter.quizzes];
-        const currentIndex = updatedQuizzes.findIndex((quiz) => quiz._id === quizId);
-  
-        if (direction === "up" && currentIndex > 0) {
-          [updatedQuizzes[currentIndex], updatedQuizzes[currentIndex - 1]] = [
-            updatedQuizzes[currentIndex - 1],
-            updatedQuizzes[currentIndex],
-          ];
-        } else if (direction === "down" && currentIndex < updatedQuizzes.length - 1) {
-          [updatedQuizzes[currentIndex], updatedQuizzes[currentIndex + 1]] = [
-            updatedQuizzes[currentIndex + 1],
-            updatedQuizzes[currentIndex],
-          ];
-        }
-        console.log("Après swap", updatedQuizzes);
-  
-        return { ...chapter, quizzes: updatedQuizzes };
-      }
-      return chapter;
-    });
-  
-    if (updatedChapterData) {
-      setChapterData(updatedChapterData); 
-    }
+
+  const handleMoveOrderQuiz = (
+    quizIndex: number,
+    chapterId: string,
+    direction: "up" | "down"
+  ) => {
+    if (!chapterData) return;
+
+    let newIndex = quizIndex + (direction === "up" ? -1 : 1);
+    if (newIndex < 0) return;
+
+    const chapter = chapterData.find((chapter) => chapter._id === chapterId);
+    if (!chapter) return;
+    const updatedChapterData = moveItem(chapter.quizzes, quizIndex, newIndex);
+
+    setChapterData(
+      (prev) =>
+        prev?.map((chapter) => {
+          if (chapter._id === chapterId) {
+            return { ...chapter, quizzes: updatedChapterData };
+          }
+          return chapter;
+        }) || null
+    );
   };
 
-
-  return { chapterData, error, isLoading, setError, createChapter, deleteChapter, updateChapter, getSingleChapter, singleChapterData, handleMoveOrderQuiz };
+  return {
+    chapterData,
+    error,
+    isLoading,
+    setError,
+    createChapter,
+    deleteChapter,
+    updateChapter,
+    getSingleChapter,
+    singleChapterData,
+    handleMoveOrderQuiz,
+  };
 }

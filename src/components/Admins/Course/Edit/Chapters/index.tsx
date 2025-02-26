@@ -189,14 +189,8 @@ export default function Chapters() {
                           <button
                             className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
                             onClick={() => {
-                              console.log(
-                                "Moving quiz:",
-                                quiz._id,
-                                "Direction: up"
-                              );
                               handleMoveOrderQuiz(
-                                quiz._id,
-                                quiz.orderQuiz,
+                                index,
                                 chapter._id,
                                 "up"
                               );
@@ -207,14 +201,8 @@ export default function Chapters() {
                           <button
                             className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
                             onClick={() => {
-                              console.log(
-                                "Moving quiz:",
-                                quiz._id,
-                                "Direction: down"
-                              );
                               handleMoveOrderQuiz(
-                                quiz._id,
-                                quiz.orderQuiz,
+                                index,
                                 chapter._id,
                                 "down"
                               );
