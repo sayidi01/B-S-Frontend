@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useUserContext } from "../../../config/UserContext";
 import { IChapter } from "../../../types/chapter";
 import { toast } from "react-hot-toast";
+import UseFetchUpdateOrderQuiz from "./UseFetchUpdateOrderQuiz";
 
 interface CreateChapterResponse {
   data: {
@@ -10,13 +11,15 @@ interface CreateChapterResponse {
 }
 
 const moveItem = (arr: any[], fromIndex: number, toIndex: number) => {
-  const item = arr.splice(fromIndex, 1)[0]; // Remove item
-  arr.splice(toIndex, 0, item); // Insert item at new index
+  const item = arr.splice(fromIndex, 1)[0];
+  arr.splice(toIndex, 0, item);
   return arr;
 };
 
 export default function useFetchChapterData(id: string | undefined) {
   const { chapterApiClient } = useUserContext();
+
+  const { updateOrderQuiz } = UseFetchUpdateOrderQuiz();
 
   const [chapterData, setChapterData] = useState<null | IChapter[]>(null);
   const [singleChapterData, setSingleChapterData] = useState<null | IChapter>(
@@ -180,6 +183,27 @@ export default function useFetchChapterData(id: string | undefined) {
           return chapter;
         }) || null
     );
+
+    const movedQuiz = updatedChapterData[newIndex];
+    const courseId = movedQuiz.courseId || chapter.courseId;
+
+    console.log(
+      "courseId:",
+      courseId,
+      "chapterId:",
+      chapterId,
+      "quizId:",
+      movedQuiz._id,
+      "orderQuiz:",
+      newIndex
+    );
+
+    if (!courseId) {
+      console.error("Error: courseId is undefined");
+      return;
+    }
+
+    updateOrderQuiz(courseId, chapterId, movedQuiz._id, newIndex);
   };
 
   return {

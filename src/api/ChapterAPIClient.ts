@@ -43,4 +43,11 @@ export default class ChapterAPIClient extends APIClient {
       )
     ).data;
   }
+  async updateOrderQuiz(courseId: string, chapterId: string, quizID: string, orderQuiz: number) {
+    return(
+      await this.axiosInstance.put(
+       `/course/${courseId}/chapters/${quizID}/${chapterId}`,{orderQuiz}
+      )
+    ).data;
+  }
 }
