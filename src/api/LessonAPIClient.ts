@@ -39,4 +39,8 @@ export class LessonAPIClient extends APIClient {
   ) {
     return await this.axiosInstance.put(`/lessons/${lessonId}`, data);
   }
+
+  async addedQuizToLesson(lessonId: string, quizId: string) {
+    return ( await this.axiosInstance.post(`/lessons/${lessonId}/quiz`,{quizId})).data
+  }
 }

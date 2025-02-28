@@ -5,6 +5,7 @@ import useFetchLessonData from "../../../../../hooks/api/Lessons/useFetchLessonD
 
 import { FaEllipsisV } from "react-icons/fa";
 import { Dropdown, Button } from "antd";
+import ModalAssignQuizToLesson from "./ModalAssignQuizToLesson";
 
 export default function Lessons() {
   const { id } = useParams<{
@@ -17,6 +18,9 @@ export default function Lessons() {
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [expandedLesson, setExpandedLesson] = useState<string | null>(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+   const [selectedLesson, setSelectedLesson] = useState<string | null>(null);
 
   const fetchLessonDataMethods = useFetchLessonData(id as string);
   const { lessonData, isLoading, deleteLesson } = fetchLessonDataMethods;
@@ -100,6 +104,17 @@ export default function Lessons() {
 
                   {expandedLesson === lesson._id && (
                     <div className="mt-4">
+                      <div className="flex justify-end">
+                        <button
+                          onClick={() => {
+                            setSelectedLesson(lesson._id)
+                            setIsModalOpen(true);
+                          }}
+                          className="bg-green-500 text-white px-4 py-1 rounded-md hover:bg-green-600 transition-colors duration-200 mb-3"
+                        >
+                          Assign Quiz → Lesson
+                        </button>
+                      </div>
                       <h3 className="text-lg font-medium text-gray-700 mb-3">
                         Description
                       </h3>
@@ -139,6 +154,11 @@ export default function Lessons() {
           </div>
         </div>
       )}
+      <ModalAssignQuizToLesson
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        lessonId={selectedLesson}
+      />
     </div>
   );
 }
