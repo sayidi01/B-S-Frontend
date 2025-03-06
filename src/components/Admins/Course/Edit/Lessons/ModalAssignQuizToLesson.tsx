@@ -3,17 +3,20 @@ import React, { useEffect, useState } from "react";
 import useFetchQuizzesByCourseData from "../../../../../hooks/api/course/useFetchQuizzesByCourseData";
 import { useParams } from "react-router-dom";
 import useFetchAddQuizToLesson from "../../../../../hooks/api/Lessons/useFetchAddQuizToLesson";
+import { ILesson } from "./TypesLessons";
 
 interface ModalAssignQuizToLessonProps {
   isOpen: boolean;
-  onClose: () => void;
   lessonId: string | null;
+  updateLessonData: (lessonID: string, newData: ILesson) => void;
+  onClose: () => void;
 }
 
 const ModalAssignQuizToLesson: React.FC<ModalAssignQuizToLessonProps> = ({
   isOpen,
   onClose,
   lessonId,
+  updateLessonData,
 }) => {
   const { id: courseID } = useParams();
   const { courseData } = useFetchQuizzesByCourseData(courseID as string);
@@ -40,8 +43,9 @@ const ModalAssignQuizToLesson: React.FC<ModalAssignQuizToLessonProps> = ({
     if (!selectedQuiz || !lessonId) return;
 
     try {
-      await addQuizToLesson(lessonId, selectedQuiz);
+      const response = await addQuizToLesson(lessonId, selectedQuiz);
       console.log("Quiz added to lesson successfuly");
+      updateLessonData(lessonId, response.data.lesson);
       onClose();
     } catch (error) {
       console.log(error);

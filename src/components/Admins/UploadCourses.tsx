@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import CreateNewCourse from "./CreateNewCourse";
 
-import Dropdown from "../../components/Dropdown";
-import IconHorizontalDots from "../../components/Icon/IconHorizontalDots";
+import Dropdown from "../Dropdown";
+import IconHorizontalDots from "../Icon/IconHorizontalDots";
 import IconTrashLines from "../Icon/IconTrashLines";
 import IconPencil from "../Icon/IconPencil";
 
@@ -17,17 +17,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
 
-
 const itemsPerPage = 8;
 
 const UploadPdfCourses: React.FC = () => {
- 
-
-  
- 
-
- 
-
   const [courseId, setCourseId] = useState<Admin[]>([]);
 
   const { isConnected, titleCourses, setTitleCourses } = useUserContext();
@@ -45,10 +37,6 @@ const UploadPdfCourses: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
-  
-
-  
 
   // GET COUSRSES TITLE
 
@@ -125,7 +113,6 @@ const UploadPdfCourses: React.FC = () => {
 
   return (
     <div>
-       
       <p
         style={{
           fontFamily: "ROBOTO",
@@ -142,12 +129,10 @@ const UploadPdfCourses: React.FC = () => {
         className="btn btn-primary"
         style={{ marginTop: "3rem", marginLeft: "4rem" }}
         onClick={() => navigate("/Dashbord/newcourse")}
-     
       >
         Add New +
       </button>
 
-      
       <Row
         gutter={[24, 48]}
         style={{ marginTop: "2rem", gap: 10, marginLeft: "3rem" }}
@@ -161,7 +146,7 @@ const UploadPdfCourses: React.FC = () => {
                     fontSize: "18px",
                     fontWeight: "bold",
                     marginBottom: "0",
-                    paddingBottom: "0", 
+                    paddingBottom: "0",
                   }}
                 >
                   {course.title}
@@ -199,17 +184,18 @@ const UploadPdfCourses: React.FC = () => {
                   flex: 1,
                   fontSize: "13px",
                   color: "#666",
-                  height: "100px", 
-                  overflow: "hidden", 
+                  height: "100px",
+                  overflow: "hidden",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: course.description.slice(0, 77) + "...",
                 }}
                 onBlur={(e) => {
                   console.log("Element lost focus");
                 }}
-                tabIndex={0} 
-                role="text" 
-              >
-                {course.description.slice(0, 77)}{"..."}
-              </div>
+                tabIndex={0}
+                role="text"
+              ></div>
               <div className="flex items-center">
                 <Link to={`/Dashbord/courses/${course._id}`}>
                   <Button
@@ -232,7 +218,7 @@ const UploadPdfCourses: React.FC = () => {
                     button={
                       <Button
                         size="small"
-                        style={{ marginLeft: "5px"}}
+                        style={{ marginLeft: "5px" }}
                         className="p-0"
                       >
                         <IconHorizontalDots />
@@ -290,11 +276,8 @@ const UploadPdfCourses: React.FC = () => {
           />
         )}
       </Row>
-
-    
-   
     </div>
   );
-}
+};
 
 export default UploadPdfCourses;

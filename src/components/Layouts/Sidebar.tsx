@@ -19,6 +19,8 @@ import IconMenuPages from "../Icon/Menu/IconMenuPages";
 
 import IconMenuDashboard from "../Icon/Menu/IconMenuDashboard";
 
+import SidebarCoursesViews from "./SideBarCoursesViews";
+
 const Sidebar = () => {
   const [currentMenu, setCurrentMenu] = useState<string>("");
 
@@ -34,6 +36,9 @@ const Sidebar = () => {
       return oldValue === value ? "" : value;
     });
   };
+
+  // Changes SideBar View
+  const isSingleCoursePage = /^\/Dashbord\/courses\/[^/]+(\/.*)?$/.test(location.pathname);
 
   useEffect(() => {
     const selector = document.querySelector(
@@ -61,7 +66,7 @@ const Sidebar = () => {
     }
   }, [location]);
 
-  return (
+  return isSingleCoursePage ? <SidebarCoursesViews /> :   (
     <div className={semidark ? "dark" : ""}>
       <nav
         className={`sidebar fixed min-h-screen h-full top-0 bottom-0 w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] z-50 transition-all duration-300 ${

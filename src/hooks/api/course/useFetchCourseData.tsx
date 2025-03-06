@@ -17,6 +17,7 @@ export default function useFetchCourseData(courseID: string) {
         setCourseData(response as ICourse);
       })
       .catch((err) => {
+        console.log(err)
         const msg = "Failed to retrieve course data";
         setCourseData(null);
         setError(msg);

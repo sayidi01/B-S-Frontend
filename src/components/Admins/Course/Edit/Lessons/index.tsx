@@ -6,6 +6,7 @@ import useFetchLessonData from "../../../../../hooks/api/Lessons/useFetchLessonD
 import { FaEllipsisV } from "react-icons/fa";
 import { Dropdown, Button } from "antd";
 import ModalAssignQuizToLesson from "./ModalAssignQuizToLesson";
+import { ILesson } from "./TypesLessons";
 
 export default function Lessons() {
   const { id } = useParams<{
@@ -20,10 +21,28 @@ export default function Lessons() {
   const [expandedLesson, setExpandedLesson] = useState<string | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-   const [selectedLesson, setSelectedLesson] = useState<string | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<string | null>(null);
 
   const fetchLessonDataMethods = useFetchLessonData(id as string);
   const { lessonData, isLoading, deleteLesson } = fetchLessonDataMethods;
+
+  const [lessonResult, setLessonResult] = useState(lessonData);
+
+  const updateLessonData = (lessonID: string, newData: ILesson) => {
+    setLessonResult((prev) => {
+      const updatedLessons = prev.map((lesson) => {
+        if (lesson._id === lessonID) {
+          return newData;
+        }
+        return lesson;
+      });
+      return updatedLessons;
+    });
+  };
+
+  useEffect(() => {
+    setLessonResult(lessonData);
+  }, [lessonData]);
 
   useEffect(() => {
     console.log("lessondata", lessonData);
@@ -75,8 +94,8 @@ export default function Lessons() {
       </div>
 
       <div className="space-y-6 max-w-3xl mx-auto">
-        {lessonData
-          ? lessonData.map((lesson, index) => {
+        {lessonResult
+          ? lessonResult.map((lesson, index) => {
               return (
                 <div
                   key={lesson._id}
@@ -107,7 +126,7 @@ export default function Lessons() {
                       <div className="flex justify-end">
                         <button
                           onClick={() => {
-                            setSelectedLesson(lesson._id)
+                            setSelectedLesson(lesson._id);
                             setIsModalOpen(true);
                           }}
                           className="bg-green-500 text-white px-4 py-1 rounded-md hover:bg-green-600 transition-colors duration-200 mb-3"
@@ -119,6 +138,9 @@ export default function Lessons() {
                         Description
                       </h3>
                       <p className="text-gray-600">{lesson.description}</p>
+                      <h3 className="text-lg font-medium text-gray-700 mt-4">
+                        Quiz Assign To Lesson : {lesson.quizId?.name}
+                      </h3>
                       <button
                         onClick={() =>
                           navigate(
@@ -158,6 +180,7 @@ export default function Lessons() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         lessonId={selectedLesson}
+        updateLessonData={updateLessonData}
       />
     </div>
   );

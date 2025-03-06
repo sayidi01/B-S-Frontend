@@ -12,6 +12,12 @@ import CreateNewCourse from "../components/Admins/CreateNewCourse";
 import CretaNewQuiz from "../components/Admins/Course/Edit/Quiz/CreateNewQuiz"
 import SingleQuiz from "../components/Admins/Course/Edit/Quiz/SingleQuiz";
 import UpdateQuizData from "../components/Admins/Course/Edit/Quiz/UpdateQuizData";
+import CourseView from "../pages/SingleCourse";
+
+import LessonView from "../pages/SingleCourse/LessonView";
+import ChapterView from "../pages/SingleCourse/ChapterView";
+
+import QuizView from "../pages/SingleCourse/QuizView";
 
 const Index = lazy(() => import("../pages/Index"));
 
@@ -24,7 +30,7 @@ const ListTeacher = lazy(() => import("../components/Teachers/ListTeacher"));
 const ListStudent = lazy(() => import("../components/Students/ListStudent"));
 
 const UploadPdfCourses = lazy(
-  () => import("../components/Admins/UploadPdfCourses")
+  () => import("../components/Admins/UploadCourses")
 );
 
 const Signin = lazy(() => import("../pages/Signin"));
@@ -80,6 +86,24 @@ const routes = [
       {
         path: "courses/:id",
         element: <SingleCourse />,
+        children: [
+          {
+            path: "",
+            element: <CourseView />,
+          },
+          {
+            path: "chapter/:chapterId",
+            element: <ChapterView />, 
+          },
+          {
+            path: "quiz/:quizID",
+            element: <QuizView />,
+          },
+          {
+            path: "lesson/:lessonID",
+            element: <LessonView />,
+          },
+        ]
       },
       {
         path: "courses/:id/edit",

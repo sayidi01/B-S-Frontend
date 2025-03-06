@@ -7,5 +7,10 @@ export interface ILesson {
     chapterId: string;
     courseID: string;
     content?: string
+    quizId?: { 
+        _id: string;
+        name: string;
+    } | null;
+    
 
 }

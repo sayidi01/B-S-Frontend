@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import useFetchChapterData from "../../../../../hooks/api/chapter/UseFetchChapter";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaEllipsisV, FaTimes } from "react-icons/fa";
 import { Dropdown, Button } from "antd";
 import UpdateChapterPopover from "./UpdateChapterPopover";
@@ -30,6 +30,8 @@ export default function Chapters() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChapter, setSelectedChapter] = useState<string | null>(null);
+
+  const navigate = useNavigate()
 
   if (isLoading) {
     return <div className="text-center py-8 text-gray-600">Loading...</div>;
@@ -212,12 +214,12 @@ export default function Chapters() {
                           </button>
                         </div>
                         <span className="text-gray-700">
-                          Quiz: {quiz.name} (After Chapter: {quiz.orderQuiz})
+                          Quiz: {quiz.quizId?.name} (After Chapter: {quiz.orderQuiz})
                         </span>
 
                         <button
                           className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200"
-                          onClick={() => alert(`Starting quiz: ${quiz.name}`)}
+                      
                         >
                           View Quiz
                         </button>

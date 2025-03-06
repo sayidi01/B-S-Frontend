@@ -1,5 +1,13 @@
 import APIClient from ".";
+import { ILesson } from "../components/Admins/Course/Edit/Lessons/TypesLessons";
 
+interface IResponse {
+  is_success: boolean;
+  message: string;
+  data: {
+    lesson: ILesson;
+  };
+}
 export class LessonAPIClient extends APIClient {
   async createLesson(
     courseId: string,
@@ -41,6 +49,6 @@ export class LessonAPIClient extends APIClient {
   }
 
   async addedQuizToLesson(lessonId: string, quizId: string) {
-    return ( await this.axiosInstance.post(`/lessons/${lessonId}/quiz`,{quizId})).data
+    return ( await this.axiosInstance.post<IResponse>(`/lessons/${lessonId}/quiz`,{quizId})).data
   }
 }
