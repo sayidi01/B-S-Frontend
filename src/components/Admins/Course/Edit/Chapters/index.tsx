@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import useFetchChapterData from "../../../../../hooks/api/chapter/UseFetchChapter";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaEllipsisV, FaTimes } from "react-icons/fa";
 import { Dropdown, Button } from "antd";
 import UpdateChapterPopover from "./UpdateChapterPopover";
 import ModalAssignQuizToChapter from "./ModalAssignQuizToChapter";
 
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { IChapter } from "../../../../../types/chapter";
+
 
 export default function Chapters() {
   const { id } = useParams();
@@ -23,6 +25,13 @@ export default function Chapters() {
   } = useFetchChapterData(id);
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
   const [newChapterTitle, setNewChapterTitle] = useState("");
+
+  const [chapterView, setchapterView] = useState(chapterData);
+
+  useEffect(() => {
+    setchapterView(chapterData);
+  }, [chapterData]);
+
   const [updatePopoverData, setUpdatePopoverData] = useState<{
     chapterId: string | null;
     currentTitle: string;
@@ -31,7 +40,19 @@ export default function Chapters() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChapter, setSelectedChapter] = useState<string | null>(null);
 
-  const navigate = useNavigate()
+  
+  const updateChapterData = (chapterId: string, newData: IChapter) => {
+    setchapterView((prev) => {
+      if (!prev) return [];
+  
+      return prev.map((chapter) =>
+        chapter._id === chapterId
+          ? newData
+          : chapter
+      );
+    });
+  };
+
 
   if (isLoading) {
     return <div className="text-center py-8 text-gray-600">Loading...</div>;
@@ -139,7 +160,7 @@ export default function Chapters() {
       )}
 
       <div className="space-y-6 max-w-3xl mx-auto">
-        {chapterData.map((chapter) => (
+        {chapterView?.map((chapter) => (
           <div
             key={chapter._id}
             className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
@@ -165,10 +186,7 @@ export default function Chapters() {
             </div>
 
             {expandedChapter === chapter._id && (
-              <div className="mt-4">
-                <h3 className="text-lg font-medium text-gray-700 mb-3">
-                  Quizzes
-                </h3>
+              <div className="mt-3">
                 <div className="flex justify-end">
                   <button
                     className="bg-green-500 text-white px-4 py-1 rounded-md hover:bg-green-600 transition-colors duration-200 mb-3"
@@ -184,18 +202,14 @@ export default function Chapters() {
                   <ul className="space-y-2">
                     {chapter.quizzes.map((quiz, index) => (
                       <li
-                      key={quiz._id || index}
+                        key={quiz._id || index}
                         className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"
                       >
                         <div>
                           <button
                             className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
                             onClick={() => {
-                              handleMoveOrderQuiz(
-                                index,
-                                chapter._id,
-                                "up"
-                              );
+                              handleMoveOrderQuiz(index, chapter._id, "up");
                             }}
                           >
                             <ArrowUpOutlined />
@@ -203,26 +217,21 @@ export default function Chapters() {
                           <button
                             className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
                             onClick={() => {
-                              handleMoveOrderQuiz(
-                                index,
-                                chapter._id,
-                                "down"
-                              );
+                              handleMoveOrderQuiz(index, chapter._id, "down");
                             }}
                           >
                             <ArrowDownOutlined />
                           </button>
                         </div>
                         <span className="text-gray-700">
-                          Quiz: {quiz.quizId?.name} (After Chapter: {quiz.orderQuiz})
+                          Quiz: {quiz.quizId?.name} (After Chapter:{" "}
+                          {quiz.orderQuiz})
                         </span>
-
-                        <button
-                          className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200"
-                      
-                        >
-                          View Quiz
-                        </button>
+                        <Link to={quiz._id ? `/Dashbord/courses/${id}/edit/quiz/${quiz.quizId?._id}` : "#"}>
+                          <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200">
+                            View Quiz
+                          </button>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -236,6 +245,7 @@ export default function Chapters() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         chapterId={selectedChapter}
+        updateCapterData={updateChapterData}
       />
     </div>
   );

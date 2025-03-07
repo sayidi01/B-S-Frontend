@@ -1,4 +1,7 @@
 import APIClient from ".";
+import { IQuiz } from "../components/Admins/Course/Edit/Quiz/quiz.types";
+
+
 
 export default class ChapterAPIClient extends APIClient {
   async getAllChapterDataById(id: string) {

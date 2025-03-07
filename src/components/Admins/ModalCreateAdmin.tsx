@@ -32,6 +32,7 @@ export interface Admin {
   imageCourse?: string
   description: string
  
+ 
 }
 
 const ModalCreateAdmin: React.FC<ModalCreateAdminProps> = ({

@@ -21,6 +21,7 @@ const itemsPerPage = 8;
 
 const UploadPdfCourses: React.FC = () => {
   const [courseId, setCourseId] = useState<Admin[]>([]);
+ 
 
   const { isConnected, titleCourses, setTitleCourses } = useUserContext();
   const navigate = useNavigate();
@@ -37,6 +38,8 @@ const UploadPdfCourses: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+ 
 
   // GET COUSRSES TITLE
 

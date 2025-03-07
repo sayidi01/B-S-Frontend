@@ -1,7 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback} from "react";
 import { useUserContext } from "../../../config/UserContext";
 import toast from "react-hot-toast";
-
 
 
 
@@ -14,6 +13,7 @@ export default function UseFetchAddQuizTochapter() {
             const response = await chapterApiClient.addQuizToChpter(courseID, chapterID, quizID, orderQuiz) ;
             console.log(response)
             toast.success("Quiz added to chapter successfuly")
+            return response 
         } catch (error) {
             console.log(error, "error")
             toast.error("Failed to add quiz to chapter")

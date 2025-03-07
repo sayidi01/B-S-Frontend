@@ -75,7 +75,7 @@ export default function Quiz() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500 flex items-center">
                       <Clock size={16} className="mr-2" />
-                      {new Date(quiz.createdAt).toLocaleDateString()}
+                      {new Date(quiz.createdAt).toLocaleDateString("fr-FR")}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

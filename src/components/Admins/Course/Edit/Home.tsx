@@ -1,9 +1,11 @@
 import { Alert, Button, Spin, Typography } from "antd";
 import useFetchCourseData from "../../../../hooks/api/course/useFetchCourseData";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditCourse from '../../EditCourse';
 import { CloseOutlined, EditOutlined } from "@ant-design/icons";
+import { useUserContext } from "../../../../config/UserContext";
+import { useSetState } from "@mantine/hooks";
 
 
 const { Title } = Typography;
@@ -14,7 +16,13 @@ export default function Home() {
 
   const [isEditCourse, setIsEditCourse] = useState(false);
 
+  const [courseView, setcourseView] = useState(courseData)
+
   
+
+  useEffect(() => {
+    setcourseView(courseData)
+  },[courseData])
 
 
   if (error) {
@@ -29,7 +37,7 @@ export default function Home() {
   }
 
 
-  if (!courseData) {
+  if (!courseView) {
     return null;
   }
 
@@ -37,12 +45,14 @@ export default function Home() {
   const handleEditClick = () => {
     setIsEditCourse(!isEditCourse); 
   };
+console.log("here: ",courseView)
 
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '1rem' }}>
-        <Title>{courseData.title}</Title>
-        <Button
+       
+        <Title>{courseView.title}</Title>
+        <Button className="mb-3"
           type="primary"
           onClick={handleEditClick} 
         >
@@ -52,11 +62,11 @@ export default function Home() {
 
     
       {isEditCourse ? (
-        <EditCourse courseData={courseData} />  
+        <EditCourse courseView={courseView} />  
       ) : (
         <div
           dangerouslySetInnerHTML={{
-            __html: courseData.description
+            __html: courseView.description
           }}
         />
       )}

@@ -7,7 +7,7 @@ import type { UploadChangeParam, UploadFile } from "antd/es/upload/interface";
 import type { UploadProps } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useUserContext } from "../../config/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface ApiResponseCourseEdit {
   _id: string;
@@ -24,19 +24,23 @@ interface CourseData {
 }
 
 interface EditCourseProps {
-  courseData: CourseData;
+  courseView: CourseData;
 }
 
-const EditCourse: React.FC<EditCourseProps> = ({ courseData }) => {
-  const [formData, setFormData] = useState<CourseData>(courseData);
+const EditCourse: React.FC<EditCourseProps> = ({ courseView}) => {
+  const [formData, setFormData] = useState<CourseData>(courseView);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const { setTitleCourses } = useUserContext();
+
+  const {id} =useParams<{ id: string }>();
+
+  console.log('id', id)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    setFormData(courseData);
-  }, [courseData]);
+    setFormData(courseView);
+  }, [courseView]);
 
   const handleChangeEditTitleCourse = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,6 +74,10 @@ const EditCourse: React.FC<EditCourseProps> = ({ courseData }) => {
   };
 
   const handleSumbitEditTitle = useCallback(() => {
+
+      
+    
+
     if (!formData.title || !formData.description) {
       toast.error("Title and description are required");
       return;
@@ -83,7 +91,7 @@ const EditCourse: React.FC<EditCourseProps> = ({ courseData }) => {
     }
 
     axiosInstance
-      .put<ApiResponseCourseEdit>(`/course/${formData._id}`, formDataToSend, {
+      .put<ApiResponseCourseEdit>(`/course/${id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

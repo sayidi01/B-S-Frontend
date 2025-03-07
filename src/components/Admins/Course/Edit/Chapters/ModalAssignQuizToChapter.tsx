@@ -3,17 +3,20 @@ import { Modal, Button, Select } from "antd";
 import useFetchQuizzesByCourseData from "../../../../../hooks/api/course/useFetchQuizzesByCourseData";
 import { useParams } from "react-router-dom";
 import UseFetchAddQuizTochapter from "../../../../../hooks/api/chapter/UseFetchAddQuizToChapter";
+import { IChapter } from "../../../../../types/chapter";
 
 interface ModalAssignQuizToChapterProps {
   isOpen: boolean;
   onClose: () => void;
   chapterId: string | null;
+  updateCapterData: (chapterId: string, newData: IChapter) => void;
 }
 
 const ModalAssignQuizToChapter: React.FC<ModalAssignQuizToChapterProps> = ({
   isOpen,
   onClose,
   chapterId,
+  updateCapterData
 }) => {
   const { id: courseID } = useParams();
   const { courseData } = useFetchQuizzesByCourseData(courseID as string);
@@ -43,8 +46,10 @@ const ModalAssignQuizToChapter: React.FC<ModalAssignQuizToChapterProps> = ({
     const orderQuiz = quizzes.length; 
 
     try {
-      await addQuizTocChapter(courseID as string,chapterId, selectedQuiz,  orderQuiz);
-      console.log("Quiz added to chapter successfuly")
+     const response =  await addQuizTocChapter(courseID as string,chapterId, selectedQuiz,  orderQuiz);
+
+     console.log("Quiz added to chapter successfuly")
+     updateCapterData(chapterId, (response as IChapter).data.quiz);
       onClose();
     } catch (error) {
       console.log(error);
