@@ -1,23 +1,19 @@
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Link,
-  NavLink,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import IconFolder from "../Icon/IconFolder";
+import IconFile from "../Icon/IconFile";
+
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { toggleSidebar } from "../../store/themeConfigSlice";
 import AnimateHeight from "react-animate-height";
 import { IRootState } from "../../store";
 import { useState, useEffect } from "react";
 
 import IconCaretDown from "../Icon/IconCaretDown";
+import IconCaretsDown from "../Icon/IconCaretsDown";
 
 import useFetchCourseData from "../../hooks/api/course/useFetchCourseData";
 import { ILesson } from "../Admins/Course/Edit/Lessons/TypesLessons";
-import IconCaretsDown from "../Icon/IconCaretsDown";
 
 const SidebarCoursesViews = () => {
   const { id } = useParams();
@@ -34,11 +30,21 @@ const SidebarCoursesViews = () => {
   );
   const location = useLocation();
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+
   const toggleMenu = (value: string) => {
     setCurrentMenu((oldValue) => {
       return oldValue === value ? "" : value;
     });
+  };
+
+  const toggleLesson = (lessonId: string) => {
+    setOpenLesson((oldValue) => {
+      return oldValue === lessonId ? "" : lessonId;
+    });
+  };
+
+  const handleBackToCourses = () => {
+    navigate("/Dashbord/courses");
   };
 
   useEffect(() => {
@@ -67,16 +73,6 @@ const SidebarCoursesViews = () => {
     }
   }, [location]);
 
-  const toggleLesson = (lessonId: string) => {
-    setOpenLesson((oldValue) => {
-      return oldValue === lessonId ? "" : lessonId;
-    });
-  };
-
-  const handleBackToCourses = () => {
-    navigate("/Dashbord/courses");
-  };
-
   return (
     <div className={semidark ? "dark" : ""}>
       <nav
@@ -86,46 +82,62 @@ const SidebarCoursesViews = () => {
       >
         <div className="bg-white dark:bg-black h-full">
           <PerfectScrollbar className="h-[calc(100vh-80px)] relative">
-            <ul className="relative font-semibold space-y-0.5 p-4 py-0">
-            <button
-              type="button"
-              className="collapse-icon w-8 h-8 rounded-full flex items-center hover:bg-gray-500/10 dark:hover:bg-dark-light/10 dark:text-white-light transition duration-300 rtl:rotate-180"
-             onClick={handleBackToCourses}
-            >
-              <IconCaretsDown className="m-auto rotate-90" />
-            </button>
-                
+            <ul className="font-semibold p-4 py-0">
+              <li className="py-[5px]">
+                <button
+                  type="button"
+                  className="collapse-icon w-8 h-8 rounded-full flex items-center hover:bg-gray-500/10 dark:hover:bg-dark-light/10 dark:text-white-light transition duration-300 rtl:rotate-180"
+                  onClick={handleBackToCourses}
+                >
+                  <IconCaretsDown className="m-auto rotate-90" />
+                </button>
+              </li>
               {courseData?.chapters?.map((chapter, index) => (
-                <li key={chapter._id} className="menu nav-item">
+                <li key={chapter._id} className="py-[5px]">
                   <Link to={`/Dashbord/courses/${id}/chapter/${chapter._id}`}>
-                    <button
-                      type="button"
-                      className={`nav-link group w-full ${
-                        currentMenu === chapter._id ? "active" : ""
-                      }`}
-                      onClick={() => toggleMenu(chapter._id)}
-                    >
+                  <button
+                    type="button"
+                    className={`w-full text-left flex items-center justify-between ${
+                      currentMenu === chapter._id ? "active" : ""
+                    }`}
+                    onClick={() => toggleMenu(chapter._id)}
+                  >
+                    <IconFolder className="w-5 h-5 mr-2 text-blue-700" />
+                    <span>
                       Chapter {index + 1} : {chapter.title}
-                    </button>
+                    </span>
+                    <IconCaretDown
+                      className={`w-4 h-4 transition-transform ${
+                        currentMenu === chapter._id ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
                   </Link>
-
                   <AnimateHeight
                     duration={300}
                     height={currentMenu === chapter._id ? "auto" : 0}
                   >
-                    <ul className="sub-menu">
+                    <ul className="ltr:pl-14 rtl:pr-14">
                       {chapter.lessons?.map((lesson: ILesson) => (
-                        <li key={lesson._id} className="nav-item">
+                        <li key={lesson._id} className="py-[5px]">
                           <Link
                             to={`/Dashbord/courses/${id}/lesson/${lesson._id}`}
                           >
-                            <button
-                              type="button"
-                              className="nav-link w-full text-left"
-                              onClick={() => toggleLesson(lesson._id)}
-                            >
+                          <button
+                            type="button"
+                            className="w-full text-left flex items-center justify-between"
+                            onClick={() => toggleLesson(lesson._id)}
+                          >
+                            <IconFile className="w-6 h-6 mr-2 text-purple-600" />
+                            <span > 
                               Lesson {index + 1} : {lesson.title}
-                            </button>
+                            </span>
+                            <IconCaretDown
+                              className={`w-4 h-4 transition-transform ${
+                                openLesson === lesson._id ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
                           </Link>
                           <AnimateHeight
                             duration={300}
@@ -134,22 +146,24 @@ const SidebarCoursesViews = () => {
                             {lesson.quizId && (
                               <Link
                                 to={`/Dashbord/courses/${id}/quiz/${lesson.quizId._id}`}
-                                className="nav-link ml-4"
+                                className="nav-link ml-4 flex items-center "
                               >
-                                Quiz {index + 1} :{lesson.quizId.name}
+                                <IconFile className="w-3 h-3 mr-2 text-purple-600" />
+                                Quiz {index + 1} : {lesson.quizId.name}
                               </Link>
                             )}
                           </AnimateHeight>
                         </li>
                       ))}
                       {chapter.quizzes?.map((quiz) => (
-                        <li key={quiz._id} className="nav-item">
+                        <li key={quiz._id} className="py-[5px]">
                           {quiz.quizId && (
                             <Link
                               to={`/Dashbord/courses/${id}/quiz/${quiz.quizId._id}`}
-                              className="nav-link"
+                              className="nav-link flex items-center" 
                             >
-                              Quiz {index + 1} : {quiz.quizId.name}
+                              <IconFile className="w-4 h-4 mr-2 text-purple-600 " />
+                             <span style={{fontSize: 11}}>  Quiz {index + 1} : {quiz.quizId.name} </span>
                             </Link>
                           )}
                         </li>

@@ -191,7 +191,7 @@ const UploadPdfCourses: React.FC = () => {
                   overflow: "hidden",
                 }}
                 dangerouslySetInnerHTML={{
-                  __html: course.description.slice(0, 77) + "...",
+                  __html: course.description.slice(0, 250) + "...",
                 }}
                 onBlur={(e) => {
                   console.log("Element lost focus");

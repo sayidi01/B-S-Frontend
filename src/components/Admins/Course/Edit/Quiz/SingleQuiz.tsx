@@ -36,6 +36,8 @@ function SingleQuiz() {
         <Card key={index} title={`Question ${index + 1}`} style={{ marginBottom: '20px' }} >
          <Text strong style={{ display: 'block' }}> Type:  {question.type}</Text>
          <Text strong style={{ display: 'block' }}> Question : {question.question}</Text>
+         <Text strong style={{ display: 'block' }}> <span style={{ color: 'green' }}>✅ (Correct Answer)</span> :  {question.correctAnswer}</Text>
+       
           <Radio.Group
             style={{ marginTop: '10px' }}
             disabled 

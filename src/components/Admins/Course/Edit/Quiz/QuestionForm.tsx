@@ -100,11 +100,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
       {/* Sélection du type de question */}
       <div className="mb-4">
-        <label className="block font-medium mb-2">Select Question Type:</label>
+        <label htmlFor="questionType" className="block font-medium mb-2">Select Question Type:</label>
         <select
-          value={currentQuestion.type}
+          id="questionType"
+          value={currentQuestion.type }
           onChange={(e) => updateType(e.target.value)}
-          className="border p-2 w-full"
+          className="border p-2 max-w-fit"
         >
           <option disabled value="">
             -- Select Question Type --
