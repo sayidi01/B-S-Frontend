@@ -7,9 +7,7 @@ import { useEffect, useState } from "react";
 import useFetchSingleLesson from "../../../../../hooks/api/Lessons/useFetchSingleLesson";
 import useFetchChapterData from "../../../../../hooks/api/chapter/UseFetchChapter";
 import useFetchLessonData from "../../../../../hooks/api/Lessons/useFetchLessonData";
-
-
-
+import toast from "react-hot-toast";
 
 function EditLesson() {
   const { lessonID, id } = useParams();
@@ -23,29 +21,31 @@ function EditLesson() {
     error: chaptersError,
   } = useFetchChapterData(id);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const {  updateLesson} = useFetchLessonData(id as string)
+  const { updateLesson } = useFetchLessonData(id as string);
 
   const [formState, setFormState] = useState(lessonData);
 
-  console.log(formState)
+  console.log(formState);
 
   useEffect(() => {
     setFormState(lessonData);
   }, [lessonData]);
 
-  if (isLoading || isLoadingChapters) return <Spin />
+  if (isLoading || isLoadingChapters) return <Spin />;
   if (error || chaptersError)
     return "Error fetching lesson data, reason".concat(
       error ?? chaptersError ?? ""
     );
   if (!lessonData || !chaptersData || !formState) return null;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
-  
+
   const handleSelectChange = (value: string) => {
     setFormState({ ...formState, chapterId: value });
   };
@@ -58,17 +58,16 @@ function EditLesson() {
     try {
       const updatedLesson = {
         ...formState,
-        lessonId: lessonID, 
-        courseId: id, 
+        lessonId: lessonID,
+        courseId: id,
       };
-  
+
       updateLesson(lessonID as string, updatedLesson);
       navigate(`/Dashbord/courses/${id}/edit/lessons`);
     } catch (err) {
-      console.error("Error updating lesson:", err);
+      toast.error("Error updating lesson");
     }
   };
-
 
   return (
     <div>
@@ -84,11 +83,11 @@ function EditLesson() {
       </Typography>
 
       <div className="mb-3 mt-3">
-        <label htmlFor="title" className="form-label" >
+        <label htmlFor="title" className="form-label">
           Title
         </label>
         <Input
-        onChange={handleChange}
+          onChange={handleChange}
           value={formState.title}
           id="title"
           name="title"
@@ -119,7 +118,7 @@ function EditLesson() {
           Description
         </label>
         <TextArea
-        onChange={handleChange}
+          onChange={handleChange}
           value={formState.description}
           id="description"
           name="description"
@@ -130,7 +129,7 @@ function EditLesson() {
 
       <Editor
         apiKey="hs596mfw1xm1lq4bvoeyrjzc5tkl2mhsax8ecy6oi8guqxpd"
-       onEditorChange={handleEditorChange}
+        onEditorChange={handleEditorChange}
         value={formState.content}
         init={{
           height: 900,
@@ -192,7 +191,11 @@ function EditLesson() {
         }}
       />
 
-      <Button type="primary" style={{ marginTop: "20px" }} onClick={handleClick}>
+      <Button
+        type="primary"
+        style={{ marginTop: "20px" }}
+        onClick={handleClick}
+      >
         Save
       </Button>
 

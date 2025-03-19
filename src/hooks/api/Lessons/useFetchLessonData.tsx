@@ -103,6 +103,7 @@ export default function useFetchLessonData(courseId: string) {
         .updateLesson(lessonId, data)
         .then((response) => {
           console.log(response, "lesson Update");
+          console.log("Response data:", response.data);
           setLessonData((prev) =>
             prev.map((lesson) =>
               lesson._id === lessonId ? { ...lesson, ...data } : lesson
@@ -110,6 +111,7 @@ export default function useFetchLessonData(courseId: string) {
           );
           setError(null);
           toast.success("Lesson Updated Successfully");
+          return response.data.data;
         })
         .catch((err) => {
           console.log("Error updating Lesoon : ", err);

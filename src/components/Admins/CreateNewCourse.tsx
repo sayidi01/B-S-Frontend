@@ -132,6 +132,8 @@ const CreateNewCourse: React.FC = () => {
         </Upload>
       </div>
       <div className="mt-5">
+      <div id="toolbar-container" style={{ position: "fixed", top: 0, left: 0, width: "100%", zIndex: 1000, background: "white", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }}></div>
+
         <Editor
           apiKey="hs596mfw1xm1lq4bvoeyrjzc5tkl2mhsax8ecy6oi8guqxpd"
           value={formCourse.description}
@@ -193,8 +195,11 @@ const CreateNewCourse: React.FC = () => {
               "Times New Roman=Times New Roman, serif; Montserrat=Montserrat, sans-serif;",
             font_family_formats:
               "Times New Roman=Times New Roman, serif; Montserrat=Montserrat, sans-serif;",
+            
+
           }}
         />
+        
       </div>
 
       <Button

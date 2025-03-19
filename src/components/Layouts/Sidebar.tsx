@@ -38,7 +38,9 @@ const Sidebar = () => {
   };
 
   // Changes SideBar View
-  const isSingleCoursePage = /^\/Dashbord\/courses\/[^/]+(\/.*)?$/.test(location.pathname);
+  const isSingleCoursePage = /^\/Dashbord\/courses\/[^/]+(\/.*)?$/.test(
+    location.pathname
+  );
 
   useEffect(() => {
     const selector = document.querySelector(
@@ -66,7 +68,9 @@ const Sidebar = () => {
     }
   }, [location]);
 
-  return isSingleCoursePage ? <SidebarCoursesViews /> :   (
+  return isSingleCoursePage ? (
+    <SidebarCoursesViews />
+  ) : (
     <div className={semidark ? "dark" : ""}>
       <nav
         className={`sidebar fixed min-h-screen h-full top-0 bottom-0 w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] z-50 transition-all duration-300 ${
@@ -92,21 +96,24 @@ const Sidebar = () => {
           </div>
 
           <Link
-            to="/" 
+            to="/"
             className={`${
               currentMenu === "Dashborad" ? "active" : ""
             } nav-link group w-full`}
           >
             <button
               type="button"
-              onClick={() => toggleMenu("Dashborad")} 
-              className="w-full flex items-center" 
+              onClick={() => toggleMenu("Dashborad")}
+              className="w-full flex items-center"
             >
               <div className="flex items-center">
-                <IconMenuDashboard className="group-hover:!text-primary shrink-0 w-5 h-5 ml-7 mb-2 " />
+                <IconMenuDashboard className="group-hover:!text-primary shrink-0 w-5 h-5 ml-7 mb-1 " />
                 <span
-                  style={{ fontSize: 17, fontWeight: "bold" }}
-                  className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark mb-2"
+                  style={{
+                    fontSize: 15, 
+                    fontFamily: "sans-serif", 
+                  }}
+                  className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
                 >
                   {t("Dashboard")}
                 </span>
@@ -119,158 +126,102 @@ const Sidebar = () => {
               ></div>
             </button>
           </Link>
+
           <PerfectScrollbar className="h-[calc(100vh-80px)] relative">
             <ul className="relative font-semibold space-y-0.5 p-4 py-0">
-              <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
-                <IconMinus className="w-4 h-5 flex-none hidden" />
-                <span>{t("Admins")}</span>
-              </h2>
-
-              <li className="menu nav-item">
-                <button
-                  type="button"
-                  className={`${
-                    currentMenu === "Admins" ? "active" : ""
-                  } nav-link group w-full`}
-                  onClick={() => toggleMenu("Admins")}
-                >
-                  <div className="flex items-center">
-                    <IconMenuUsers className="group-hover:!text-primary shrink-0 w-7 h-7" />
-                    <span
-                      style={{ fontSize: 15 }}
-                      className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
-                    >
-                      {t("Admins")}
-                    </span>
-                  </div>
-
-                  <div
-                    className={
-                      currentMenu !== "Students"
-                        ? "rtl:rotate-90 -rotate-90"
-                        : ""
-                    }
+              <li className="menu nav-item mt-3">
+                <NavLink to="/Dashbord/ListAdmin">
+                  <button
+                    type="button"
+                    className={`${
+                      currentMenu === "Admins" ? "active" : ""
+                    } nav-link group w-full`}
+                    onClick={() => toggleMenu("Admins")}
                   >
-                    <IconCaretDown />
-                  </div>
-                </button>
+                    <div className="flex items-center">
+                      <IconMenuUsers className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                      <span
+                        style={{ fontSize: 15 }}
+                        className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                      >
+                        {t("Admins")}
+                      </span>
+                    </div>
 
-                <AnimateHeight
-                  duration={300}
-                  height={currentMenu === "Admins" ? "auto" : 0}
-                >
-                  <ul className="sub-menu text-gray-500">
-                    <li>
-                      <NavLink to="/Dashbord/ListAdmin">{t("List")}</NavLink>
-                    </li>
-                    <li>
-                      <NavLink to="/Dashbord/Admin">
-                        {t("account_settings")}
-                      </NavLink>
-                    </li>
-                  </ul>
-                </AnimateHeight>
+                    <div
+                      className={
+                        currentMenu !== "Students"
+                          ? "rtl:rotate-90 -rotate-90"
+                          : ""
+                      }
+                    ></div>
+                  </button>
+                </NavLink>
               </li>
 
-              <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
-                <IconMinus className="w-4 h-5 flex-none hidden" />
-                <span>{t("teachers")}</span>
-              </h2>
-
-              <li className="menu nav-item">
-                <button
-                  type="button"
-                  className={`${
-                    currentMenu === "Teachers" ? "active" : ""
-                  } nav-link group w-full`}
-                  onClick={() => toggleMenu("Teachers")}
-                >
-                  <div className="flex items-center">
-                    <IconUser className="group-hover:!text-primary shrink-0 w-7 h-7" />
-                    <span
-                      style={{ fontSize: 15 }}
-                      className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
-                    >
-                      {t("Teachers")}
-                    </span>
-                  </div>
-
-                  <div
-                    className={
-                      currentMenu !== "Teachers"
-                        ? "rtl:rotate-90 -rotate-90"
-                        : ""
-                    }
+              <li className="menu nav-item mt-3">
+                <NavLink to="/Dashbord/ListTeacher">
+                  <button
+                    type="button"
+                    className={`${
+                      currentMenu === "Teachers" ? "active" : ""
+                    } nav-link group w-full`}
+                    onClick={() => toggleMenu("Teachers")}
                   >
-                    <IconCaretDown />
-                  </div>
-                </button>
+                    <div className="flex items-center">
+                      <IconUser className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                      <span
+                        style={{ fontSize: 15 }}
+                        className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                      >
+                        {t("Teachers")}
+                      </span>
+                    </div>
 
-                <AnimateHeight
-                  duration={300}
-                  height={currentMenu === "Teachers" ? "auto" : 0}
-                >
-                  <ul className="sub-menu text-gray-500">
-                    <li>
-                      <NavLink to="/Dashbord/ListTeacher">{t("List")}</NavLink>
-                    </li>
-                  </ul>
-                </AnimateHeight>
+                    <div
+                      className={
+                        currentMenu !== "Teachers"
+                          ? "rtl:rotate-90 -rotate-90"
+                          : ""
+                      }
+                    ></div>
+                  </button>
+                </NavLink>
               </li>
 
-              <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
-                <IconMinus className="w-4 h-5 flex-none hidden" />
-                <span>{t("Students")}</span>
-              </h2>
-
-              <li className="menu nav-item">
-                <button
-                  type="button"
-                  className={`${
-                    currentMenu === "Students" ? "active" : ""
-                  } nav-link group w-full`}
-                  onClick={() => toggleMenu("Students")}
-                >
-                  <div className="flex items-center">
-                    <IconUserPlus className="group-hover:!text-primary shrink-0 w-7 h-7" />
-                    <span
-                      style={{ fontSize: 15 }}
-                      className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
-                    >
-                      {t("Students")}
-                    </span>
-                  </div>
-
-                  <div
-                    className={
-                      currentMenu !== "Students"
-                        ? "rtl:rotate-90 -rotate-90"
-                        : ""
-                    }
+              <li className="menu nav-item mt-3">
+                <NavLink to="/Dashbord/ListStudent">
+                  <button
+                    type="button"
+                    className={`${
+                      currentMenu === "Students" ? "active" : ""
+                    } nav-link group w-full`}
+                    onClick={() => toggleMenu("Students")}
                   >
-                    <IconCaretDown />
-                  </div>
-                </button>
+                    <div className="flex items-center">
+                      <IconUserPlus className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                      <span
+                        style={{ fontSize: 15 }}
+                        className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                      >
+                        {t("Students")}
+                      </span>
+                    </div>
 
-                <AnimateHeight
-                  duration={300}
-                  height={currentMenu === "Students" ? "auto" : 0}
-                >
-                  <ul className="sub-menu text-gray-500">
-                    <li>
-                      <NavLink to="/Dashbord/ListStudent">{t("List")}</NavLink>
-                    </li>
-                  </ul>
-                </AnimateHeight>
+                    <div
+                      className={
+                        currentMenu !== "Students"
+                          ? "rtl:rotate-90 -rotate-90"
+                          : ""
+                      }
+                    ></div>
+                  </button>
+                </NavLink>
               </li>
 
               <li className="menu nav-item"></li>
 
-              <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
-                <IconMinus className="w-4 h-5 flex-none hidden" />
-                <span>{t("Courses Overview")}</span>
-              </h2>
-              <li className="menu nav-item">
+              <li className="menu nav-item mt-3">
                 <button
                   type="button"
                   className={`${
@@ -278,16 +229,16 @@ const Sidebar = () => {
                   } nav-link group w-full`}
                   onClick={() => toggleMenu("Courses")}
                 >
-                   <NavLink to="/Dashbord/courses">
-                  <div className="flex items-center">
-                    <IconMenuPages className="group-hover:!text-primary shrink-0 w-7 h-7" />
-                    <span
-                      style={{ fontSize: 15 }}
-                      className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
-                    >
-                      {t("Courses")}
-                    </span>
-                  </div>
+                  <NavLink to="/Dashbord/courses">
+                    <div className="flex items-center">
+                      <IconMenuPages className="group-hover:!text-primary shrink-0 w-7 h-7" />
+                      <span
+                        style={{ fontSize: 15 }}
+                        className="ltr:pl-3 rtl:pr-3 leading-none text-black dark:text-[#506690] dark:group-hover:text-white-dark"
+                      >
+                        {t("Courses")}
+                      </span>
+                    </div>
                   </NavLink>
                   <div
                     className={
@@ -299,9 +250,6 @@ const Sidebar = () => {
                     {/* <IconCaretDown /> */}
                   </div>
                 </button>
-
-               
-              
               </li>
 
               {/* <li className="menu nav-item"></li>
@@ -389,8 +337,6 @@ const Sidebar = () => {
                   height={currentMenu === "Sites Web" ? "auto" : 0}
                 ></AnimateHeight>
               </li> */}
-
-             
             </ul>
           </PerfectScrollbar>
         </div>

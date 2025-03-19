@@ -23,10 +23,7 @@ function SingleLesson() {
 
   return (
     <div>
-     <p style={{fontWeight: "bold", fontSize: 20, marginTop: '2rem'}}>Title :  {lessonData.title}</p>
-      <p  style={{fontWeight: "bold", fontSize: 20, marginTop: '2rem'}}> Description:</p>
-      <p style={{marginTop: '1rem'}}> {lessonData.description}</p>
-      <p  style={{fontWeight: "bold", fontSize: 20, marginTop: '2rem'}}>Content:</p>
+     
       <iframe
         srcDoc={lessonData.content} 
         style={{

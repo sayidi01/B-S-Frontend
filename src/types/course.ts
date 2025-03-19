@@ -14,6 +14,12 @@ export interface ICourse {
   description: string
   content?: string
   chapters: IChapter[]
+  courseData: {
+    _id: string;
+    title: string;
+    imageCourse: string
+    description: string
+  }
  
 
 }

@@ -49,11 +49,10 @@ console.log("here: ",courseView)
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: "start", padding: "1rem" }}>
        
-        <Title>{courseView.title}</Title>
-        <Button className="mb-3"
-          type="primary"
+     
+        <Button className="text-secondary hover:text-secondary transition-all duration-700"
           onClick={handleEditClick} 
         >
          {isEditCourse ? <CloseOutlined /> : <EditOutlined />} 
@@ -62,11 +61,11 @@ console.log("here: ",courseView)
 
     
       {isEditCourse ? (
-        <EditCourse courseView={courseView} />  
+        <EditCourse  courseView={{ ...courseView.courseData, title: courseView.courseData.title,imageCourse: courseView.courseData.imageCourse, description: courseView.courseData.description }} />  
       ) : (
         <div
           dangerouslySetInnerHTML={{
-            __html: courseView.description
+            __html: courseView.courseData.description
           }}
         />
       )}

@@ -40,7 +40,7 @@ function ListTeacher() {
     setCurrentPage(page);
   };
 
-  console.log(listTeachers);
+ 
 
   const showModal = () => {
     setIsModalOpen(true);

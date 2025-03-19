@@ -21,7 +21,6 @@ const itemsPerPage = 8;
 
 const UploadPdfCourses: React.FC = () => {
   const [courseId, setCourseId] = useState<Admin[]>([]);
- 
 
   const { isConnected, titleCourses, setTitleCourses } = useUserContext();
   const navigate = useNavigate();
@@ -38,8 +37,6 @@ const UploadPdfCourses: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
- 
 
   // GET COUSRSES TITLE
 
@@ -191,7 +188,7 @@ const UploadPdfCourses: React.FC = () => {
                   overflow: "hidden",
                 }}
                 dangerouslySetInnerHTML={{
-                  __html: course.description.slice(0, 250) + "...",
+                  __html: course.description.slice(0, 100) + "...",
                 }}
                 onBlur={(e) => {
                   console.log("Element lost focus");
@@ -208,7 +205,6 @@ const UploadPdfCourses: React.FC = () => {
                       color: "#fff",
                       border: "none",
                       cursor: "pointer",
-                      marginLeft: "1rem",
                     }}
                   >
                     View Course

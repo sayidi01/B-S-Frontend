@@ -45,7 +45,7 @@ export class LessonAPIClient extends APIClient {
     lessonId: string,
     data: Partial<{ title: string; description: string; content: string; courseId: string; chapterId: string }>
   ) {
-    return await this.axiosInstance.put(`/lessons/${lessonId}`, data);
+    return await this.axiosInstance.put<IResponse>(`/lessons/${lessonId}`, data);
   }
 
   async addedQuizToLesson(lessonId: string, quizId: string) {

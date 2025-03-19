@@ -11,9 +11,9 @@ import { ILesson } from "./TypesLessons";
 export default function Lessons() {
   const { id } = useParams<{
     id: string;
-    chapterId: string;
-    lessonId: string;
+   
   }>();
+  
 
   const navigate = useNavigate();
 
@@ -28,6 +28,13 @@ export default function Lessons() {
 
   const [lessonResult, setLessonResult] = useState(lessonData);
 
+
+  useEffect(() => {
+    setLessonResult(lessonData);
+  }, [lessonData]);
+
+  
+
   const updateLessonData = (lessonID: string, newData: ILesson) => {
     setLessonResult((prev) => {
       const updatedLessons = prev.map((lesson) => {
@@ -39,30 +46,11 @@ export default function Lessons() {
       return updatedLessons;
     });
   };
-
-  useEffect(() => {
-    setLessonResult(lessonData);
-  }, [lessonData]);
-
-  useEffect(() => {
-    console.log("lessondata", lessonData);
-  }, [lessonData]);
+  
 
   const toggleLesson = (lessonId: string) => {
     setExpandedLesson(expandedLesson === lessonId ? null : lessonId);
   };
-
-  useEffect(() => {
-    console.log("lessondata", lessonData);
-  }, [lessonData]);
-
-  useEffect(() => {
-    if (!id) {
-      console.error("Course ID is missing in the URL");
-    } else {
-      console.log("Course ID:", id);
-    }
-  }, [id]);
 
   const menuItems = (lessonId: string) => [
     {

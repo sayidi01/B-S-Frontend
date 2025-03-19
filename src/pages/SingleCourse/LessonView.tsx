@@ -1,14 +1,21 @@
-import React from 'react'
+
 import useFetchSingleLesson from '../../hooks/api/Lessons/useFetchSingleLesson'
 import { useParams } from 'react-router-dom';
 import { Spin } from 'antd';
 
 
+
 function LessonView() {
+ 
 
   const { id, lessonID } = useParams();
 
+ 
+
   const {lessonData, isLoading, error} = useFetchSingleLesson(id as string, lessonID as string);
+
+
+ 
 
   
 
@@ -17,7 +24,7 @@ function LessonView() {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error} !</div>;
   }
 
   if (!lessonData) {
@@ -26,10 +33,7 @@ function LessonView() {
 
   return (
     <div>
-     <p style={{fontWeight: "bold", fontSize: 20, marginTop: '2rem'}}>Title :  {lessonData.title}</p>
-      <p  style={{fontWeight: "bold", fontSize: 20, marginTop: '2rem'}}> Description:</p>
-      <p style={{marginTop: '1rem'}}> {lessonData.description}</p>
-      <p  style={{fontWeight: "bold", fontSize: 20, marginTop: '2rem'}}>Content:</p>
+    
       <iframe
         title={`Lesson Content: ${lessonData.title}`}
         srcDoc={lessonData.content} 
