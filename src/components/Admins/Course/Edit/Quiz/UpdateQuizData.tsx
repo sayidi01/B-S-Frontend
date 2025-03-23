@@ -20,7 +20,7 @@ function UpdateQuizData() {
   const { updateQuiz, isLoading: isLoadingUpdatingQuiz } = UseFetchUpdateQuiz();
 
   const {
-    methods: { updateQuestion, addQuestion, removeQuestion },
+    methods: { updateQuestion, addQuestion, removeQuestion, updateQuizName },
     quiz,
   } = useManageQuiz(quizData);
 
@@ -38,6 +38,12 @@ function UpdateQuizData() {
 
     addQuestion(newQuestion);
   };
+
+  const handleQuizNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = e.target.value;
+    updateQuizName(newName); // Mettre à jour le nom du quiz dans l'état local
+  };
+  
 
   const handleUpdateQuizClick = useCallback(async () => {
     if (!quiz) return;
@@ -64,6 +70,7 @@ function UpdateQuizData() {
         id="name"
         name="name"
         value={quiz.name}
+        onChange={handleQuizNameChange}
         className="border p-2 w-full mb-4"
       />
 

@@ -4,11 +4,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import EditCourse from '../../EditCourse';
 import { CloseOutlined, EditOutlined } from "@ant-design/icons";
-import { useUserContext } from "../../../../config/UserContext";
-import { useSetState } from "@mantine/hooks";
 
-
-const { Title } = Typography;
 
 export default function Home() {
   const { id } = useParams();

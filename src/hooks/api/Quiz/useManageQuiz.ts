@@ -47,6 +47,8 @@ export default function useManageQuiz(initialQuizData: IQuiz | null) {
     setQuiz((prev) => (!prev ? null : { ...prev, name: newName }));
   };
 
+  
+
   return {
     quiz,
     methods: { addQuestion, updateQuestion, removeQuestion, updateQuizName },

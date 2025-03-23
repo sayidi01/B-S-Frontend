@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { ICourse } from "../../../types/course";
+import { ICourse } from '../../../types/course';
 import { useUserContext } from "../../../config/UserContext";
+
+
 
 export default function useFetchCourseData(courseID: string) {
   const { courseApiClient } = useUserContext();
@@ -8,6 +10,8 @@ export default function useFetchCourseData(courseID: string) {
   const [courseData, setCourseData] = useState<null | ICourse>(null);
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -25,7 +29,10 @@ export default function useFetchCourseData(courseID: string) {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [courseID]);
 
-  return { courseData, error, isLoading };
+
+ 
+
+  return { courseData, error, isLoading};
 }

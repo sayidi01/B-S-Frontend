@@ -16,6 +16,7 @@ import { Admin } from "./ModalCreateAdmin";
 import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
+import { EditOutlined } from '@ant-design/icons';
 
 const itemsPerPage = 8;
 
@@ -188,7 +189,7 @@ const UploadPdfCourses: React.FC = () => {
                   overflow: "hidden",
                 }}
                 dangerouslySetInnerHTML={{
-                  __html: course.description.slice(0, 100) + "...",
+                  __html: course?.description ? course.description.slice(0, 100) + "..." : "No description available",
                 }}
                 onBlur={(e) => {
                   console.log("Element lost focus");
@@ -239,7 +240,8 @@ const UploadPdfCourses: React.FC = () => {
                             gap: "5px",
                           }}
                         >
-                          Editor Text
+                          <EditOutlined style={{ fontSize: '16px' }} />
+                          Edit
                         </button>
                       </li>
                       <li>

@@ -5,14 +5,14 @@ import { toast } from "react-hot-toast";
 
 
 
+
 export default function useFetchLessonData(courseId: string) {
   const { lessonAPIClient } = useUserContext();
   const [lessonData, setLessonData] = useState<ILesson[]>([]);
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-
-
+ 
   const createLesson = useCallback(
     async (
       courseId: string,
@@ -106,12 +106,13 @@ export default function useFetchLessonData(courseId: string) {
           console.log("Response data:", response.data);
           setLessonData((prev) =>
             prev.map((lesson) =>
-              lesson._id === lessonId ? { ...lesson, ...data } : lesson
+              lesson._id === lessonId ? response.data.data.lesson : lesson
             )
           );
           setError(null);
           toast.success("Lesson Updated Successfully");
-          return response.data.data;
+          
+          
         })
         .catch((err) => {
           console.log("Error updating Lesoon : ", err);

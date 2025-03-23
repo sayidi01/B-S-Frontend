@@ -8,18 +8,24 @@ import { Alert } from "antd";
 
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import useFetchCourseData from "../../hooks/api/course/useFetchCourseData";
 
 
 
 type CourseContextType = {
   course: ICourse | null | false;
   setCourse: React.Dispatch<React.SetStateAction<ICourse | null | false>>;
+  courseDetails: ICourse | null;
+  setcourseDetails: React.Dispatch<React.SetStateAction<ICourse | null>>;
+ 
 };
 
 
 const CourseContext = createContext<CourseContextType>({
   course: null,
   setCourse: () => {},
+  courseDetails: null,
+  setcourseDetails: () => {},
 });
 
 
@@ -36,7 +42,14 @@ export const useCourse = () => {
 export default function SingleCourse() {
   const { id } = useParams();
   const [course, setCourse] = useState<ICourse | null | false>(null);
+  const { courseData } = useFetchCourseData(id as string);
+
+  const [courseDetails, setcourseDetails] = useState(courseData)
+
   
+  useEffect(() => {
+    setcourseDetails(courseData);
+  }, [courseData]);
 
   // GET SINGLE COURSE ID
 
@@ -64,10 +77,9 @@ export default function SingleCourse() {
 
   return (
     <div>
-     
-    
 
-      <CourseContext.Provider value={{ course, setCourse }}>
+      <CourseContext.Provider value={{ course, setCourse, courseDetails, setcourseDetails}}>
+       
       <Outlet />
     </CourseContext.Provider>
     </div>
