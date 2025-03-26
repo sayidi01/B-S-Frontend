@@ -3,11 +3,14 @@ import { useUserContext } from "../../../config/UserContext";
 import { IChapter } from "../../../types/chapter";
 import { toast } from "react-hot-toast";
 import UseFetchUpdateOrderQuiz from "./UseFetchUpdateOrderQuiz";
+import { useCourse } from "../../../components/Admins/SingleCourse";
+import { ICourse } from "../../../types/course";
 
 interface CreateChapterResponse {
   data: {
     chapter: IChapter;
   };
+  courseDetails?: ICourse; 
 }
 
 const moveItem = (arr: any[], fromIndex: number, toIndex: number) => {
@@ -18,6 +21,8 @@ const moveItem = (arr: any[], fromIndex: number, toIndex: number) => {
 
 export default function useFetchChapterData(id: string | undefined) {
   const { chapterApiClient } = useUserContext();
+ const { updateCourseDetails } = useCourse();
+
 
   const { updateOrderQuiz } = UseFetchUpdateOrderQuiz();
 
@@ -84,6 +89,7 @@ export default function useFetchChapterData(id: string | undefined) {
           courseId,
           title
         )) as CreateChapterResponse;
+        console.log(response)
 
         setChapterData((prev) => {
           if (prev) {
@@ -92,6 +98,9 @@ export default function useFetchChapterData(id: string | undefined) {
             return [response.data.chapter];
           }
         });
+        if (response.courseDetails) {
+          updateCourseDetails(response.courseDetails);
+        }
 
         setError(null);
       } catch (err) {
@@ -101,7 +110,7 @@ export default function useFetchChapterData(id: string | undefined) {
         setIsLoading(false);
       }
     },
-    [id, chapterApiClient]
+    [ chapterApiClient]
   );
 
   const deleteChapter = useCallback(

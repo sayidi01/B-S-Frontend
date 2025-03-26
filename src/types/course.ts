@@ -1,3 +1,4 @@
+import { ILesson } from "../components/Admins/Course/Edit/Lessons/TypesLessons";
 import { IQuiz } from "../components/Admins/Course/Edit/Quiz/quiz.types";
 import { IChapter } from "./chapter";
 
@@ -20,6 +21,7 @@ export interface ICourse {
     imageCourse: string
     description: string
   }
+ 
  
 
 }

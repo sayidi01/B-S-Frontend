@@ -72,6 +72,7 @@ export default function useFetchLessonData(courseId: string) {
             prev ? prev.filter((lesson) => lesson._id !== lessonId) : prev
           );
           setError(null);
+
           toast.success("Lesson deleted successfully");
         })
         .catch((err) => {

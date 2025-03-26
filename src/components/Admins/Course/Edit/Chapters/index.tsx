@@ -8,7 +8,8 @@ import UpdateChapterPopover from "./UpdateChapterPopover";
 import ModalAssignQuizToChapter from "./ModalAssignQuizToChapter";
 
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { IChapter } from "../../../../../types/chapter";
+import { IChapter } from '../../../../../types/chapter';
+import { useCourse } from "../../../SingleCourse";
 
 
 export default function Chapters() {
@@ -23,6 +24,7 @@ export default function Chapters() {
     updateChapter,
     handleMoveOrderQuiz,
   } = useFetchChapterData(id);
+   const { updateCourseDetails } = useCourse();
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
   const [newChapterTitle, setNewChapterTitle] = useState("");
 
@@ -79,6 +81,7 @@ export default function Chapters() {
       try {
         await createChapter(newChapterTitle, id as string);
         setNewChapterTitle("");
+        
         document.getElementById("popover")?.classList.add("hidden");
       } catch (err) {
         setError("Failed to create chapter. Please try again.");
