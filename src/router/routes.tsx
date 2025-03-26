@@ -9,7 +9,7 @@ import SingleChapter from "../components/Admins/Course/Edit/Chapters/SingleChapt
 import EditLesson from "../components/Admins/Course/Edit/Lessons/EditLesson";
 import SingleLesson from "../components/Admins/Course/Edit/Lessons/SingleLesson";
 import CreateNewCourse from "../components/Admins/CreateNewCourse";
-import CretaNewQuiz from "../components/Admins/Course/Edit/Quiz/CreateNewQuiz"
+import CreataNewQuiz from "../components/Admins/Course/Edit/Quiz/CreateNewQuiz"
 import SingleQuiz from "../components/Admins/Course/Edit/Quiz/SingleQuiz";
 import UpdateQuizData from "../components/Admins/Course/Edit/Quiz/UpdateQuizData";
 import CourseView from "../pages/SingleCourse";
@@ -80,91 +80,94 @@ const routes = [
       },
       {
         path: "newcourse",
-        element: <CreateNewCourse/>,
+        element: <CreateNewCourse />,
         layout: "default"
       },
       {
         path: "courses/:id",
         element: <SingleCourse />,
-        children: [
-          {
-            path: "",
-            element: <CourseView />,
-          },
-          {
-            path: "chapter/:chapterId",
-            element: <ChapterView />, 
-          },
-          {
-            path: "quiz/:quizID",
-            element: <QuizView />,
-          },
-          {
-            path: "lesson/:lessonID",
-            element: <LessonView />,
-          },
-        ]
-      },
-      {
-        path: "courses/:id/edit",
-        element: <CourseTextEditor />,
         layout: "default",
         children: [
           {
             path: "",
-            element: <Home />,
+            element: <CourseView />,
             layout: "default",
           },
           {
-            path: "chapters",
-            element: <Chapters />,
+            path: "edit",
+            element: <CourseTextEditor />,
             layout: "default",
             children: [
               {
-                path: ":chapterId",
-                element: <SingleChapter />,
+                path: "",
+                element: <Home />,
                 layout: "default",
+              },
+              {
+                path: "chapters",
+                element: <Chapters />,
+                layout: "default",
+                children: [
+                  {
+                    path: ":chapterId",
+                    element: <SingleChapter />,
+                    layout: "default",
+                  },
+                ],
+              },
+              {
+                path: "lessons",
+                element: <Lessons />,
+                layout: "default",
+              },
+              {
+                path: "lessons/:lessonID",
+                element: <EditLesson />,
+                layout: "default",
+              },
+              {
+                path: "lesson/:lessonID",
+                element: <SingleLesson />,
+                layout: "default",
+              },
+              {
+                path: "quiz",
+                element: <Quiz />,
+                layout: "default",
+              },
+              {
+                path: "create-quiz",
+                element: <CreataNewQuiz />,
+                layout: "default",
+              },
+              {
+                path: "quiz/:quizID",
+                element: <SingleQuiz />,
+                layout: "default"
+              },
+              {
+                path: "quizzes/:quizID",
+                element: <UpdateQuizData />,
+                layout: "default"
               },
             ],
           },
-
           {
-            path: "lessons",
-            element: <Lessons />,
-            layout: "default",
-          },
-          {
-            path: "lessons/:lessonID",
-            element: <EditLesson />,
-            layout: "default",
-          },
-          {
-            path: "lesson/:lessonID",
-            element: <SingleLesson />,
-            layout: "default",
-          },
-
-          {
-            path: "quiz",
-            element: <Quiz />,
-            layout: "default",
-          },
-          {
-            path: "create-quiz",
-            element: <CretaNewQuiz />,
+            path: "chapter/:chapterId",
+            element: <ChapterView />,
             layout: "default",
           },
           {
             path: "quiz/:quizID",
-            element: <SingleQuiz/>,
-            layout: "default"
+            element: <QuizView />,
+            layout: "default",
           },
           {
-            path: "quizzes/:quizID",
-            element: <UpdateQuizData/>,
-            layout: "default"
+            path: "lesson/:lessonID",
+            element: <LessonView />,
+            layout: "default",
           },
-        ],
+        ]
       },
       {
         path: "chat",

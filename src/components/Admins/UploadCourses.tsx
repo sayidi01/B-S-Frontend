@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
 import { EditOutlined } from '@ant-design/icons';
+import { useCourse } from "./SingleCourse";
 
 const itemsPerPage = 8;
 
@@ -26,7 +27,6 @@ const UploadPdfCourses: React.FC = () => {
   const { isConnected, titleCourses, setTitleCourses } = useUserContext();
   const navigate = useNavigate();
 
-  console.log(courseId);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -61,7 +61,6 @@ const UploadPdfCourses: React.FC = () => {
   // GET ONE COURSE BY ID
 
   useEffect(() => {
-    console.log("Course ID:", courseId);
     if (courseId && courseId.length > 0) {
       axiosInstance
         .get(`/course/${courseId}`)
@@ -81,7 +80,6 @@ const UploadPdfCourses: React.FC = () => {
       console.error("L'identifiant cours est requis.");
       return;
     }
-    console.log("Suppression cours avec l'ID:", coursepdfId);
     axiosInstance
       .delete(`/course/${coursepdfId}`)
       .then((data) => {
@@ -229,9 +227,7 @@ const UploadPdfCourses: React.FC = () => {
                       <li>
                         <button
                           onClick={() =>
-                            navigate(`/Dashbord/courses/${course._id}/edit`, {
-                              state: { course },
-                            })
+                            navigate(`/Dashbord/courses/${course._id}/edit`)
                           }
                           type="button"
                           style={{

@@ -9,16 +9,14 @@ import { Tab, TabGroup, TabList, TabPanels } from "@headlessui/react";
 import { editCourseTabs } from "./utils";
 
 function CourseTextEditor() {
-  const [currentCourse, setCurrentCourse] = useState<ICourse | null>(null);
-  const [editorText, setEditorText] = useState("");
-
-  const navigate = useNavigate();
+ 
 
   const params = useParams();
   const { courseApiClient } = useUserContext();
+ 
 
-  const { id, chapterId } = params;
-  console.log("params", params);
+  const { id } = params;
+  
 
   useEffect(() => {
     const fetchingCourse = async () => {
@@ -27,32 +25,13 @@ function CourseTextEditor() {
           params.id
         )) as ICourse;
         console.log("response", response);
-        setCurrentCourse(response);
-        setEditorText(response.content ?? "");
       }
     };
 
     fetchingCourse();
   }, []);
 
-  const saveTextEditor = useCallback(async () => {
-    if (!currentCourse) return;
-    try {
-      const response = await courseApiClient.updateCourseContent(
-        currentCourse._id,
-        editorText
-      );
-      console.log("sdsdf", response);
-
-      toast.success("Course content is saved correctly.");
-      navigate("/Dashbord/courses");
-    } catch (error) {
-      console.log("error", error);
-      toast.error("Error saving content, try again later!");
-    }
-  }, [editorText, currentCourse]);
-
-  if (!currentCourse) return <LoadingOverlay />;
+  
 
   return (
     <div>

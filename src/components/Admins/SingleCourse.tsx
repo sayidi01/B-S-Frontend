@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState,  createContext  } from "react";
+import React, { useContext, useEffect, useState,  createContext, useMemo  } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import axiosInstance from "../../config/Api";
 import { ICourse } from "../../types/course";
@@ -9,6 +9,7 @@ import { Alert } from "antd";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import useFetchCourseData from "../../hooks/api/course/useFetchCourseData";
+import SidebarCoursesViews from "../Layouts/SideBarCoursesViews";
 
 
 
@@ -17,6 +18,7 @@ type CourseContextType = {
   setCourse: React.Dispatch<React.SetStateAction<ICourse | null | false>>;
   courseDetails: ICourse | null;
   setcourseDetails: React.Dispatch<React.SetStateAction<ICourse | null>>;
+  updateCourseDetails: (newDetails: ICourse) => void;
  
 };
 
@@ -26,6 +28,7 @@ const CourseContext = createContext<CourseContextType>({
   setCourse: () => {},
   courseDetails: null,
   setcourseDetails: () => {},
+  updateCourseDetails: () => {},
 });
 
 
@@ -48,8 +51,12 @@ export default function SingleCourse() {
 
   
   useEffect(() => {
-    setcourseDetails(courseData);
+    if (courseData) {
+      setcourseDetails(courseData);
+    }
   }, [courseData]);
+
+  
 
   // GET SINGLE COURSE ID
 
@@ -71,6 +78,19 @@ export default function SingleCourse() {
     }
   }, [id]);
 
+
+  const updateCourseDetails = (newDetails: ICourse) => {
+    setcourseDetails(newDetails);
+  };
+
+  const contextValue = useMemo(() => ({
+    course,
+    setCourse,
+    courseDetails,
+    setcourseDetails,
+    updateCourseDetails, 
+  }), [course, courseDetails]);
+
   if (course == null) return <IconLoader />;
   if (course === false)
     return <Alert message={"Failed to load course"} type="error" />;
@@ -78,9 +98,13 @@ export default function SingleCourse() {
   return (
     <div>
 
-      <CourseContext.Provider value={{ course, setCourse, courseDetails, setcourseDetails}}>
-       
-      <Outlet />
+<CourseContext.Provider value={contextValue}>
+      <div className="flex h-full">
+        <SidebarCoursesViews />
+        <div className="flex-1 overflow-auto">
+          <Outlet />
+        </div>
+      </div>
     </CourseContext.Provider>
     </div>
   );

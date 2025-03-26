@@ -3,17 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { toggleSidebar } from "../../store/themeConfigSlice";
 import { IRootState } from "../../store";
-import { useState, useEffect } from "react";
-import useFetchCourseData from "../../hooks/api/course/useFetchCourseData";
+import {  useEffect } from "react";
 import { ILesson } from "../Admins/Course/Edit/Lessons/TypesLessons";
 import IconCaretsDown from "../Icon/IconCaretsDown";
 import { useCourse } from "../Admins/SingleCourse";
 
 const SidebarCoursesViews = () => {
   const { id } = useParams();
-  const { courseData } = useFetchCourseData(id as string);
 
-  // const {sidebarCourse} = useCourse()
+
+  const {courseDetails} = useCourse()
+
+  
 
   const navigate = useNavigate();
   const themeConfig = useSelector((state: IRootState) => state.themeConfig);
@@ -23,12 +24,7 @@ const SidebarCoursesViews = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  const [sidebarCourse, setSidebarCourse] = useState(courseData);
-
-  useEffect(() => {
-    setSidebarCourse(courseData);
-  }, [courseData]);
-
+  
 
   
 
@@ -42,10 +38,14 @@ const SidebarCoursesViews = () => {
     navigate("/Dashbord/courses");
   };
 
+
+
+  
+
   return (
     <div className={semidark ? "dark" : ""}>
       <nav
-        className={`sidebar fixed min-h-screen h-full top-0 w-[260px] shadow-lg z-50 transition-all duration-300 ${
+        className={`sidebar fixed min-h-screen h-full top-0 w-[260px]  shadow-lg z-50 transition-all duration-300 ${
           semidark ? "text-white-dark bg-black" : "bg-white"
         }`}
       >
@@ -59,7 +59,7 @@ const SidebarCoursesViews = () => {
           </button>
           <PerfectScrollbar className="h-[calc(100vh-80px)]">
             <ul className="space-y-2">
-              {sidebarCourse?.chapters?.map((chapter) => (
+              {courseDetails?.chapters?.map((chapter) => (
                 <li key={chapter._id}>
                   <span className="block text-lg font-semibold text-black-800 hover:font-bold dark:text-white">
                     {chapter.chapterData.title}

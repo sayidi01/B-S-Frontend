@@ -2,9 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useUserContext } from "../../../config/UserContext";
 import { ILesson } from "../../../components/Admins/Course/Edit/Lessons/TypesLessons";
 import { toast } from "react-hot-toast";
-
-
-
+import { useCourse } from "../../../components/Admins/SingleCourse";
+import { ICourse } from "../../../types/course";
 
 export default function useFetchLessonData(courseId: string) {
   const { lessonAPIClient } = useUserContext();
@@ -12,7 +11,8 @@ export default function useFetchLessonData(courseId: string) {
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
 
- 
+  const { updateCourseDetails } = useCourse();
+
   const createLesson = useCallback(
     async (
       courseId: string,
@@ -27,21 +27,21 @@ export default function useFetchLessonData(courseId: string) {
           chapterId,
           title,
           description
-        )) as { data: { lesson: ILesson } };
-        console.log("hello", response.data.lesson);
+        )) as { data: { lesson: ILesson; courseDetails?: ICourse } };
         setLessonData((prev) => [...prev, response.data.lesson]);
+        if (response.data.courseDetails) {
+          updateCourseDetails(response.data.courseDetails);
+        }
         setError(null);
       } catch (err) {
         console.error("Error creating lesson:", err);
         setError("Failed to create lesson");
-      
       } finally {
         setIsLoading(false);
       }
     },
     [lessonAPIClient]
   );
-
 
   useEffect(() => {
     if (!courseId) return;
@@ -60,8 +60,6 @@ export default function useFetchLessonData(courseId: string) {
         setIsLoading(false);
       });
   }, [lessonAPIClient, courseId]);
-
-
 
   const deleteLesson = useCallback(
     (lessonId: string) => {
@@ -102,20 +100,26 @@ export default function useFetchLessonData(courseId: string) {
       lessonAPIClient
         .updateLesson(lessonId, data)
         .then((response) => {
-          console.log(response, "lesson Update");
-          console.log("Response data:", response.data);
+          const lessonResponse = response.data.data as {
+            lesson: ILesson;
+            courseDetails?: ICourse;
+          };
+
           setLessonData((prev) =>
             prev.map((lesson) =>
-              lesson._id === lessonId ? response.data.data.lesson : lesson
+              lesson._id === lessonId ? lessonResponse.lesson : lesson
             )
           );
+
+          if (lessonResponse.courseDetails) {
+            updateCourseDetails(lessonResponse.courseDetails);
+          }
+
           setError(null);
           toast.success("Lesson Updated Successfully");
-          
-          
         })
         .catch((err) => {
-          console.log("Error updating Lesoon : ", err);
+          console.log("Error updating Lesson: ", err);
           setError("Failed to update lesson");
         })
         .finally(() => {
@@ -125,7 +129,6 @@ export default function useFetchLessonData(courseId: string) {
     [lessonAPIClient]
   );
 
-
   return {
     createLesson,
     lessonData,
@@ -133,6 +136,5 @@ export default function useFetchLessonData(courseId: string) {
     isLoading,
     deleteLesson,
     updateLesson,
-   
   };
 }
