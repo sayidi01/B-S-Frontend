@@ -10,7 +10,14 @@ interface CreateChapterResponse {
   data: {
     chapter: IChapter;
   };
-  courseDetails?: ICourse; 
+  courseDetails?: ICourse;
+}
+
+interface DeleteChapterResponse extends CreateChapterResponse {
+  data: {
+    chapter: IChapter;
+  };
+  courseDetails?: ICourse;
 }
 
 const moveItem = (arr: any[], fromIndex: number, toIndex: number) => {
@@ -21,8 +28,7 @@ const moveItem = (arr: any[], fromIndex: number, toIndex: number) => {
 
 export default function useFetchChapterData(id: string | undefined) {
   const { chapterApiClient } = useUserContext();
- const { updateCourseDetails } = useCourse();
-
+  const { updateCourseDetails } = useCourse();
 
   const { updateOrderQuiz } = UseFetchUpdateOrderQuiz();
 
@@ -89,7 +95,6 @@ export default function useFetchChapterData(id: string | undefined) {
           courseId,
           title
         )) as CreateChapterResponse;
-        console.log(response)
 
         setChapterData((prev) => {
           if (prev) {
@@ -110,63 +115,73 @@ export default function useFetchChapterData(id: string | undefined) {
         setIsLoading(false);
       }
     },
-    [ chapterApiClient]
+    [chapterApiClient]
   );
 
   const deleteChapter = useCallback(
-    (courseId: string, chapterId: string) => {
+    async (courseId: string, chapterId: string) => {
       setIsLoading(true);
-      chapterApiClient
-        .deleteChapter(courseId, chapterId)
-        .then(() => {
-          setChapterData((prev) => {
-            if (prev) {
-              return prev.filter((chapter) => chapter._id !== chapterId);
-            }
-            return prev;
-          });
-          toast.success("Chapter deleted Successfully!");
-        })
-        .catch((err) => {
-          console.error("Error deleting chapter:", err);
-          setError("Failed to delete chapter");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      try {
+        const response = (await chapterApiClient.deleteChapter(
+          courseId,
+          chapterId
+        )) as DeleteChapterResponse;
+  
+        // Mise à jour de la liste des chapitres
+        setChapterData((prev) => (prev ? prev.filter((chapter) => chapter._id !== chapterId) : []));
+  
+        // Mise à jour des détails du cours si disponible
+        if (response.courseDetails) {
+          updateCourseDetails(response.courseDetails);
+        }
+  
+        setError(null);
+        toast.success("Chapter deleted Successfully!");
+      } catch (err) {
+        setError("Failed to delete chapter");
+        console.error("Error deleting chapter:", err);
+        toast.error("Failed to delete chapter");
+      } finally {
+        setIsLoading(false);
+      }
     },
-    [chapterApiClient, setChapterData]
+    [chapterApiClient, setChapterData, updateCourseDetails]
   );
-
+  
   const updateChapter = useCallback(
-    (courseId: string, chapterID: string, title: string) => {
+    async (courseId: string, chapterID: string, title: string) => {
+      console.log(courseId);
       setIsLoading(true);
-      chapterApiClient
-        .updateChapter(courseId, chapterID, title)
-        .then(() => {
-          setChapterData((prev) => {
-            if (prev) {
-              return prev.map((chapter) => {
-                if (chapter._id === chapterID) {
-                  return { ...chapter, title };
-                }
-                return chapter;
-              });
-            }
-            return prev;
-          });
-          toast.success("Chapter Updated Successfully!");
-        })
-        .catch((err) => {
-          console.error("Error updating chapter:", err);
-          setError("Failed to update chapter");
-          toast.error("Failed to update chapter");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      try {
+        const response = (await chapterApiClient.updateChapter(
+          courseId,
+          chapterID,
+          title
+        )) as CreateChapterResponse;
+
+        setChapterData((prev) =>
+          prev
+            ? prev.map((chapter) =>
+                chapter._id === chapterID ? { ...chapter, title } : chapter
+              )
+            : []
+        );
+
+        if (response.courseDetails) {
+          updateCourseDetails(response.courseDetails);
+        }
+
+        setError(null);
+        toast.success("Chapter Updated Successfully!");
+      } catch (err) {
+        setError("Failed to update chapter");
+        console.error("Error updating chapter:", err);
+        toast.error("Failed to update chapter");
+      } finally {
+        setIsLoading(false);
+      }
     },
-    [chapterApiClient, setChapterData]
+    [chapterApiClient, setChapterData, updateCourseDetails]
   );
 
   const handleMoveOrderQuiz = (

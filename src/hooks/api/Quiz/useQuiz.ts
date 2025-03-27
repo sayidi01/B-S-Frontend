@@ -5,6 +5,8 @@ import {
   QuizQuestion,
 } from "../../../components/Admins/Course/Edit/Quiz/quiz.types";
 import { useUserContext } from "../../../config/UserContext";
+import { useCourse } from "../../../components/Admins/SingleCourse";
+import { ICourse } from "../../../types/course";
 
 interface CreateQuizResponse {
   data: {
@@ -27,6 +29,7 @@ interface UseQuizReturn {
 
 const useQuiz = (): UseQuizReturn => {
   const { quizAPIClient } = useUserContext();
+  const { updateCourseDetails } = useCourse();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,6 +85,7 @@ const useQuiz = (): UseQuizReturn => {
           ...prev,
           ...response.data.quiz,
         }));
+       
         return response;
       } catch (err: any) {
         setError(err.message || "Failed to create quiz");

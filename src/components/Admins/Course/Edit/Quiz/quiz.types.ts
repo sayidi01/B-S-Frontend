@@ -19,6 +19,12 @@ export interface CreateQuizData {
   name: string;
 }
 
+export interface UpdateQuizdata {
+  questions: QuizQuestion[];
+  name: string;
+  courseId: string
+}
+
 export interface IQuiz {
   name: string;
   courseId: string;
