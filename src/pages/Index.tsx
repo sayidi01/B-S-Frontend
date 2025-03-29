@@ -33,11 +33,11 @@ const Index = () => {
   useEffect(() => {
     const isConnectedLocalStr = localStorage.getItem("isConnected");
     if (isConnected && isConnectedLocalStr == "true") {
-      console.log("Hello", currentAdmin, isConnected);
+    
       axiosInstance
         .get<{ total: number }>("/admin/total")
         .then(({ data }) => {
-          console.log(data);
+       
           setTotalAdmins(data.total);
         })
         .catch((error) => {
@@ -57,7 +57,7 @@ const Index = () => {
       axiosInstance
         .get<{ total: number }>("/teacher/total")
         .then(({ data }) => {
-          console.log(data);
+        
           setTotalTeachers(data.total);
         })
         .catch((error) => {
@@ -77,7 +77,7 @@ const Index = () => {
       axiosInstance
         .get<{ total: number }>("/student/total")
         .then(({ data }) => {
-          console.log(data);
+       
           setTotalStudents(data.total);
         })
         .catch((error) => {
@@ -91,11 +91,10 @@ const Index = () => {
   useEffect(() => {
     const isConnectedLocalStr = localStorage.getItem("isConnected");
     if (isConnected && isConnectedLocalStr == "true") {
-      console.log("Courses numbers", currentAdmin, isConnected);
       axiosInstance
         .get<{ total: number }>("/course/total")
         .then(({ data }) => {
-          console.log(data);
+         
           setTotalCourses(data.total);
         })
         .catch((error) => {

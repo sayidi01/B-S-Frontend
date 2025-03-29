@@ -1,3 +1,6 @@
+import { S } from "@fullcalendar/core/internal-common";
+import { ICourse } from "../../../../../types/course";
+
 export interface QuizQuestion {
   _id: string;
   type: string;
@@ -22,7 +25,7 @@ export interface CreateQuizData {
 export interface UpdateQuizdata {
   questions: QuizQuestion[];
   name: string;
-  courseId: string
+  courseId: string;
 }
 
 export interface IQuiz {
@@ -41,4 +44,10 @@ export interface IQuiz {
     right: string;
   }[];
   createdAt: string;
+
+  courseID: string;
+
+ 
+  courseDetails: ICourse;
+ 
 }

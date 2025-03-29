@@ -14,8 +14,8 @@ function UpdateQuizData() {
   const { id: courseID, quizID } = useParams();
 
   const { quizData } = UseFetchSingleQuiz(courseID as string, quizID as string);
- 
-  const navigate = useNavigate()
+
+  const navigate = useNavigate();
 
   const { updateQuiz, isLoading: isLoadingUpdatingQuiz } = UseFetchUpdateQuiz();
 
@@ -24,7 +24,7 @@ function UpdateQuizData() {
     quiz,
   } = useManageQuiz(quizData);
 
-  console.log("quiz", quiz);
+ 
 
   const handleAddQuestion = () => {
     const newQuestion: QuizQuestion = {
@@ -41,9 +41,8 @@ function UpdateQuizData() {
 
   const handleQuizNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
-    updateQuizName(newName); // Mettre à jour le nom du quiz dans l'état local
+    updateQuizName(newName);
   };
-  
 
   const handleUpdateQuizClick = useCallback(async () => {
     if (!quiz) return;
@@ -74,8 +73,8 @@ function UpdateQuizData() {
         className="border p-2 w-full mb-4"
       />
 
-      {quiz.questions.map((question) => (
-        <div key={question._id} className="mb-4 border p-4 rounded-md">
+      {quiz.questions.map((question, index) => (
+        <div key={question._id || index} className="mb-4 border p-4 rounded-md">
           <QuestionForm
             question={question}
             updateQuestion={updateQuestion}

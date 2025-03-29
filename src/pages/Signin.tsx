@@ -45,7 +45,7 @@ const Signin = () => {
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  console.log(signinAdmin);
+ 
 
   const handleChangeSignin = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

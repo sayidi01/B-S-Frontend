@@ -78,6 +78,8 @@ export default function SingleCourse() {
     }
   }, [id]);
 
+ 
+
 
   const updateCourseDetails = (newDetails: ICourse) => {
     setcourseDetails(newDetails);

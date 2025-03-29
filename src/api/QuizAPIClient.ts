@@ -18,8 +18,8 @@ export default class QuizAPIClient extends APIClient {
     return await this.axiosInstance.delete(`/quiz/${quizID}`);
   }
 
-  async updateQuiz(quizID: string, data: UpdateQuizdata) {
-    return ((await this.axiosInstance.put(`/quiz/${quizID}`, data)).data as any)
+  async updateQuiz(quizID: string,courseId: string, data: UpdateQuizdata) {
+    return ((await this.axiosInstance.put(`/quiz/${quizID}`, { ...data, courseId })).data as any)
       .data.quiz as IQuiz;
   }
 }

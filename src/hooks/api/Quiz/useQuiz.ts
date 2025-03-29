@@ -29,7 +29,7 @@ interface UseQuizReturn {
 
 const useQuiz = (): UseQuizReturn => {
   const { quizAPIClient } = useUserContext();
-  const { updateCourseDetails } = useCourse();
+  
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -79,7 +79,6 @@ const useQuiz = (): UseQuizReturn => {
           courseId,
           quizData
         )) as CreateQuizResponse;
-        console.log("Quiz created successfully:", response);
         
         setQuizData((prev) => ({
           ...prev,

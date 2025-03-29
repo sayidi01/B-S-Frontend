@@ -126,11 +126,9 @@ export default function useFetchChapterData(id: string | undefined) {
           courseId,
           chapterId
         )) as DeleteChapterResponse;
-  
-        // Mise à jour de la liste des chapitres
+      
         setChapterData((prev) => (prev ? prev.filter((chapter) => chapter._id !== chapterId) : []));
-  
-        // Mise à jour des détails du cours si disponible
+      
         if (response.courseDetails) {
           updateCourseDetails(response.courseDetails);
         }
