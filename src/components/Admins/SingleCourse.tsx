@@ -10,6 +10,10 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import useFetchCourseData from "../../hooks/api/course/useFetchCourseData";
 import SidebarCoursesViews from "../Layouts/SideBarCoursesViews";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+
+
+
 
 
 
@@ -50,11 +54,20 @@ export default function SingleCourse() {
   const [courseDetails, setcourseDetails] = useState(courseData)
 
   
+  const { data } = useQuery({
+    queryKey: ['courseData', id],
+    queryFn: () => axiosInstance.get(`/course/${id}`).then(res => res.data),
+   
+  });
+  
   useEffect(() => {
-    if (courseData) {
+    if (data) {
+      setcourseDetails(data as ICourse);
+    } else if (courseData) {
       setcourseDetails(courseData);
     }
-  }, [courseData]);
+  }, [data, courseData]);
+  
 
   
 
@@ -70,13 +83,15 @@ export default function SingleCourse() {
           if (isObject(data)) {
             setCourse(data as ICourse);
           } else setCourse(false);
+          
         })
+        
         .catch((error) => {
           console.error("Erreur lors de la récupération cours ", error);
           setCourse(false);
         });
     }
-  }, [id]);
+  }, [id, data]);
 
  
 
@@ -85,6 +100,9 @@ export default function SingleCourse() {
     setcourseDetails(newDetails);
   };
 
+ 
+ 
+  
   const contextValue = useMemo(() => ({
     course,
     setCourse,
@@ -97,17 +115,20 @@ export default function SingleCourse() {
   if (course === false)
     return <Alert message={"Failed to load course"} type="error" />;
 
+ 
+
   return (
     <div>
-
-<CourseContext.Provider value={contextValue}>
-      <div className="flex h-full">
-        <SidebarCoursesViews />
-        <div className="flex-1 overflow-auto">
-          <Outlet />
+    
+      <CourseContext.Provider value={contextValue}>
+        <div className="flex h-full">
+          <SidebarCoursesViews />
+          <div className="flex-1 overflow-auto">
+            <Outlet />
+          </div>
         </div>
-      </div>
-    </CourseContext.Provider>
+      </CourseContext.Provider>
+    
     </div>
   );
 }

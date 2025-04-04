@@ -29,6 +29,7 @@ import CourseAPIClient from "./api/CourseAPIClient";
 import ChapterAPIClient from "./api/ChapterAPIClient";
 import { LessonAPIClient } from './api/LessonAPIClient';
 import QuizAPIClient from './api/QuizAPIClient';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 
 
@@ -73,11 +74,12 @@ const App = () => {
     </UserContext.Provider>
   );
 };
-
+ const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 
 root.render(
+  <QueryClientProvider client={queryClient}>
   <React.StrictMode>
     <Suspense>
       <Provider store={store}>
@@ -87,4 +89,5 @@ root.render(
       </Provider>
     </Suspense>
   </React.StrictMode>
+  </QueryClientProvider>
 );

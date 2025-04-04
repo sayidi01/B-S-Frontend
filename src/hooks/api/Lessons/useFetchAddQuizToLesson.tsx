@@ -1,15 +1,16 @@
-import { useCallback, useState } from "react";
+import { useCallback} from "react";
 import { useUserContext } from "../../../config/UserContext";
 import toast from "react-hot-toast";
-import { ILesson } from "../../../components/Admins/Course/Edit/Lessons/TypesLessons";
-import { C } from "@fullcalendar/core/internal-common";
+
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
 export default function useFetchAddQuizToLesson() {
   const { lessonAPIClient } = useUserContext();
+  const queryClient = useQueryClient();
+ 
 
-  const [lessonWithQuiz, setLessonWithQuiz] = useState<ILesson[]>([]);
-
-  console.log(lessonWithQuiz, "hey");
+ const { id } = useParams();
 
   const addQuizToLesson = useCallback(
     async (lessonId: string, quizId: string) => {
@@ -18,6 +19,9 @@ export default function useFetchAddQuizToLesson() {
           lessonId,
           quizId
         );
+        await queryClient.invalidateQueries({
+          queryKey: ['courseData', id],
+        });
         toast.success("Quiz added to lesson successfuly");
         return response;
       } catch (error) {

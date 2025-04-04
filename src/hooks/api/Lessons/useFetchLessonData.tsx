@@ -4,6 +4,8 @@ import { ILesson } from "../../../components/Admins/Course/Edit/Lessons/TypesLes
 import { toast } from "react-hot-toast";
 import { useCourse } from "../../../components/Admins/SingleCourse";
 import { ICourse } from "../../../types/course";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 
 
@@ -12,8 +14,8 @@ export default function useFetchLessonData(courseId: string) {
   const [lessonData, setLessonData] = useState<ILesson[]>([]);
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
- 
 
+  const queryClient = useQueryClient();
   const { updateCourseDetails } = useCourse();
 
   const createLesson = useCallback(
@@ -75,6 +77,9 @@ export default function useFetchLessonData(courseId: string) {
             prev ? prev.filter((lesson) => lesson._id !== lessonId) : prev
           );
           setError(null);
+          queryClient.refetchQueries({
+            queryKey: ['courseData', courseId],
+          });
 
           toast.success("Lesson deleted successfully");
         })

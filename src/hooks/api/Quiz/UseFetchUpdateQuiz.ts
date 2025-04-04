@@ -3,16 +3,15 @@ import { useUserContext } from "../../../config/UserContext";
 import { IQuiz } from "../../../components/Admins/Course/Edit/Quiz/quiz.types";
 import { useCourse } from "../../../components/Admins/SingleCourse";
 import { useParams } from "react-router-dom";
-
-
-
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function UseFetchUpdateQuiz() {
   const { quizAPIClient } = useUserContext();
   const { updateCourseDetails } = useCourse();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [quizData, setQuizData] = useState<IQuiz | null>(null);
+  const queryClient = useQueryClient();
+ 
 
   const { id } = useParams();
 
@@ -21,22 +20,29 @@ export default function UseFetchUpdateQuiz() {
       setIsLoading(true);
 
       try {
-      const response = await quizAPIClient.updateQuiz(
-        data._id,
-        id as string,
-        data
-      );
+        const response = await quizAPIClient.updateQuiz(
+          data._id,
+          id as string,
+          data
+        );
+       
+        await queryClient.refetchQueries({
+          queryKey: ['courseData', id],
+        });
+
         if (response.courseDetails) {
           updateCourseDetails(response.courseDetails);
         }
 
         return response;
+      } catch (error) {
+        console.error("Failed to update quiz:", error);
+        throw error;
       } finally {
         setIsLoading(false);
       }
     },
-    [quizAPIClient, isLoading]
+    [quizAPIClient, id, queryClient, updateCourseDetails]
   );
-
   return { updateQuiz, isLoading };
 }
