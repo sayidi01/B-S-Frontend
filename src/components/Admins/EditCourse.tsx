@@ -34,13 +34,15 @@ const EditCourse: React.FC<EditCourseProps> = ({ courseView}) => {
 
   const {id} =useParams<{ id: string }>();
 
-  console.log('id', id)
+ 
 
   const navigate = useNavigate()
 
   useEffect(() => {
     setFormData(courseView);
   }, [courseView]);
+
+  
 
   const handleChangeEditTitleCourse = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -54,6 +56,10 @@ const EditCourse: React.FC<EditCourseProps> = ({ courseView}) => {
     if (info.fileList.length > 0) {
       const file = info.fileList[0].originFileObj as File;
       setSelectedImage(file);
+      setFormData((prevState) => ({
+        ...prevState,
+        imageCourse: URL.createObjectURL(file),
+      }));
     } else {
       setSelectedImage(null);
     }
@@ -74,9 +80,7 @@ const EditCourse: React.FC<EditCourseProps> = ({ courseView}) => {
   };
 
   const handleSumbitEditTitle = useCallback(() => {
-
-      
-    
+   
 
     if (!formData.title || !formData.description) {
       toast.error("Title and description are required");
@@ -104,6 +108,10 @@ const EditCourse: React.FC<EditCourseProps> = ({ courseView}) => {
               : course
           )
         );
+        setFormData((prevState) => ({
+          ...prevState,
+          imageCourse: data.imageCourse
+        }));
         toast.success("Course updated successfully");
         navigate('/Dashbord/courses')
        
