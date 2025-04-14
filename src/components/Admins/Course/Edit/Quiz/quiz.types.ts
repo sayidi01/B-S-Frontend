@@ -1,6 +1,10 @@
-import { S } from "@fullcalendar/core/internal-common";
+
 import { ICourse } from "../../../../../types/course";
 
+
+export type QuizItem = 
+  | { id: string; type: 'blank';  correctOption: string; options: string[] }
+  | { id: string; type: 'phrase'; text: string };
 export interface QuizQuestion {
   _id: string;
   type: string;
@@ -15,6 +19,7 @@ export interface QuizQuestion {
     left: string;
     right: string;
   }[];
+  items?: QuizItem[]; 
 }
 
 export interface CreateQuizData {

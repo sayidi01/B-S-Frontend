@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { QuizQuestion } from "./quiz.types";
+import { QuizItem, QuizQuestion } from "./quiz.types";
 import _ from "lodash";
+import FillInTheBlankCreator from "./FillInTheBlankCreator";
 
 interface QuestionFormProps {
   question: QuizQuestion;
@@ -13,7 +14,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   onRemove,
   updateQuestion,
 }) => {
-  const [currentQuestion, setCurrentQuestion] = useState(question);
+  const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion>({
+    ...question,
+    items: question.type === 'fill_in_the_blank' ? question.items || [] : undefined,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentQuestion((prev) => ({
@@ -87,7 +91,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     updateQuestion(currentQuestion._id, update);
   };
 
-  console.log(currentQuestion);
+  const updateItems = (items: QuizItem[]) => {
+    setCurrentQuestion(prev => ({ ...prev, items }));
+    updateQuestion(currentQuestion._id, { ...currentQuestion, items });
+  }
 
   return (
     <div>
@@ -178,7 +185,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
       {[
         "short_answer",
-        "fill_in_the_blank",
+        // "fill_in_the_blank",
         "text_with_questions",
         "grammar_quiz",
       ].includes(currentQuestion.type) && (
@@ -192,6 +199,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             placeholder="Enter correct answer"
             className="border p-2 w-full"
           />
+        </div>
+      )}
+      {currentQuestion.type === "fill_in_the_blank" && (
+        <div>
+            <FillInTheBlankCreator  items={currentQuestion.items || []} setItems={updateItems} />
         </div>
       )}
     </div>

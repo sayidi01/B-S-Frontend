@@ -56,12 +56,12 @@ export default function useFetchLessonData(courseId: string) {
       .then((response) => {
         const data = (response as { data: { lessons: ILesson[] } }).data;
         setLessonData(data.lessons);
+        
         setIsLoading(false);
       })
       .catch((err) => {
         console.error("Error fetching lesson data : ", err);
         setError("Failed to fetch lesson data ");
-        toast.error("Failed to fetch lessons");
         setIsLoading(false);
       });
   }, [lessonAPIClient, courseId]);
