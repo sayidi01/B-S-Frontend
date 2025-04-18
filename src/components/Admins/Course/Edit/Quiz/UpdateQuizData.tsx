@@ -2,7 +2,7 @@ import UseFetchSingleQuiz from "../../../../../hooks/api/Quiz/UseFetchSingleQuiz
 import { useNavigate, useParams } from "react-router-dom";
 import QuestionForm from "./QuestionForm";
 
-import { QuizQuestion } from "./quiz.types";
+import { QuizQuestion, QuizQuestionType } from "./quiz.types";
 import { uniqueId } from "lodash";
 import useManageQuiz from "../../../../../hooks/api/Quiz/useManageQuiz";
 import UseFetchUpdateQuiz from "../../../../../hooks/api/Quiz/UseFetchUpdateQuiz";
@@ -20,20 +20,25 @@ function UpdateQuizData() {
   const { updateQuiz, isLoading: isLoadingUpdatingQuiz } = UseFetchUpdateQuiz();
 
   const {
-    methods: { updateQuestion, addQuestion, removeQuestion, updateQuizName },
+    methods: {
+      updateQuestion,
+      addQuestion,
+      removeQuestion,
+      updateQuizName,
+      updateQuestionType,
+    },
     quiz,
   } = useManageQuiz(quizData);
-
- 
 
   const handleAddQuestion = () => {
     const newQuestion: QuizQuestion = {
       _id: uniqueId("question"),
-      type: "",
+      type: QuizQuestionType.SINGLE_CHOICE,
       question: "",
       options: [],
       correctAnswer: "",
       matchingPairs: [],
+      fillTheBlank: [],
     };
 
     addQuestion(newQuestion);
@@ -73,12 +78,13 @@ function UpdateQuizData() {
         className="border p-2 w-full mb-4"
       />
 
-      {quiz.questions.map((question, index) => (
-        <div key={question._id || index} className="mb-4 border p-4 rounded-md">
+      {quiz.questions.map((question) => (
+        <div key={question._id} className="mb-4 border p-4 rounded-md">
           <QuestionForm
             question={question}
             updateQuestion={updateQuestion}
             onRemove={() => removeQuestion(question._id)}
+            updateQuestionType={updateQuestionType}
           />
         </div>
       ))}

@@ -1,5 +1,4 @@
 import APIClient from ".";
-import { IQuiz } from "../components/Admins/Course/Edit/Quiz/quiz.types";
 
 
 

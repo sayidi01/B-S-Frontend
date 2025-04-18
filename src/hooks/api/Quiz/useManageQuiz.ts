@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IQuiz,
   QuizQuestion,
+  QuizQuestionType,
 } from "../../../components/Admins/Course/Edit/Quiz/quiz.types";
+import { defaultQuestionPerType } from "./utils";
+import { QueryClient } from "@tanstack/react-query";
 
 export default function useManageQuiz(initialQuizData: IQuiz | null) {
   const [quiz, setQuiz] = useState<IQuiz | null>(initialQuizData);
@@ -32,6 +35,31 @@ export default function useManageQuiz(initialQuizData: IQuiz | null) {
     });
   };
 
+  const updateQuestionType = (
+    questionID: string,
+    newType: QuizQuestionType
+  ) => {
+    const newQuestion: QuizQuestion = {
+      _id: questionID,
+      type: newType,
+      question: "",
+      options: [],
+      correctAnswer: "",
+      matchingPairs: [],
+      fillTheBlank: [],
+      ...defaultQuestionPerType[newType],
+    };
+
+    setQuiz((prev) => {
+      if (!prev) return null;
+
+      const updatedQuestions = prev.questions.map((question) =>
+        question._id === questionID ? newQuestion : question
+      );
+      return { ...prev, questions: updatedQuestions };
+    });
+  };
+
   const removeQuestion = (questionID: string) => {
     setQuiz((prev) => {
       if (!prev) return null;
@@ -47,10 +75,8 @@ export default function useManageQuiz(initialQuizData: IQuiz | null) {
     setQuiz((prev) => (!prev ? null : { ...prev, name: newName }));
   };
 
-  
-
   return {
     quiz,
-    methods: { addQuestion, updateQuestion, removeQuestion, updateQuizName },
+    methods: { addQuestion, updateQuestion, removeQuestion, updateQuizName, updateQuestionType },
   };
 }

@@ -178,23 +178,19 @@ const UploadPdfCourses: React.FC = () => {
                   }}
                 />
               </div>
-              <div
+              <p
                 style={{
                   flex: 1,
                   fontSize: "13px",
                   color: "#666",
                   height: "100px",
                   overflow: "hidden",
+                  margin: 0,
                 }}
                 dangerouslySetInnerHTML={{
                   __html: course?.description ? course.description.slice(0, 100) + "..." : "No description available",
                 }}
-                onBlur={(e) => {
-                  console.log("Element lost focus");
-                }}
-                tabIndex={0}
-                role="text"
-              ></div>
+              ></p>
               <div className="flex items-center">
                 <Link to={`/Dashbord/courses/${course._id}`}>
                   <Button

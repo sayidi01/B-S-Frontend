@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { QuizItem, QuizQuestion } from "./quiz.types";
+import React from "react";
+import { QuizItem, QuizQuestion, QuizQuestionType } from "./quiz.types";
 import _ from "lodash";
 import FillInTheBlankCreator from "./FillInTheBlankCreator";
 
@@ -7,99 +7,81 @@ interface QuestionFormProps {
   question: QuizQuestion;
   onRemove: () => void;
   updateQuestion: (questionID: string, newData: QuizQuestion) => void;
+  updateQuestionType: (questionID: string, newType: QuizQuestionType) => void;
 }
 
 const QuestionForm: React.FC<QuestionFormProps> = ({
   question,
   onRemove,
   updateQuestion,
+  updateQuestionType,
 }) => {
-  const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion>({
-    ...question,
-    items: question.type === 'fill_in_the_blank' ? question.items || [] : undefined,
-  });
+  if (question.type === QuizQuestionType.FILL_IN_THE_BLANK)
+    console.log(question);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentQuestion((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-
-    const update = { ...currentQuestion, [e.target.name]: e.target.value };
-    updateQuestion(currentQuestion._id, update);
+    const update = { ...question, [e.target.name]: e.target.value };
+    updateQuestion(question._id, update);
   };
   const handleOptionChange = (
     index: number,
     field: string,
     value: string | boolean
   ) => {
-    setCurrentQuestion((prev) => {
-      const updatedOptions = prev.options?.map((opt, i) =>
-        i === index ? { ...opt, [field]: value } : opt
-      );
-      return { ...prev, options: updatedOptions };
-    });
-
     const update = {
-      ...currentQuestion,
-      options: currentQuestion.options?.map((opt, i) =>
+      ...question,
+      options: question.options?.map((opt, i) =>
         i === index ? { ...opt, [field]: value } : opt
       ),
     };
-    updateQuestion(currentQuestion._id, update);
+    updateQuestion(question._id, update);
   };
 
   const addOption = () => {
-    setCurrentQuestion((prev) => {
-      const options = prev.options || [];
-
-      return {
-        ...prev,
-        options: [
-          ...options,
-          { _id: String(options.length + 1), text: "", isCorrect: false },
-        ],
-      };
-    });
+    if (!question.options) return;
 
     const update = {
-      ...currentQuestion,
-      options: currentQuestion.options,
+      ...question,
+      options: [
+        ...question.options,
+        {
+          _id: String(question.options.length + 1),
+          text: "",
+          isCorrect: false,
+        },
+      ],
     };
-    updateQuestion(currentQuestion._id, update);
+    updateQuestion(question._id, update);
   };
 
   const removeOption = (index: number) => {
-    setCurrentQuestion((prev) => {
-      const updatedOptions = [...(prev.options || [])];
-      updatedOptions.splice(index, 1);
-      return { ...prev, options: updatedOptions };
-    });
+    if (!question.options) return;
+
+    const updatedOptions = question.options;
+    updatedOptions.splice(index, 1);
 
     const update = {
-      ...currentQuestion,
-      options: [...(currentQuestion.options || [])],
+      ...question,
+      options: updatedOptions,
     };
-    update.options?.splice(index, 1);
-    updateQuestion(currentQuestion._id, update);
+    updateQuestion(question._id, update);
   };
 
-  const updateType = (type: string) => {
-    setCurrentQuestion((prev) => ({ ...prev, type }));
-
-    const update = { ...currentQuestion, type };
-    updateQuestion(currentQuestion._id, update);
+  const updateType = (type: QuizQuestionType) => {
+    updateQuestionType(question._id, type);
   };
 
   const updateItems = (items: QuizItem[]) => {
-    setCurrentQuestion(prev => ({ ...prev, items }));
-    updateQuestion(currentQuestion._id, { ...currentQuestion, items });
-  }
+    updateQuestion(question._id, {
+      ...question,
+      fillTheBlank: items,
+    });
+  };
 
   return (
     <div>
       <div className="flex justify-between items-center mb-2">
-        <h3 className="font-medium">Question {currentQuestion.question}</h3>
+        <h3 className="font-medium">Question {question.question}</h3>
         <button onClick={onRemove} className="text-red-500 hover:text-red-700">
           Remove
         </button>
@@ -107,11 +89,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
       {/* Sélection du type de question */}
       <div className="mb-4">
-        <label htmlFor="questionType" className="block font-medium mb-2">Select Question Type:</label>
+        <label htmlFor="questionType" className="block font-medium mb-2">
+          Select Question Type:
+        </label>
         <select
           id="questionType"
-          value={currentQuestion.type }
-          onChange={(e) => updateType(e.target.value)}
+          value={question.type}
+          onChange={(e) => updateType(e.target.value as QuizQuestionType)}
           className="border p-2 max-w-fit"
         >
           <option disabled value="">
@@ -132,7 +116,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       <input
         type="text"
         name="question"
-        value={currentQuestion.question}
+        value={question.question}
         onChange={handleChange}
         placeholder="Enter question text"
         className="border p-2 w-full mb-4"
@@ -140,11 +124,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
       {/* Options ou Réponse Correcte */}
       {["true_false", "multiple_choice", "single_choice", "matching"].includes(
-        currentQuestion.type
+        question.type
       ) && (
         <div>
           <h4 className="font-medium mb-2">Options</h4>
-          {currentQuestion.options?.map((option, index) => (
+          {question.options?.map((option, index) => (
             <div key={index} className="flex items-center mb-2">
               <input
                 type="text"
@@ -188,22 +172,25 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         // "fill_in_the_blank",
         "text_with_questions",
         "grammar_quiz",
-      ].includes(currentQuestion.type) && (
+      ].includes(question.type) && (
         <div>
           <h4 className="font-medium mb-2">Correct Answer</h4>
           <input
             type="text"
             name="correctAnswer"
-            value={currentQuestion.correctAnswer || ""}
+            value={question.correctAnswer || ""}
             onChange={(e) => handleChange(e as any)}
             placeholder="Enter correct answer"
             className="border p-2 w-full"
           />
         </div>
       )}
-      {currentQuestion.type === "fill_in_the_blank" && (
+      {question.type === "fill_in_the_blank" && question.fillTheBlank && (
         <div>
-            <FillInTheBlankCreator  items={currentQuestion.items || []} setItems={updateItems} />
+          <FillInTheBlankCreator
+            items={question.fillTheBlank}
+            updateItems={updateItems}
+          />
         </div>
       )}
     </div>

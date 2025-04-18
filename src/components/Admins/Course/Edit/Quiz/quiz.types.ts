@@ -5,9 +5,21 @@ import { ICourse } from "../../../../../types/course";
 export type QuizItem = 
   | { id: string; type: 'blank';  correctOption: string; options: string[] }
   | { id: string; type: 'phrase'; text: string };
+
+export enum QuizQuestionType {
+  TRUE_FASLE = "true_false",
+  MULTIPLE_CHOICE = "multiple_choice",
+  SINGLE_CHOICE = "single_choice",
+  MATCHING = "matching",
+  SHORT_ANSWER = "short_answer",
+  FILL_IN_THE_BLANK = "fill_in_the_blank",
+  TEXT_WITH_QUESTIONS = "text_with_questions",
+  GRAMMAR_QUIZ = "grammar_quiz",
+}
+
 export interface QuizQuestion {
   _id: string;
-  type: string;
+  type: QuizQuestionType;
   question: string;
   options?: {
     _id: string;
@@ -19,7 +31,7 @@ export interface QuizQuestion {
     left: string;
     right: string;
   }[];
-  items?: QuizItem[]; 
+  fillTheBlank?: QuizItem[]; 
 }
 
 export interface CreateQuizData {

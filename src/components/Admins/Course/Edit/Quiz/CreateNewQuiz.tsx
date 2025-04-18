@@ -1,6 +1,6 @@
 import React from "react";
 import useQuiz from "../../../../../hooks/api/Quiz/useQuiz";
-import { QuizQuestion } from "./quiz.types";
+import { QuizQuestion, QuizQuestionType } from "./quiz.types";
 import QuestionForm from "./QuestionForm";
 import { toast } from "react-hot-toast";
 import { uniqueId } from "lodash";
@@ -28,11 +28,12 @@ const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
   const handleAddQuestion = () => {
     const newQuestion: QuizQuestion = {
       _id: uniqueId("question"),
-      type: "",
+     type: QuizQuestionType.SINGLE_CHOICE,
       question: "",
       options: [],
       correctAnswer: "",
       matchingPairs: [],
+      fillTheBlank: [],
     };
 
     addQuestion(newQuestion);
@@ -73,6 +74,9 @@ const CreateNewQuiz: React.FC<CreateNewQuizProps> = ({}) => {
             <QuestionForm
               question={question}
               updateQuestion={updateQuestion}
+              updateQuestionType={(questionID, newType) =>
+                updateQuestion(questionID, { ...question, type: newType })
+              }
               onRemove={() => removeQuestion(index)}
             />
           </div>
