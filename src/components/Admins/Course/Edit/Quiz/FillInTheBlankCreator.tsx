@@ -70,8 +70,6 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
     updateItems(updatedItems);
   };
 
- 
- 
   return (
     <div style={{ padding: 20 }}>
       <div style={{ display: "flex", gap: "10px", marginBottom: 20 }}>
@@ -137,7 +135,6 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
               borderRadius: "6px",
             }}
           >
-            
             {item.type === "phrase" ? (
               <input
                 type="text"
@@ -148,6 +145,7 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
               />
             ) : (
               <>
+                Correct option:
                 <input
                   type="text"
                   value={item.correctOption}
@@ -173,9 +171,8 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
                         style={{ width: "80%", padding: 6 }}
                       />
                     </div>
-                    
                   ))}
-                  
+
                   <button
                     onClick={() => addOption(item.id)}
                     style={{
