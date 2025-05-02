@@ -37,7 +37,37 @@ function SingleQuiz() {
          <Text strong style={{ display: 'block' }}> Type:  {question.type}</Text>
          <Text strong style={{ display: 'block' }}> Question : {question.question}</Text>
          <Text strong style={{ display: 'block' }}> <span style={{ color: 'green' }}>✅ (Correct Answer)</span> :  {question.correctAnswer}</Text>
-       
+         {question.type === "matching" ? (
+            <div>
+              {question.matchingPairs?.map((pair, pairIndex) => (
+                <Text key={pairIndex} style={{ display: 'block' }}>
+                  {pair.left} - {pair.right}
+                </Text>
+              ))}
+            </div>
+          ) : question.type === "fill_in_the_blank" ? (
+            <div>
+              {question.fillTheBlank?.map((blank, blankIndex) => (
+                <div key={blankIndex} style={{ marginBottom: '10px' }}>
+                  {blank.type === "phrase" ? (
+                    <Text style={{ fontWeight: 'bold' }}>{blank.text}</Text>
+                  ) : (
+                    <Text>______ (Options: {blank.options.join(", ")})</Text>
+                  )}
+                  {blank.type === "blank" && (
+                    <Text style={{ color: 'green', display: 'block' }}>
+                      {' '}(Correct Answer: {blank.correctOption})
+                    </Text>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Text strong style={{ display: 'block' }}>
+              {/* <span style={{ color: 'green' }}>✅ (Correct Answer)</span>: {question.correctAnswer} */}
+            </Text>
+          )}
+
           <Radio.Group
             style={{ marginTop: '10px' }}
             disabled 

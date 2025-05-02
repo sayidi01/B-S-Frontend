@@ -24,6 +24,31 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
     updateItems(updatedItems);
   };
 
+
+  const handleRemoveBlank = (id: string) => {
+    const updatedItems: QuizItem[] = items.filter((item) => item.id !== id);
+    updateItems(updatedItems);
+  }
+
+
+  const handleRemovePhrase = (id: string) => {
+    const updatedItems: QuizItem[] = items.filter((item) => item.id !== id);
+    updateItems(updatedItems);
+  };
+  const handleRemoveOption = (id: string, optionIndex: number) => {
+    const updatedItems: QuizItem[] = items.map((item) =>
+      item.id === id && item.type === "blank"
+        ? {
+            ...item,
+            options: item.options.filter((_, idx) => idx !== optionIndex),
+          }
+        : item
+    );
+    updateItems(updatedItems);
+  };
+
+
+
   const handleAddPhrase = () => {
     const updatedItems: QuizItem[] = [
       ...items,
@@ -136,41 +161,84 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
             }}
           >
             {item.type === "phrase" ? (
-              <input
-                type="text"
-                value={item.text}
-                onChange={(e) => updateItem(item.id, { text: e.target.value })}
-                placeholder="Enter phrase..."
-                style={{ width: "100%", padding: 8 }}
-              />
+               <div style={{ display: "flex", alignItems: "center" }}>
+               <input
+                 type="text"
+                 value={item.text}
+                 onChange={(e) => updateItem(item.id, { text: e.target.value })}
+                 placeholder="Enter phrase..."
+                 style={{ width: "100%", padding: 8 }}
+               />
+               <button
+                 onClick={() => handleRemovePhrase(item.id)}
+                 style={{
+                   background: "none",
+                   border: "none",
+                   cursor: "pointer",
+                   fontSize: "18px",
+                   color: "#d9534f",
+                   marginLeft: 8,
+                 }}
+                 title="Remove phrase"
+               >
+                 🗑️
+               </button>
+             </div>
             ) : (
               <>
-                Correct option:
-                <input
-                  type="text"
-                  value={item.correctOption}
-                  onChange={(e) =>
-                    updateItem(item.id, { correctOption: e.target.value })
-                  }
-                  placeholder="Correct Option..."
-                  style={{ width: "100%", padding: 8 }}
-                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: 8,
+                  }}
+                >
+                  <label style={{ fontWeight: "bold" }}>Correct option:</label>
+                  <button
+                    onClick={() => handleRemoveBlank(item.id)}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: "18px",
+                      color: "#d9534f",
+                    }}
+                    title="Remove blank"
+                  >
+                    🗑️
+                  </button>
+                </div>
                 <div style={{ marginTop: 10 }}>
                   {item.options.map((opt, idx) => (
-                    <div
-                      key={`${item.id}-option-${idx}`}
-                      style={{ marginTop: 5 }}
-                    >
-                      <input
-                        type="text"
-                        value={opt}
-                        onChange={(e) =>
-                          updateOption(item.id, idx, e.target.value)
-                        }
-                        placeholder={`Option ${idx + 1}`}
-                        style={{ width: "80%", padding: 6 }}
-                      />
-                    </div>
+                   <div
+                   key={`${item.id}-option-${idx}`}
+                   style={{ display: "flex", alignItems: "center", marginTop: 5 }}
+                 >
+                   <input
+                     type="text"
+                     value={opt}
+                     onChange={(e) =>
+                       updateOption(item.id, idx, e.target.value)
+                     }
+                     placeholder={`Option ${idx + 1}`}
+                     style={{ width: "80%", padding: 6 }}
+                   />
+                   <button
+                     onClick={() => handleRemoveOption(item.id, idx)}
+                     style={{
+                       background: "none",
+                       border: "none",
+                       cursor: "pointer",
+                       fontSize: "18px",
+                       color: "#d9534f",
+                       marginLeft: 8,
+                     }}
+                     title="Remove option"
+                   >
+                     🗑
+                   </button>
+                 </div>
                   ))}
 
                   <button

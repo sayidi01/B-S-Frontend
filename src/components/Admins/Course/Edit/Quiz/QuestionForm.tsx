@@ -78,10 +78,45 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     });
   };
 
+  const handlePairChange = (index: number, field: string, value: string) => {
+    const update = {
+      ...question,
+      matchingPairs: question.matchingPairs?.map((pair, i) =>
+        i === index ? { ...pair, [field]: value } : pair
+      ),
+    };
+    updateQuestion(question._id, update);
+  };
+
+  const addPair = () => {
+    const update = {
+      ...question,
+      matchingPairs: [
+        ...(question.matchingPairs || []),
+        { left: "", right: "" },
+      ],
+    };
+    updateQuestion(question._id, update);
+  };
+
+  const removePair = (index: number) => {
+    const updatedPairs = question.matchingPairs || [];
+    updatedPairs.splice(index, 1);
+
+    const update = {
+      ...question,
+      matchingPairs: updatedPairs,
+    };
+    updateQuestion(question._id, update);
+  };
+
+ 
+
+
   return (
     <div>
       <div className="flex justify-between items-center mb-2">
-        <h3 className="font-medium">Question {question.question}</h3>
+        <h3 className="font-medium">{question.question}</h3>
         <button onClick={onRemove} className="text-red-500 hover:text-red-700">
           Remove
         </button>
@@ -121,9 +156,49 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         placeholder="Enter question text"
         className="border p-2 w-full mb-4"
       />
+       {question.type === "matching" && (
+        <div>
+          <h4 className="font-medium mb-2">Matching Pairs</h4>
+          {question.matchingPairs?.map((pair, index) => (
+            <div key={index} className="flex mb-2">
+              <input
+                type="text"
+                value={pair.left}
+                onChange={(e) =>
+                  handlePairChange(index, "left", e.target.value)
+                }
+                placeholder={`Left ${index + 1}`}
+                className="border p-2 mr-2"
+              />
+              <input
+                type="text"
+                value={pair.right}
+                onChange={(e) =>
+                  handlePairChange(index, "right", e.target.value)
+                }
+                placeholder={`Right ${index + 1}`}
+                className="border p-2 mr-2"
+              />
+              <button
+                onClick={() => removePair(index)}
+                className="text-red-500 ml-2"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={addPair}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200"
+          >
+            Add Pair
+          </button>
+        </div>
+      )}
+
 
       {/* Options ou Réponse Correcte */}
-      {["true_false", "multiple_choice", "single_choice", "matching"].includes(
+      {["true_false", "multiple_choice","short_answer", "single_choice"].includes(
         question.type
       ) && (
         <div>
@@ -168,8 +243,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       )}
 
       {[
-        "short_answer",
-        // "fill_in_the_blank",
+      
         "text_with_questions",
         "grammar_quiz",
       ].includes(question.type) && (
