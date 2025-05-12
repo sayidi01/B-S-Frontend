@@ -1,10 +1,8 @@
-import React, { Fragment, useCallback, useEffect, useState } from "react";
+import  { Fragment, useEffect, } from "react";
 
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import { useUserContext } from "../../config/UserContext";
 import { ICourse } from "../../types/course";
-import { LoadingOverlay } from "@mantine/core";
-import { toast } from "react-hot-toast";
 import { Tab, TabGroup, TabList, TabPanels } from "@headlessui/react";
 import { editCourseTabs } from "./utils";
 

@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import CreateNewCourse from "./CreateNewCourse";
 
 import Dropdown from "../Dropdown";
 import IconHorizontalDots from "../Icon/IconHorizontalDots";
 import IconTrashLines from "../Icon/IconTrashLines";
-import IconPencil from "../Icon/IconPencil";
 
 import { Button, Modal, Pagination, Card, Col, Row } from "antd";
 
@@ -17,7 +15,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
 import { EditOutlined } from '@ant-design/icons';
-import { useCourse } from "./SingleCourse";
 
 const itemsPerPage = 8;
 
