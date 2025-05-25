@@ -1,6 +1,6 @@
 import APIClient from ".";
 
-
+export type ChapterTimelineEdit = { elementName: "lesson" | "quiz"; id: string }[];
 
 export default class ChapterAPIClient extends APIClient {
   async getAllChapterDataById(id: string) {
@@ -12,13 +12,20 @@ export default class ChapterAPIClient extends APIClient {
       await this.axiosInstance.get(`/course/${courseId}/chapters/${chapterId}`)
     ).data;
   }
- 
-  async  addQuizToChpter (courseId: string,  chapterId: string, quizID: string,orderQuiz: number) {
-    return(
-      await this.axiosInstance.post(`/course/${courseId}/chapters/${quizID}/${chapterId}`,{orderQuiz})
-    ).data
+
+  async addQuizToChpter(
+    courseId: string,
+    chapterId: string,
+    quizID: string,
+    orderQuiz: number
+  ) {
+    return (
+      await this.axiosInstance.post(
+        `/course/${courseId}/chapters/${quizID}/${chapterId}`,
+        { orderQuiz }
+      )
+    ).data;
   }
-  
 
   async createChapter(courseId: string, title: string) {
     return (
@@ -45,10 +52,13 @@ export default class ChapterAPIClient extends APIClient {
       )
     ).data;
   }
-  async updateOrderQuiz(courseId: string, chapterId: string, quizID: string, orderQuiz: number) {
-    return(
+  async updateTimeline(courseId: string, chapterId: string, timeline: ChapterTimelineEdit) {
+    return (
       await this.axiosInstance.put(
-       `/course/${courseId}/chapters/${quizID}/${chapterId}`,{orderQuiz}
+        `/course/${courseId}/chapters/${chapterId}/timeline`,
+        {
+          timeline,
+        }
       )
     ).data;
   }

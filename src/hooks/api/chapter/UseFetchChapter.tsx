@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useUserContext } from "../../../config/UserContext";
 import { IChapter } from "../../../types/chapter";
 import { toast } from "react-hot-toast";
-import UseFetchUpdateOrderQuiz from "./UseFetchUpdateOrderQuiz";
 import { useCourse } from "../../../components/Admins/SingleCourse";
 import { ICourse } from "../../../types/course";
+import { ChapterTimelineEdit } from "../../../api/ChapterAPIClient";
 
 interface CreateChapterResponse {
   data: {
@@ -20,7 +20,7 @@ interface DeleteChapterResponse extends CreateChapterResponse {
   courseDetails?: ICourse;
 }
 
-const moveItem = (arr: any[], fromIndex: number, toIndex: number) => {
+const moveItem = function <T>(arr: T[], fromIndex: number, toIndex: number) {
   const item = arr.splice(fromIndex, 1)[0];
   arr.splice(toIndex, 0, item);
   return arr;
@@ -29,8 +29,6 @@ const moveItem = (arr: any[], fromIndex: number, toIndex: number) => {
 export default function useFetchChapterData(id: string | undefined) {
   const { chapterApiClient } = useUserContext();
   const { updateCourseDetails } = useCourse();
-
-  const { updateOrderQuiz } = UseFetchUpdateOrderQuiz();
 
   const [chapterData, setChapterData] = useState<null | IChapter[]>(null);
   const [singleChapterData, setSingleChapterData] = useState<null | IChapter>(
@@ -126,13 +124,15 @@ export default function useFetchChapterData(id: string | undefined) {
           courseId,
           chapterId
         )) as DeleteChapterResponse;
-      
-        setChapterData((prev) => (prev ? prev.filter((chapter) => chapter._id !== chapterId) : []));
-      
+
+        setChapterData((prev) =>
+          prev ? prev.filter((chapter) => chapter._id !== chapterId) : []
+        );
+
         if (response.courseDetails) {
           updateCourseDetails(response.courseDetails);
         }
-  
+
         setError(null);
         toast.success("Chapter deleted Successfully!");
       } catch (err) {
@@ -145,7 +145,7 @@ export default function useFetchChapterData(id: string | undefined) {
     },
     [chapterApiClient, setChapterData, updateCourseDetails]
   );
-  
+
   const updateChapter = useCallback(
     async (courseId: string, chapterID: string, title: string) => {
       console.log(courseId);
@@ -190,42 +190,55 @@ export default function useFetchChapterData(id: string | undefined) {
     if (!chapterData) return;
 
     let newIndex = quizIndex + (direction === "up" ? -1 : 1);
-    if (newIndex < 0) return;
+    if (newIndex < 0) {
+      console.error(`Error: newIndex is less than 0`);
+      return;
+    }
 
     const chapter = chapterData.find((chapter) => chapter._id === chapterId);
-    if (!chapter) return;
-    const updatedChapterData = moveItem(chapter.quizzes, quizIndex, newIndex);
+    if (!chapter) {
+      console.error(`Error: Chapter with ID ${chapterId} not found`);
+      return;
+    }
+    const updatedChapterTimeline = moveItem<IChapter["timeline"][number]>(
+      chapter.timeline,
+      quizIndex,
+      newIndex
+    );
+    if (updatedChapterTimeline.length !== chapter.timeline.length) {
+      console.error(
+        `Error: Timeline length mismatch after moving quiz from index ${quizIndex} to ${newIndex}`
+      );
+      return;
+    }
+
+    console.log("updatedChapterTimeline", updatedChapterTimeline, chapterId);
 
     setChapterData(
       (prev) =>
         prev?.map((chapter) => {
           if (chapter._id === chapterId) {
-            return { ...chapter, quizzes: updatedChapterData };
+            return { ...chapter, timeline: updatedChapterTimeline };
           }
           return chapter;
         }) || null
     );
 
-    const movedQuiz = updatedChapterData[newIndex];
-    const courseId = movedQuiz.courseId || chapter.courseId;
-
-    console.log(
-      "courseId:",
-      courseId,
-      "chapterId:",
-      chapterId,
-      "quizId:",
-      movedQuiz._id,
-      "orderQuiz:",
-      newIndex
+    const updatedTimeline = prepareChapterTimelineUpdate(
+      updatedChapterTimeline
     );
 
-    if (!courseId) {
-      console.error("Error: courseId is undefined");
-      return;
-    }
+    console.log('updatedTimeline', updatedTimeline);
 
-    updateOrderQuiz(courseId, chapterId, movedQuiz._id, newIndex);
+    chapterApiClient
+      .updateTimeline(chapter.courseId, chapterId, updatedTimeline)
+      .then(() => {
+        toast.success("Quiz order updated successfully!");
+      })
+      .catch((err) => {
+        console.error("Error updating quiz order:", err);
+        toast.error("Failed to update quiz order");
+      });
   };
 
   return {
@@ -241,3 +254,12 @@ export default function useFetchChapterData(id: string | undefined) {
     handleMoveOrderQuiz,
   };
 }
+
+const prepareChapterTimelineUpdate = (
+  timeline: IChapter["timeline"]
+): ChapterTimelineEdit => {
+  return timeline.map((item) => ({
+    elementName: item.elementName,
+    id: item._id,
+  }));
+};

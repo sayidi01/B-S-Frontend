@@ -201,26 +201,30 @@ export default function Chapters() {
                   <ul className="space-y-2">
                     {chapter.timeline.map((element, index) => (
                       <li
-                        key={element._id || index}
+                        key={element.id+chapter._id}
                         className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"
                       >
                         <div>
-                          <button
-                            className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                            onClick={() => {
-                              // handleMoveOrderQuiz(index, chapter._id, "up");
-                            }}
-                          >
-                            <ArrowUpOutlined />
-                          </button>
-                          <button
-                            className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                            onClick={() => {
-                              // handleMoveOrderQuiz(index, chapter._id, "down");
-                            }}
-                          >
-                            <ArrowDownOutlined />
-                          </button>
+                          {!!index && (
+                            <button
+                              className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                              onClick={() => {
+                                handleMoveOrderQuiz(index, chapter._id, "up");
+                              }}
+                            >
+                              <ArrowUpOutlined />
+                            </button>
+                          )}
+                          {(index+1) !== chapter.timeline.length && (
+                            <button
+                              className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                              onClick={() => {
+                                handleMoveOrderQuiz(index, chapter._id, "down");
+                              }}
+                            >
+                              <ArrowDownOutlined />
+                            </button>
+                          )}
                         </div>
                         <span className="text-gray-700">
                           {capitalize(element.elementName)}:{" "}
