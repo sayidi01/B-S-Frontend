@@ -16,6 +16,9 @@ interface ApiResponseCourseEdit {
   imageCourse?: string;
 }
 
+
+
+
 interface CourseData {
   _id: string;
   title: string;

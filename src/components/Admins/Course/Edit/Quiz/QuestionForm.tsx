@@ -237,8 +237,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             onClick={addOption}
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200"
           >
-            Add Option
-          </button>
+            Add Option </button>
         </div>
       )}
 

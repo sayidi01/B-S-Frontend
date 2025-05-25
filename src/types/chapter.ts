@@ -1,20 +1,23 @@
 import { ILesson } from "../components/Admins/Course/Edit/Lessons/TypesLessons";
 import { IQuiz } from "../components/Admins/Course/Edit/Quiz/quiz.types";
 
+
+interface ChapterTimelineLesson extends ILesson {
+  id: string;
+  elementName: "lesson"
+}
+
+interface ChapterTimelineQuiz extends IQuiz {
+  id: string;
+  elementName: "quiz";
+}
+
+type ChapterTimelineElement = ChapterTimelineLesson | ChapterTimelineQuiz;
+
 export interface IChapter {
-  [x: string]: any;
   _id: string;
   title: string;
   courseId: string;
-  quizzes: {
-    _id: string
-    quizId?: { 
-      _id: string;
-      name: string;
-  } | null;
-    name: string; 
-    orderQuiz: number;
-    lessons?: ILesson[]
-    quizzes?: IQuiz[];
-  }[];
+  timeline: ChapterTimelineElement[]
+  [x: string]: string | ChapterTimelineElement[];
 }

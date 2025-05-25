@@ -8,9 +8,9 @@ import UpdateChapterPopover from "./UpdateChapterPopover";
 import ModalAssignQuizToChapter from "./ModalAssignQuizToChapter";
 
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { IChapter } from '../../../../../types/chapter';
+import { IChapter } from "../../../../../types/chapter";
 import { useCourse } from "../../../SingleCourse";
-
+import { capitalize } from "lodash";
 
 export default function Chapters() {
   const { id } = useParams();
@@ -24,7 +24,7 @@ export default function Chapters() {
     updateChapter,
     handleMoveOrderQuiz,
   } = useFetchChapterData(id);
-   const { updateCourseDetails } = useCourse();
+  const { updateCourseDetails } = useCourse();
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
   const [newChapterTitle, setNewChapterTitle] = useState("");
 
@@ -42,19 +42,15 @@ export default function Chapters() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChapter, setSelectedChapter] = useState<string | null>(null);
 
-  
   const updateChapterData = (chapterId: string, newData: IChapter) => {
     setchapterView((prev) => {
       if (!prev) return [];
-  
+
       return prev.map((chapter) =>
-        chapter._id === chapterId
-          ? newData
-          : chapter
+        chapter._id === chapterId ? newData : chapter
       );
     });
   };
-
 
   if (isLoading) {
     return <div className="text-center py-8 text-gray-600">Loading...</div>;
@@ -81,7 +77,7 @@ export default function Chapters() {
       try {
         await createChapter(newChapterTitle, id as string);
         setNewChapterTitle("");
-        
+
         document.getElementById("popover")?.classList.add("hidden");
       } catch (err) {
         setError("Failed to create chapter. Please try again.");
@@ -203,16 +199,16 @@ export default function Chapters() {
                 </div>
                 <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100">
                   <ul className="space-y-2">
-                    {chapter.quizzes.map((quiz, index) => (
+                    {chapter.timeline.map((element, index) => (
                       <li
-                        key={quiz._id || index}
+                        key={element._id || index}
                         className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"
                       >
                         <div>
                           <button
                             className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
                             onClick={() => {
-                              handleMoveOrderQuiz(index, chapter._id, "up");
+                              // handleMoveOrderQuiz(index, chapter._id, "up");
                             }}
                           >
                             <ArrowUpOutlined />
@@ -220,19 +216,28 @@ export default function Chapters() {
                           <button
                             className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
                             onClick={() => {
-                              handleMoveOrderQuiz(index, chapter._id, "down");
+                              // handleMoveOrderQuiz(index, chapter._id, "down");
                             }}
                           >
                             <ArrowDownOutlined />
                           </button>
                         </div>
                         <span className="text-gray-700">
-                          Quiz: {quiz.quizId?.name} (After Chapter:{" "}
-                          {quiz.orderQuiz})
+                          {capitalize(element.elementName)}:{" "}
+                          {element.elementName === "lesson"
+                            ? element.title
+                            : element.name || "Untitled"}
                         </span>
-                        <Link to={quiz._id ? `/Dashbord/courses/${id}/edit/quiz/${quiz.quizId?._id}` : "#"}>
+                        <Link
+                          to={
+                            // quiz._id
+                            //   ? `/Dashbord/courses/${id}/edit/quiz/${quiz.quizId?._id}`
+                            // :
+                            "#"
+                          }
+                        >
                           <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200">
-                            View Quiz
+                            View {capitalize(element.elementName)}
                           </button>
                         </Link>
                       </li>
