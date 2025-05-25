@@ -255,7 +255,7 @@ export default function useFetchChapterData(id: string | undefined) {
   };
 }
 
-const prepareChapterTimelineUpdate = (
+export const prepareChapterTimelineUpdate = (
   timeline: IChapter["timeline"]
 ): ChapterTimelineEdit => {
   return timeline.map((item) => ({

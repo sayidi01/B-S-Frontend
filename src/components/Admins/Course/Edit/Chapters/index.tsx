@@ -11,6 +11,7 @@ import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { IChapter } from "../../../../../types/chapter";
 import { useCourse } from "../../../SingleCourse";
 import { capitalize } from "lodash";
+import TimelineAdder from "./TimelineAdder";
 
 export default function Chapters() {
   const { id } = useParams();
@@ -29,6 +30,7 @@ export default function Chapters() {
   const [newChapterTitle, setNewChapterTitle] = useState("");
 
   const [chapterView, setchapterView] = useState(chapterData);
+  console.log("chapterView", chapterView);
 
   useEffect(() => {
     setchapterView(chapterData);
@@ -186,22 +188,12 @@ export default function Chapters() {
 
             {expandedChapter === chapter._id && (
               <div className="mt-3">
-                <div className="flex justify-end">
-                  <button
-                    className="bg-green-500 text-white px-4 py-1 rounded-md hover:bg-green-600 transition-colors duration-200 mb-3"
-                    onClick={() => {
-                      setSelectedChapter(chapter._id);
-                      setIsModalOpen(true);
-                    }}
-                  >
-                    Assign Quiz → Chapter
-                  </button>
-                </div>
+                <TimelineAdder chapter={chapter} />
                 <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100">
                   <ul className="space-y-2">
                     {chapter.timeline.map((element, index) => (
                       <li
-                        key={element.id+chapter._id}
+                        key={element.id + chapter._id}
                         className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"
                       >
                         <div>
@@ -215,7 +207,7 @@ export default function Chapters() {
                               <ArrowUpOutlined />
                             </button>
                           )}
-                          {(index+1) !== chapter.timeline.length && (
+                          {index + 1 !== chapter.timeline.length && (
                             <button
                               className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
                               onClick={() => {

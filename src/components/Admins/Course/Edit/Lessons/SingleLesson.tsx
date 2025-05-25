@@ -21,6 +21,8 @@ function SingleLesson() {
     return <div>No lesson data found.</div>;
   }
 
+  console.log('lessonData', lessonData)
+
   return (
     <div>
      

@@ -117,18 +117,17 @@ export default function Lessons() {
                             setSelectedLesson(lesson._id);
                             setIsModalOpen(true);
                           }}
+                          disabled
                           className="bg-green-500 text-white px-4 py-1 rounded-md hover:bg-green-600 transition-colors duration-200 mb-3"
                         >
                           Assign Quiz → Lesson
                         </button>
                       </div>
+                      {/* Had l boutton l fo9 makhassch yb9a */}
                       <h3 className="text-lg font-medium text-gray-700 mb-3">
                         Description
                       </h3>
                       <p className="text-gray-600">{lesson.description}</p>
-                      <h3 className="text-lg font-medium text-gray-700 mt-4">
-                        Quiz Assign To Lesson : {lesson.quizId?.name}
-                      </h3>
                       <button
                         onClick={() =>
                           navigate(
