@@ -12,7 +12,7 @@ interface ChapterTimelineQuiz extends IQuiz {
   elementName: "quiz";
 }
 
-type ChapterTimelineElement = ChapterTimelineLesson | ChapterTimelineQuiz;
+export type ChapterTimelineElement = ChapterTimelineLesson | ChapterTimelineQuiz;
 
 export interface IChapter {
   _id: string;

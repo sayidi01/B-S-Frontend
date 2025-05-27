@@ -13,6 +13,8 @@ export default function Lessons() {
     id: string;
    
   }>();
+
+  console.log(id, "id from params");
   
 
   const navigate = useNavigate();
@@ -111,7 +113,7 @@ export default function Lessons() {
 
                   {expandedLesson === lesson._id && (
                     <div className="mt-4">
-                      <div className="flex justify-end">
+                      {/* <div className="flex justify-end">
                         <button
                           onClick={() => {
                             setSelectedLesson(lesson._id);
@@ -122,7 +124,7 @@ export default function Lessons() {
                         >
                           Assign Quiz → Lesson
                         </button>
-                      </div>
+                      </div> */}
                       {/* Had l boutton l fo9 makhassch yb9a */}
                       <h3 className="text-lg font-medium text-gray-700 mb-3">
                         Description

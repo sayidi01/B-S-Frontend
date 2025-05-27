@@ -43,7 +43,7 @@ export class LessonAPIClient extends APIClient {
   
   async updateLesson(
     lessonId: string,
-    data: Partial<{ title: string; description: string; content: string; courseId: string; chapterId: string }>
+    data: Partial<{ title: string; description: string; content: string; courseId: string; }>
   ) {
     return await this.axiosInstance.put<IResponse>(`/lessons/${lessonId}`, data);
   }

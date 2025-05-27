@@ -102,7 +102,6 @@ export default function useFetchLessonData(courseId: string) {
         description: string;
         content: string;
         courseId: string;
-        chapterId: string;
       }>
     ) => {
       setIsLoading(true);

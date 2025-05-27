@@ -46,7 +46,7 @@ function TimelineAdder({ chapter }: Props) {
           className="bg-green-500 text-white px-4 py-1 rounded-md hover:bg-green-600 transition-colors duration-200 mb-3"
           onClick={handleToggleOptionsView}
         >
-          {isOptionsOpen ? "Close" : "Add Lesson/Quiz"}
+          {isOptionsOpen ? "Close" : "Add Lesson / Quiz"}
         </button>
       </div>
 
@@ -55,7 +55,7 @@ function TimelineAdder({ chapter }: Props) {
           style={{ width: "100%" }}
           placeholder="Add lesson/quiz to timeline"
         >
-          {courseDetails.timeline.map((resource) => (
+          {courseDetails?.timeline.map((resource) => (
             <Select.Option key={resource._id} value={resource._id}>
               <span onClick={handleOptionClick(resource)}>
                 {capitalize(resource.elementName) + ": "}
