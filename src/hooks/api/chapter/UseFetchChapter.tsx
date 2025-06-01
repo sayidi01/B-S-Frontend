@@ -29,7 +29,7 @@ const moveItem = function <T>(arr: T[], fromIndex: number, toIndex: number) {
 
 export default function useFetchChapterData(id: string | undefined) {
   const { chapterApiClient } = useUserContext();
-  const { updateCourseDetails } = useCourse();
+  const { updateCourseDetails, courseDetails } = useCourse();
   const queryClient = useQueryClient();
 
   const [chapterData, setChapterData] = useState<null | IChapter[]>(null);
@@ -62,7 +62,7 @@ export default function useFetchChapterData(id: string | undefined) {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [id, chapterApiClient]);
+  }, [id, chapterApiClient, courseDetails]);
 
   const getSingleChapter = useCallback(
     async (courseId: string, chapterId: string) => {

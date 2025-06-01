@@ -21,7 +21,7 @@ export default function useFetchLessonData(courseId: string) {
   const createLesson = useCallback(
     async (
       courseId: string,
-      chapterId: string,
+     
       title: string,
       description: string
     ) => {
@@ -29,7 +29,6 @@ export default function useFetchLessonData(courseId: string) {
       try {
         const response = (await lessonAPIClient.createLesson(
           courseId,
-          chapterId,
           title,
           description
         )) as { data: { lesson: ILesson; courseDetails?: ICourse } };

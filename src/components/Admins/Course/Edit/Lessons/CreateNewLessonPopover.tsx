@@ -27,7 +27,7 @@ function CreateNewLessonPopover({
   error,
   isLoading,
 }: Props) {
-  const { id: courseId } = useParams<{ id: string; chapterId: string }>();
+  const { id: courseId } = useParams<{ id: string;  }>();
 
   const queryClient = useQueryClient();
 

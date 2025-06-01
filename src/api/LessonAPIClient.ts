@@ -11,14 +11,13 @@ interface IResponse {
 export class LessonAPIClient extends APIClient {
   async createLesson(
     courseId: string,
-    chapterId: string,
     title: string,
     description: string
   ) {
     return (
       await this.axiosInstance.post(
         `/lessons`,
-        { title, description, chapterId, courseId }
+        { title, description, courseId }
       )
     ).data;
   }
