@@ -31,6 +31,7 @@ export default function Chapters() {
 
   const [chapterView, setchapterView] = useState(chapterData);
   console.log("chapterView", chapterView);
+  console.log('chapterData', chapterData)
 
   useEffect(() => {
     setchapterView(chapterData);
@@ -53,22 +54,6 @@ export default function Chapters() {
       );
     });
   };
-
-  if (isLoading) {
-    return <div className="text-center py-8 text-gray-600">Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center py-8 text-red-500">{error}</div>;
-  }
-
-  if (!chapterData) {
-    return (
-      <div className="text-center py-8 text-gray-600">
-        No chapter data found.
-      </div>
-    );
-  }
 
   const toggleQuiz = (chapterId: string) => {
     setExpandedChapter(expandedChapter === chapterId ? null : chapterId);
@@ -103,6 +88,22 @@ export default function Chapters() {
       onClick: () => deleteChapter(id as string, chapterId),
     },
   ];
+
+  if (isLoading) {
+    return <div className="text-center py-8 text-gray-600">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-8 text-red-500">{error}</div>;
+  }
+
+  if (!chapterData) {
+    return (
+      <div className="text-center py-8 text-gray-600">
+        No chapter data found.
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -191,7 +192,7 @@ export default function Chapters() {
                 <TimelineAdder chapter={chapter} />
                 <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100">
                   <ul className="space-y-2">
-                    {chapter.timeline.map((element, index) => (
+                    {chapter.timeline.filter(element => element).map((element, index) => (
                       <li
                         key={element.id + chapter._id}
                         className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"

@@ -3,8 +3,9 @@ import { useUserContext } from "../../../config/UserContext";
 import { IChapter } from "../../../types/chapter";
 import { toast } from "react-hot-toast";
 import { useCourse } from "../../../components/Admins/SingleCourse";
-import { ICourse } from "../../../types/course";
+import { ICourse, TimelineItem } from "../../../types/course";
 import { ChapterTimelineEdit } from "../../../api/ChapterAPIClient";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateChapterResponse {
   data: {
@@ -29,6 +30,7 @@ const moveItem = function <T>(arr: T[], fromIndex: number, toIndex: number) {
 export default function useFetchChapterData(id: string | undefined) {
   const { chapterApiClient } = useUserContext();
   const { updateCourseDetails } = useCourse();
+  const queryClient = useQueryClient();
 
   const [chapterData, setChapterData] = useState<null | IChapter[]>(null);
   const [singleChapterData, setSingleChapterData] = useState<null | IChapter>(
@@ -233,11 +235,15 @@ export default function useFetchChapterData(id: string | undefined) {
     chapterApiClient
       .updateTimeline(chapter.courseId, chapterId, updatedTimeline)
       .then(() => {
-        toast.success("Quiz order updated successfully!");
+        toast.success("Order updated successfully!");
+
+        queryClient.refetchQueries({
+          queryKey: ["courseData", id],
+        })
       })
       .catch((err) => {
-        console.error("Error updating quiz order:", err);
-        toast.error("Failed to update quiz order");
+        console.error("Error updating order:", err);
+        toast.error("Failed to update order");
       });
   };
 
@@ -256,10 +262,11 @@ export default function useFetchChapterData(id: string | undefined) {
 }
 
 export const prepareChapterTimelineUpdate = (
-  timeline: IChapter["timeline"]
+  timeline: TimelineItem[]
 ): ChapterTimelineEdit => {
-  return timeline.map((item) => ({
-    elementName: item.elementName,
+  console.log('timeline', timeline)
+  return timeline.filter(item => item).map((item) => ({
+    elementName: item?.elementName,
     id: item._id,
   }));
 };

@@ -1,5 +1,6 @@
 import { ILesson } from "../components/Admins/Course/Edit/Lessons/TypesLessons";
 import { IQuiz } from "../components/Admins/Course/Edit/Quiz/quiz.types";
+import { ChapterTimelineItem } from "./course";
 
 
 interface ChapterTimelineLesson extends ILesson {
@@ -18,6 +19,6 @@ export interface IChapter {
   _id: string;
   title: string;
   courseId: string;
-  timeline: ChapterTimelineElement[]
-  [x: string]: string | ChapterTimelineElement[];
+  timeline: ChapterTimelineItem["timeline"];
+  [x: string]: string | ChapterTimelineItem["timeline"];
 }

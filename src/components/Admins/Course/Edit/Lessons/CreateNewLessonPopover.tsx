@@ -5,11 +5,12 @@ const { TextArea } = Input;
 import { toast } from "react-hot-toast";
 import useFetchChapterData from "../../../../../hooks/api/chapter/UseFetchChapter";
 import { ILesson } from "./TypesLessons";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   createLesson: (
     courseId: string,
-    chapterId: string,
+    // chapterId: string,
     title: string,
     description: string
   ) => Promise<void>;
@@ -28,10 +29,12 @@ function CreateNewLessonPopover({
 }: Props) {
   const { id: courseId } = useParams<{ id: string; chapterId: string }>();
 
+  const queryClient = useQueryClient();
+
   const [formDataLesson, setFormDataLesson] = useState({
     title: "",
     description: "",
-    chapterId: "",
+   
   });
 
   const { chapterData, isLoading: isLoadingChapters } =
@@ -55,24 +58,28 @@ function CreateNewLessonPopover({
       return;
     }
 
-    if (!formDataLesson.chapterId) {
-      console.error("Chapter ID missing");
-      toast.error("Please select a chapter");
-      return;
-    }
+    // if (!formDataLesson.chapterId) {
+    //   console.error("Chapter ID missing");
+    //   toast.error("Please select a chapter");
+    //   return;
+    // }
 
     try {
       console.log("Payload:", formDataLesson);
-      console.log("Chapter ID:", formDataLesson.chapterId);
+    
 
       const response = await createLesson(
         courseId,
-        formDataLesson.chapterId,
+        // formDataLesson.chapterId,
         formDataLesson.title,
         formDataLesson.description
       );
       console.log("Lesson Created:", response);
       toast.success("Lesson Created Successfully");
+
+      queryClient.refetchQueries({
+        queryKey: ["courseData", courseId],
+      })
 
       onClose();
     } catch (err) {
@@ -94,7 +101,7 @@ function CreateNewLessonPopover({
           placeholder="Enter lesson title"
         />
       </div>
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <label htmlFor="chapterId" className="form-label">
           Chapter
         </label>
@@ -115,7 +122,7 @@ function CreateNewLessonPopover({
             </Select.Option>
           ))}
         </Select>
-      </div>
+      </div> */}
 
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
