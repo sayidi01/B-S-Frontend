@@ -1,20 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
 import { useUserContext } from "../../../config/UserContext";
-import { IChapter } from "../../../types/chapter";
+import { IChapter, SingleChapterView } from "../../../types/chapter";
 import { toast } from "react-hot-toast";
 import { useCourse } from "../../../components/Admins/SingleCourse";
-import { ICourse, TimelineItem } from "../../../types/course";
+import {
+  ICourse,
+  TimelineItem,
+  TimelineReference,
+} from "../../../types/course";
 import { ChapterTimelineEdit } from "../../../api/ChapterAPIClient";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateChapterResponse {
   data: {
-    chapter: IChapter;
+    chapter: SingleChapterView;
   };
   courseDetails?: ICourse;
 }
 
-interface DeleteChapterResponse extends CreateChapterResponse {
+interface DeleteChapterResponse {
   data: {
     chapter: IChapter;
   };
@@ -32,10 +36,11 @@ export default function useFetchChapterData(id: string | undefined) {
   const { updateCourseDetails, courseDetails } = useCourse();
   const queryClient = useQueryClient();
 
-  const [chapterData, setChapterData] = useState<null | IChapter[]>(null);
-  const [singleChapterData, setSingleChapterData] = useState<null | IChapter>(
+  const [chapterData, setChapterData] = useState<null | SingleChapterView[]>(
     null
   );
+  const [singleChapterData, setSingleChapterData] =
+    useState<null | SingleChapterView>(null);
 
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +55,7 @@ export default function useFetchChapterData(id: string | undefined) {
     chapterApiClient
       .getAllChapterDataById(id)
       .then((response) => {
-        const data = response as { data: { chapters: IChapter[] } };
+        const data = response as { data: { chapters: SingleChapterView[] } };
         setChapterData(data.data.chapters);
         setError(null);
       })
@@ -73,7 +78,7 @@ export default function useFetchChapterData(id: string | undefined) {
           chapterId
         );
         setSingleChapterData(
-          (response as { data: { chapter: IChapter } }).data.chapter
+          (response as { data: { chapter: SingleChapterView } }).data.chapter
         );
         setError(null);
       } catch (err) {
@@ -96,16 +101,19 @@ export default function useFetchChapterData(id: string | undefined) {
           title
         )) as CreateChapterResponse;
 
+        queryClient.refetchQueries({
+          queryKey: ['courseData', courseId],
+        });
+
+        console.log("response", response);
+
         setChapterData((prev) => {
           if (prev) {
             return [...prev, response.data.chapter];
           } else {
             return [response.data.chapter];
           }
-        });
-        if (response.courseDetails) {
-          updateCourseDetails(response.courseDetails);
-        }
+        }); // @TODO to recheck
 
         setError(null);
       } catch (err) {
@@ -202,11 +210,9 @@ export default function useFetchChapterData(id: string | undefined) {
       console.error(`Error: Chapter with ID ${chapterId} not found`);
       return;
     }
-    const updatedChapterTimeline = moveItem<IChapter["timeline"][number]>(
-      chapter.timeline,
-      quizIndex,
-      newIndex
-    );
+    const updatedChapterTimeline = moveItem<
+      SingleChapterView["timeline"][number]
+    >(chapter.timeline, quizIndex, newIndex);
     if (updatedChapterTimeline.length !== chapter.timeline.length) {
       console.error(
         `Error: Timeline length mismatch after moving quiz from index ${quizIndex} to ${newIndex}`
@@ -226,11 +232,11 @@ export default function useFetchChapterData(id: string | undefined) {
         }) || null
     );
 
-    const updatedTimeline = prepareChapterTimelineUpdate(
+    const updatedTimeline = prepareChapterViewTimelineUpdate(
       updatedChapterTimeline
     );
 
-    console.log('updatedTimeline', updatedTimeline);
+    console.log("updatedTimeline", updatedTimeline);
 
     chapterApiClient
       .updateTimeline(chapter.courseId, chapterId, updatedTimeline)
@@ -239,7 +245,7 @@ export default function useFetchChapterData(id: string | undefined) {
 
         queryClient.refetchQueries({
           queryKey: ["courseData", id],
-        })
+        });
       })
       .catch((err) => {
         console.error("Error updating order:", err);
@@ -262,11 +268,25 @@ export default function useFetchChapterData(id: string | undefined) {
 }
 
 export const prepareChapterTimelineUpdate = (
+  timeline: TimelineReference[]
+): ChapterTimelineEdit => {
+  return timeline
+    .filter((item) => item)
+    .map((item) => ({
+      elementName: item.elementName as any,
+      id: item.id,
+    }));
+};
+
+export const prepareChapterViewTimelineUpdate = (
   timeline: TimelineItem[]
 ): ChapterTimelineEdit => {
-  console.log('timeline', timeline)
-  return timeline.filter(item => item).map((item) => ({
-    elementName: item?.elementName,
-    id: item._id,
-  }));
+  console.log("timeline", timeline);
+  return timeline
+    .filter((item) => item)
+    .map((item) => ({
+      elementName:
+        "elementName" in item ? item.elementName : (item.type as any),
+      id: "data" in item ? item.data._id : "_id" in item ? item._id : item.id,
+    }));
 };

@@ -10,7 +10,6 @@ import { useQueryClient } from "@tanstack/react-query";
 interface Props {
   createLesson: (
     courseId: string,
-    // chapterId: string,
     title: string,
     description: string
   ) => Promise<void>;
@@ -36,9 +35,7 @@ function CreateNewLessonPopover({
     description: "",
    
   });
-
-  const { chapterData, isLoading: isLoadingChapters } =
-    useFetchChapterData(courseId);
+ 
 
   console.log(formDataLesson);
 
@@ -57,29 +54,22 @@ function CreateNewLessonPopover({
       console.error("Course ID missing");
       return;
     }
-
-    // if (!formDataLesson.chapterId) {
-    //   console.error("Chapter ID missing");
-    //   toast.error("Please select a chapter");
-    //   return;
-    // }
-
+   
     try {
       console.log("Payload:", formDataLesson);
     
 
       const response = await createLesson(
         courseId,
-        // formDataLesson.chapterId,
         formDataLesson.title,
         formDataLesson.description
       );
       console.log("Lesson Created:", response);
       toast.success("Lesson Created Successfully");
 
-      queryClient.refetchQueries({
-        queryKey: ["courseData", courseId],
-      })
+      // queryClient.refetchQueries({
+      //   queryKey: ["courseData", courseId],
+      // })
 
       onClose();
     } catch (err) {
@@ -101,29 +91,6 @@ function CreateNewLessonPopover({
           placeholder="Enter lesson title"
         />
       </div>
-      {/* <div className="mb-3">
-        <label htmlFor="chapterId" className="form-label">
-          Chapter
-        </label>
-        <Select
-          id="chapterId"
-          value={formDataLesson.chapterId || undefined}
-          onChange={(value) =>
-            setFormDataLesson((prev) => ({ ...prev, chapterId: value }))
-          }
-          placeholder="Select a chapter"
-          style={{ width: "100%" }}
-          loading={isLoadingChapters}
-          disabled={isLoadingChapters || !chapterData}
-        >
-          {chapterData?.map((chapter) => (
-            <Select.Option key={chapter._id} value={chapter._id}>
-              {chapter.title}
-            </Select.Option>
-          ))}
-        </Select>
-      </div> */}
-
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
           Description

@@ -11,11 +11,9 @@ import { ILesson } from "./TypesLessons";
 export default function Lessons() {
   const { id } = useParams<{
     id: string;
-   
   }>();
 
   console.log(id, "id from params");
-  
 
   const navigate = useNavigate();
 
@@ -30,12 +28,9 @@ export default function Lessons() {
 
   const [lessonResult, setLessonResult] = useState(lessonData);
 
-
   useEffect(() => {
     setLessonResult(lessonData);
   }, [lessonData]);
-
-  
 
   const updateLessonData = (lessonID: string, newData: ILesson) => {
     setLessonResult((prev) => {
@@ -48,7 +43,6 @@ export default function Lessons() {
       return updatedLessons;
     });
   };
-  
 
   const toggleLesson = (lessonId: string) => {
     setExpandedLesson(expandedLesson === lessonId ? null : lessonId);
@@ -85,35 +79,37 @@ export default function Lessons() {
 
       <div className="space-y-6 max-w-3xl mx-auto">
         {lessonResult
-          ? lessonResult.map((lesson, index) => {
-              return (
-                <div
-                  key={lesson._id}
-                  className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
-                >
-                  <div className="flex justify-between items-center">
-                    <div
-                      className="flex justify-between items-center cursor-pointer w-full"
-                      onClick={() => toggleLesson(lesson._id)}
-                    >
-                      <h2 className="text-xl font-semibold text-gray-800">
-                        Lesson {index + 1} : {lesson.title}
-                      </h2>
-                      <span className="text-gray-500">
-                        {expandedLesson === lesson._id ? "▲" : "▼"}
-                      </span>
+          ? lessonResult
+              .filter((lesson) => !!lesson)
+              .map((lesson, index) => {
+                return (
+                  <div
+                    key={lesson._id}
+                    className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div
+                        className="flex justify-between items-center cursor-pointer w-full"
+                        onClick={() => toggleLesson(lesson._id)}
+                      >
+                        <h2 className="text-xl font-semibold text-gray-800">
+                          Lesson {index + 1} : {lesson.title}
+                        </h2>
+                        <span className="text-gray-500">
+                          {expandedLesson === lesson._id ? "▲" : "▼"}
+                        </span>
+                      </div>
+                      <Dropdown
+                        menu={{ items: menuItems(lesson._id) }}
+                        trigger={["click"]}
+                      >
+                        <Button type="text" icon={<FaEllipsisV />} />
+                      </Dropdown>
                     </div>
-                    <Dropdown
-                      menu={{ items: menuItems(lesson._id) }}
-                      trigger={["click"]}
-                    >
-                      <Button type="text" icon={<FaEllipsisV />} />
-                    </Dropdown>
-                  </div>
 
-                  {expandedLesson === lesson._id && (
-                    <div className="mt-4">
-                      {/* <div className="flex justify-end">
+                    {expandedLesson === lesson._id && (
+                      <div className="mt-4">
+                        {/* <div className="flex justify-end">
                         <button
                           onClick={() => {
                             setSelectedLesson(lesson._id);
@@ -125,26 +121,26 @@ export default function Lessons() {
                           Assign Quiz → Lesson
                         </button>
                       </div> */}
-                      {/* Had l boutton l fo9 makhassch yb9a */}
-                      <h3 className="text-lg font-medium text-gray-700 mb-3">
-                        Description
-                      </h3>
-                      <p className="text-gray-600">{lesson.description}</p>
-                      <button
-                        onClick={() =>
-                          navigate(
-                            `/Dashbord/courses/${id}/edit/lesson/${lesson._id}`
-                          )
-                        }
-                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                      >
-                        View Lesson
-                      </button>
-                    </div>
-                  )}
-                </div>
-              );
-            })
+                        {/* Had l boutton l fo9 makhassch yb9a */}
+                        <h3 className="text-lg font-medium text-gray-700 mb-3">
+                          Description
+                        </h3>
+                        <p className="text-gray-600">{lesson.description}</p>
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/Dashbord/courses/${id}/edit/lesson/${lesson._id}`
+                            )
+                          }
+                          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        >
+                          View Lesson
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })
           : !isLoading && <p>No lessons found.</p>}
       </div>
 

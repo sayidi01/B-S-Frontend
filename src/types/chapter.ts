@@ -1,11 +1,10 @@
 import { ILesson } from "../components/Admins/Course/Edit/Lessons/TypesLessons";
 import { IQuiz } from "../components/Admins/Course/Edit/Quiz/quiz.types";
-import { ChapterTimelineItem } from "./course";
-
+import { LessonData, QuizData, TimelineReference } from "./course";
 
 interface ChapterTimelineLesson extends ILesson {
   id: string;
-  elementName: "lesson"
+  elementName: "lesson";
 }
 
 interface ChapterTimelineQuiz extends IQuiz {
@@ -13,12 +12,34 @@ interface ChapterTimelineQuiz extends IQuiz {
   elementName: "quiz";
 }
 
-export type ChapterTimelineElement = ChapterTimelineLesson | ChapterTimelineQuiz;
+export type ChapterTimelineElement =
+  | ChapterTimelineLesson
+  | ChapterTimelineQuiz;
 
 export interface IChapter {
   _id: string;
   title: string;
   courseId: string;
-  timeline: ChapterTimelineItem["timeline"];
-  [x: string]: string | ChapterTimelineItem["timeline"];
+  timeline: TimelineReference[];
+  [x: string]: string | TimelineReference[];
+}
+
+export interface SingleChapterView {
+  _id: string;
+  title: string;
+  courseId: string;
+  timeline: (QuizData | LessonData)[];
+  [x: string]: string | (QuizData | LessonData)[];
+}
+
+export interface ChapterTimelineItem {
+  id: string;
+  title: string;
+  elementName: "lesson" | "quiz";
+  type: "lesson" | "quiz";
+  data: ChapterTimelineElement;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  timeline: ChapterTimelineItem[];
 }

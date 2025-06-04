@@ -6,7 +6,12 @@ import { IRootState } from "../../store";
 import { useEffect } from "react";
 import IconCaretsDown from "../Icon/IconCaretsDown";
 import { useCourse } from "../Admins/SingleCourse";
-import { ElementType, LessonTimelineItem, QuizTimelineItem } from "../../types/course";
+import {
+  ElementType,
+  LessonTimelineItem,
+  QuizTimelineItem,
+  TimelineItem,
+} from "../../types/course";
 
 const SidebarCoursesViews = () => {
   const { id } = useParams();
@@ -50,71 +55,80 @@ const SidebarCoursesViews = () => {
           </button>
           <PerfectScrollbar className="h-[calc(100vh-80px)]">
             <ul className="space-y-2">
-              {courseDetails?.timeline?.map((element) => (
-                <>
-                  {element.type === ElementType.Chapter ? (
-                    // Display chapter timeline
-                    <li key={element.data._id}>
-                      <span className="block text-lg font-semibold text-black-800 hover:font-bold dark:text-white">
-                        {element.data.title}
-                      </span>
-                      <ul className="ml-4 mt-2 space-y-1">
-                        {element.timeline.filter(item => item).map((item: QuizTimelineItem | LessonTimelineItem) => {
-                          // @TODO 7tta tl3ab 3la design
-                          return (
-                            <li key={item.data._id}>
-                              <Link
-                                to={`/Dashbord/courses/${id}/chapter/${element.data._id}/lesson/${item.data._id}`}
-                                className={`block text-black-700 dark:text-gray-300 hover:font-bold ${
-                                  location.pathname ===
-                                  `/Dashbord/courses/${id}/chapter/${element.data._id}/lesson/${item.data._id}`
-                                    ? "font-bold"
-                                    : ""
-                                }`}
-                                style={{ fontSize: 16 }}
-                              >
-                                {item.type == ElementType.Lesson 
-                                  ? item.data.title
-                                  : item.data.name}
-                              </Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </li>
-                  ) : element.type === ElementType.Quiz ? (
-                    // Display quiz timeline
-                    <li key={element.data._id}>
-                      <Link
-                        to={`/Dashbord/courses/${id}/quiz/${element.data._id}`}
-                        className={`block text-lg font-semibold text-black-800 hover:font-bold dark:text-white ${
-                          location.pathname ===
-                          `/Dashbord/courses/${id}/quiz/${element.data._id}`
-                            ? "font-bold"
-                            : ""
-                        }`}
-                      >
-                        {element.data.name}
-                      </Link>
-                    </li>
-                  ) : element.type === ElementType.Lesson ? (
-                    // Display lesson timeline
-                    <li key={element.data._id}>
-                      <Link
-                        to={`/Dashbord/courses/${id}/lesson/${element.data._id}`}
-                        className={`block text-lg font-semibold text-black-800 hover:font-bold dark:text-white ${
-                          location.pathname ===
-                          `/Dashbord/courses/${id}/lesson/${element.data._id}`
-                            ? "font-bold"
-                            : ""
-                        }`}
-                      >
-                        {element.data.title}
-                      </Link>
-                    </li>
-                  ) : null}
-                </>
-              ))}
+              {courseDetails?.timeline
+                ?.filter(
+                  (item): item is TimelineItem =>
+                    !!item && item.type === ElementType.Chapter
+                )
+                .map((element) => (
+                  <>
+                    {element.type === ElementType.Chapter ? (
+                      // Display chapter timeline
+                      <li key={element.data._id}>
+                        <span className="block text-lg font-semibold text-black-800 hover:font-bold dark:text-white">
+                          {element.data.title}
+                        </span>
+                        <ul className="ml-4 mt-2 space-y-1">
+                          {element.timeline
+                            .filter((item) => item)
+                            .map(
+                              (item: QuizTimelineItem | LessonTimelineItem) => {
+                                // @TODO 7tta tl3ab 3la design
+                                return (
+                                  <li key={item.data._id}>
+                                    <Link
+                                      to={`/Dashbord/courses/${id}/chapter/${element.data._id}/lesson/${item.data._id}`}
+                                      className={`block text-black-700 dark:text-gray-300 hover:font-bold ${
+                                        location.pathname ===
+                                        `/Dashbord/courses/${id}/chapter/${element.data._id}/lesson/${item.data._id}`
+                                          ? "font-bold"
+                                          : ""
+                                      }`}
+                                      style={{ fontSize: 16 }}
+                                    >
+                                      {item.type == ElementType.Lesson
+                                        ? item.data.title
+                                        : item.data.name}
+                                    </Link>
+                                  </li>
+                                );
+                              }
+                            )}
+                        </ul>
+                      </li>
+                    ) : element.type === ElementType.Quiz ? (
+                      // Display quiz timeline
+                      <li key={element.data._id}>
+                        <Link
+                          to={`/Dashbord/courses/${id}/quiz/${element.data._id}`}
+                          className={`block text-lg font-semibold text-black-800 hover:font-bold dark:text-white ${
+                            location.pathname ===
+                            `/Dashbord/courses/${id}/quiz/${element.data._id}`
+                              ? "font-bold"
+                              : ""
+                          }`}
+                        >
+                          {element.data.name}
+                        </Link>
+                      </li>
+                    ) : element.type === ElementType.Lesson ? (
+                      // Display lesson timeline
+                      <li key={element.data._id}>
+                        <Link
+                          to={`/Dashbord/courses/${id}/lesson/${element.data._id}`}
+                          className={`block text-lg font-semibold text-black-800 hover:font-bold dark:text-white ${
+                            location.pathname ===
+                            `/Dashbord/courses/${id}/lesson/${element.data._id}`
+                              ? "font-bold"
+                              : ""
+                          }`}
+                        >
+                          {element.data.title}
+                        </Link>
+                      </li>
+                    ) : null}
+                  </>
+                ))}
               {/* {courseDetails?.chapters?.map((chapter) => (
                 <li key={chapter._id}>
                   <span className="block text-lg font-semibold text-black-800 hover:font-bold dark:text-white">

@@ -65,7 +65,7 @@ export interface TimelineReference {
   id: string;
 }
 
-export type TimelineItem = ChapterTimelineItem | QuizTimelineItem;
+export type TimelineItem = ChapterTimelineItem | QuizTimelineItem | LessonTimelineItem;
 
 export interface ChapterTimelineItem {
   type: 'chapter';

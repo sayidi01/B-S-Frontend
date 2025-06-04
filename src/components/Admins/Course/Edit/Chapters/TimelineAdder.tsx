@@ -1,16 +1,23 @@
 import { useState } from "react";
 import { Select } from "antd";
-import { IChapter } from "../../../../../types/chapter";
+import { IChapter, SingleChapterView } from "../../../../../types/chapter";
 import { capitalize } from "lodash";
-import { prepareChapterTimelineUpdate } from "../../../../../hooks/api/chapter/UseFetchChapter";
+import {
+  prepareChapterTimelineUpdate,
+  prepareChapterViewTimelineUpdate,
+} from "../../../../../hooks/api/chapter/UseFetchChapter";
 import { useUserContext } from "../../../../../config/UserContext";
 import toast from "react-hot-toast";
 import { useCourse } from "../../../SingleCourse";
-import { TimelineItem } from "../../../../../types/course";
+import {
+  LessonTimelineItem,
+  QuizTimelineItem,
+  TimelineItem,
+} from "../../../../../types/course";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
-  chapter: IChapter;
+  chapter: SingleChapterView;
 }
 
 function TimelineAdder({ chapter }: Props) {
@@ -20,40 +27,43 @@ function TimelineAdder({ chapter }: Props) {
 
   const { chapterApiClient } = useUserContext();
 
-  console.log("chapter", chapter);
+  console.log("courseDetails", courseDetails);
 
-  const handleOptionClick = (resource: TimelineItem) => () => {
-    if (!courseDetails) {
-      return;
-    }
-    const updatedTimeline = chapter.timeline.concat({
-      ...resource.data,
-      elementName: resource.type,
-      type: resource.type,
-    });
-    const preparedTimeline = prepareChapterTimelineUpdate(updatedTimeline);
+  const handleOptionClick =
+    (resource: QuizTimelineItem | LessonTimelineItem) => () => {
+      if (!courseDetails) {
+        return;
+      }
+      const updatedTimeline: (QuizTimelineItem | LessonTimelineItem)[] = chapter.timeline.concat([
+        { 
+          type: resource.type,
+          data: resource.data,
+        },
+      ]);
+      const preparedTimeline =
+        prepareChapterViewTimelineUpdate(updatedTimeline);
 
-    chapterApiClient
-      .updateTimeline(chapter.courseId, chapter._id, preparedTimeline)
-      .then(() => {
-        toast.success("Lesson/Quiz added to timeline successfully");
-        queryClient.refetchQueries({
-          queryKey: ["courseData", courseDetails.courseData._id],
+      chapterApiClient
+        .updateTimeline(chapter.courseId, chapter._id, preparedTimeline)
+        .then(() => {
+          toast.success("Lesson/Quiz added to timeline successfully");
+          queryClient.refetchQueries({
+            queryKey: ["courseData", courseDetails.courseData._id],
+          });
         })
-      })
-      .catch((error) => {
-        console.error("Failed to add lesson/quiz to timeline:", error);
-        toast.error("Failed to add lesson/quiz to timeline");
-      })
-      .finally(() => {
-        setIsOptionsOpen(false);
-      });
-  };
+        .catch((error) => {
+          console.error("Failed to add lesson/quiz to timeline:", error);
+          toast.error("Failed to add lesson/quiz to timeline");
+        })
+        .finally(() => {
+          setIsOptionsOpen(false);
+        });
+    };
 
   const handleSelectChange = (value: string) => {
-    const selectedResource = courseDetails?.timeline.find(
-      (resource) => resource.data._id === value
-    );
+    const selectedResource = courseDetails?.timeline
+      .filter((element): element is TimelineItem => !!element)
+      .find((resource) => resource.data._id === value);
     if (selectedResource) {
       handleOptionClick(selectedResource)();
     }

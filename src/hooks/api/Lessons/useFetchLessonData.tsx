@@ -16,7 +16,6 @@ export default function useFetchLessonData(courseId: string) {
   const [isLoading, setIsLoading] = useState(false);
 
   const queryClient = useQueryClient();
-  const { updateCourseDetails } = useCourse();
 
   const createLesson = useCallback(
     async (
@@ -33,9 +32,9 @@ export default function useFetchLessonData(courseId: string) {
           description
         )) as { data: { lesson: ILesson; courseDetails?: ICourse } };
         setLessonData((prev) => [...prev, response.data.lesson]);
-        if (response.data.courseDetails) {
-          updateCourseDetails(response.data.courseDetails);
-        }
+        queryClient.refetchQueries({
+          queryKey: ['courseData', courseId],
+        });
         setError(null);
       } catch (err) {
         console.error("Error creating lesson:", err);
@@ -118,9 +117,9 @@ export default function useFetchLessonData(courseId: string) {
             )
           );
 
-          if (lessonResponse.courseDetails) {
-            updateCourseDetails(lessonResponse.courseDetails);
-          }
+          // if (lessonResponse.courseDetails) {
+          //   updateCourseDetails(lessonResponse.courseDetails);
+          // }
 
           setError(null);
           toast.success("Lesson Updated Successfully");

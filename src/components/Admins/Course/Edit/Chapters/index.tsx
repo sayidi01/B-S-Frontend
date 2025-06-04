@@ -12,6 +12,7 @@ import { IChapter } from "../../../../../types/chapter";
 import { useCourse } from "../../../SingleCourse";
 import { capitalize } from "lodash";
 import TimelineAdder from "./TimelineAdder";
+import { TimelineItem, TimelineReference } from "../../../../../types/course";
 
 export default function Chapters() {
   const { id } = useParams();
@@ -31,7 +32,7 @@ export default function Chapters() {
 
   const [chapterView, setchapterView] = useState(chapterData);
   console.log("chapterView", chapterView);
-  console.log('chapterData', chapterData)
+  console.log("chapterData", chapterData);
 
   useEffect(() => {
     setchapterView(chapterData);
@@ -162,9 +163,9 @@ export default function Chapters() {
       )}
 
       <div className="space-y-6 max-w-3xl mx-auto">
-        {chapterView?.map((chapter) => (
+        {chapterView?.map((chapter, idx) => (
           <div
-            key={chapter._id}
+            key={chapter._id+idx}
             className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
           >
             <div className="flex justify-between items-center">
@@ -192,53 +193,59 @@ export default function Chapters() {
                 <TimelineAdder chapter={chapter} />
                 <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100">
                   <ul className="space-y-2">
-                    {chapter.timeline.filter(element => element).map((element, index) => (
-                      <li
-                        key={element.id + chapter._id}
-                        className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"
-                      >
-                        <div>
-                          {!!index && (
-                            <button
-                              className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                              onClick={() => {
-                                handleMoveOrderQuiz(index, chapter._id, "up");
-                              }}
-                            >
-                              <ArrowUpOutlined />
-                            </button>
-                          )}
-                          {index + 1 !== chapter.timeline.length && (
-                            <button
-                              className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                              onClick={() => {
-                                handleMoveOrderQuiz(index, chapter._id, "down");
-                              }}
-                            >
-                              <ArrowDownOutlined />
-                            </button>
-                          )}
-                        </div>
-                        <span className="text-gray-700">
-                          {capitalize(element.elementName)}:{" "}
-                          {element.elementName === "lesson"
-                            ? element.title
-                            : element.name || "Untitled"}
-                        </span>
-                        <Link
-                          to={
-                            // quiz._id
-                            //   ? `/Dashbord/courses/${id}/edit/quiz/${quiz.quizId?._id}`
-                            // :
-                            "#"
-                          }
+                    {chapter.timeline
+                      .filter((element): element is TimelineReference => !!element)
+                      .map((element, index) => (
+                        <li
+                          key={element.id + chapter._id+index}
+                          className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"
                         >
-                          <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200">
-                            View {capitalize(element.elementName)}
-                          </button>
-                        </Link>
-                      </li>
-                    ))}
+                          <div>
+                            {!!index && (
+                              <button
+                                className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                                onClick={() => {
+                                  handleMoveOrderQuiz(index, chapter._id, "up");
+                                }}
+                              >
+                                <ArrowUpOutlined />
+                              </button>
+                            )}
+                            {index + 1 !== chapter.timeline.length && (
+                              <button
+                                className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                                onClick={() => {
+                                  handleMoveOrderQuiz(
+                                    index,
+                                    chapter._id,
+                                    "down"
+                                  );
+                                }}
+                              >
+                                <ArrowDownOutlined />
+                              </button>
+                            )}
+                          </div>
+                          <span className="text-gray-700">
+                            {capitalize(element.elementName)}:{" "}
+                            {element.elementName === "lesson"
+                              ? element.title
+                              : element.name || "Untitled"}
+                          </span>
+                          <Link
+                            to={
+                              // quiz._id
+                              //   ? `/Dashbord/courses/${id}/edit/quiz/${quiz.quizId?._id}`
+                              // :
+                              "#"
+                            }
+                          >
+                            <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200">
+                              View {capitalize(element.elementName)}
+                            </button>
+                          </Link>
+                        </li>
+                      ))}
                   </ul>
                 </div>
               </div>
