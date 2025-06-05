@@ -9,17 +9,11 @@ import ModalAssignQuizToLesson from "./ModalAssignQuizToLesson";
 import { ILesson } from "./TypesLessons";
 
 export default function Lessons() {
-  const { id } = useParams<{
-    id: string;
-  }>();
-
-  console.log(id, "id from params");
-
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [expandedLesson, setExpandedLesson] = useState<string | null>(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<string | null>(null);
 
@@ -33,15 +27,9 @@ export default function Lessons() {
   }, [lessonData]);
 
   const updateLessonData = (lessonID: string, newData: ILesson) => {
-    setLessonResult((prev) => {
-      const updatedLessons = prev.map((lesson) => {
-        if (lesson._id === lessonID) {
-          return newData;
-        }
-        return lesson;
-      });
-      return updatedLessons;
-    });
+    setLessonResult((prev) =>
+      prev.map((lesson) => (lesson._id === lessonID ? newData : lesson))
+    );
   };
 
   const toggleLesson = (lessonId: string) => {
@@ -78,58 +66,61 @@ export default function Lessons() {
       </div>
 
       <div className="space-y-6 max-w-3xl mx-auto">
-        {lessonResult
-          ? lessonResult
-              .filter((lesson) => !!lesson)
-              .map((lesson, index) => {
-                return (
+        {lessonResult && lessonResult.length > 0 ? (
+          lessonResult
+            .filter((lesson): lesson is ILesson => !!lesson)
+            .filter(
+              (lesson, index, self) =>
+                index === self.findIndex((l) => l._id === lesson._id)
+            )
+            .map((lesson, index) => (
+              <div
+                key={lesson._id}
+                className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
+              >
+                <div className="flex justify-between items-center">
                   <div
-                    key={lesson._id}
-                    className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
+                    className="flex justify-between items-center cursor-pointer w-full"
+                    onClick={() => toggleLesson(lesson._id)}
                   >
-                    <div className="flex justify-between items-center">
-                      <div
-                        className="flex justify-between items-center cursor-pointer w-full"
-                        onClick={() => toggleLesson(lesson._id)}
-                      >
-                        <h2 className="text-xl font-semibold text-gray-800">
-                          Lesson {index + 1} : {lesson.title}
-                        </h2>
-                        <span className="text-gray-500">
-                          {expandedLesson === lesson._id ? "▲" : "▼"}
-                        </span>
-                      </div>
-                      <Dropdown
-                        menu={{ items: menuItems(lesson._id) }}
-                        trigger={["click"]}
-                      >
-                        <Button type="text" icon={<FaEllipsisV />} />
-                      </Dropdown>
-                    </div>
-
-                    {expandedLesson === lesson._id && (
-                      <div className="mt-4">
-                       
-                        <h3 className="text-lg font-medium text-gray-700 mb-3">
-                          Description
-                        </h3>
-                        <p className="text-gray-600">{lesson.description}</p>
-                        <button
-                          onClick={() =>
-                            navigate(
-                              `/Dashbord/courses/${id}/edit/lesson/${lesson._id}`
-                            )
-                          }
-                          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                        >
-                          View Lesson
-                        </button>
-                      </div>
-                    )}
+                    <h2 className="text-xl font-semibold text-gray-800">
+                      Lesson {index + 1} : {lesson.title}
+                    </h2>
+                    <span className="text-gray-500">
+                      {expandedLesson === lesson._id ? "▲" : "▼"}
+                    </span>
                   </div>
-                );
-              })
-          : !isLoading && <p>No lessons found.</p>}
+                  <Dropdown
+                    menu={{ items: menuItems(lesson._id) }}
+                    trigger={["click"]}
+                  >
+                    <Button type="text" icon={<FaEllipsisV />} />
+                  </Dropdown>
+                </div>
+
+                {expandedLesson === lesson._id && (
+                  <div className="mt-4">
+                    <h3 className="text-lg font-medium text-gray-700 mb-3">
+                      Description
+                    </h3>
+                    <p className="text-gray-600">{lesson.description}</p>
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `/Dashbord/courses/${id}/edit/lesson/${lesson._id}`
+                        )
+                      }
+                      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    >
+                      View Lesson
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))
+        ) : (
+          !isLoading && <p>No lessons found.</p>
+        )}
       </div>
 
       {isPopoverOpen && (
@@ -149,6 +140,7 @@ export default function Lessons() {
           </div>
         </div>
       )}
+
       <ModalAssignQuizToLesson
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

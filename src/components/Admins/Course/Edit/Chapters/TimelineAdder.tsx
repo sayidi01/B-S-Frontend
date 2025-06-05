@@ -34,21 +34,26 @@ function TimelineAdder({ chapter }: Props) {
       if (!courseDetails) {
         return;
       }
-      const updatedTimeline: (QuizTimelineItem | LessonTimelineItem)[] = chapter.timeline.concat([
-        { 
+      const updatedTimeline: (QuizTimelineItem | LessonTimelineItem)[] = (
+        chapter.timeline as unknown as (QuizTimelineItem | LessonTimelineItem)[]
+      ).concat([
+        {
           type: resource.type,
           data: resource.data,
-        },
+          
+        } as QuizTimelineItem | LessonTimelineItem,
       ]);
-      const preparedTimeline =
-        prepareChapterViewTimelineUpdate(updatedTimeline);
+  
+      const preparedTimeline = prepareChapterViewTimelineUpdate(
+        updatedTimeline as unknown as TimelineItem[]
+      );
 
       chapterApiClient
         .updateTimeline(chapter.courseId, chapter._id, preparedTimeline)
         .then(() => {
           toast.success("Lesson/Quiz added to timeline successfully");
           queryClient.refetchQueries({
-            queryKey: ["courseData", courseDetails.courseData._id],
+            queryKey: ["courseData", courseDetails.courseData._id ],
           });
         })
         .catch((error) => {
@@ -60,14 +65,17 @@ function TimelineAdder({ chapter }: Props) {
         });
     };
 
-  const handleSelectChange = (value: string) => {
-    const selectedResource = courseDetails?.timeline
-      .filter((element): element is TimelineItem => !!element)
-      .find((resource) => resource.data._id === value);
-    if (selectedResource) {
-      handleOptionClick(selectedResource)();
-    }
-  };
+    const handleSelectChange = (value: string) => {
+      const selectedResource = courseDetails?.timeline
+        .filter((element): element is TimelineItem => !!element)
+        .find((resource) => resource.data._id === value);
+    
+      if (selectedResource) {
+        handleOptionClick(
+          selectedResource as unknown as QuizTimelineItem | LessonTimelineItem
+        )();
+      }
+    };
 
   const handleToggleOptionsView = () => {
     setIsOptionsOpen((prev) => !prev);

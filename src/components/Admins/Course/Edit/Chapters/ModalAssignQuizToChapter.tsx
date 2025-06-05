@@ -25,7 +25,7 @@ const ModalAssignQuizToChapter: React.FC<ModalAssignQuizToChapterProps> = ({
 
   const [selectedQuiz, setSelectedQuiz] = useState<string | null>(null);
   
-  const quizzes = courseData?.quizzes || [];
+  const quizzes = courseData?.data.quizzes || [];
 
 
   console.log(quizzes)

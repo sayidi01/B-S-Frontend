@@ -46,9 +46,6 @@ function EditLesson() {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  // const handleSelectChange = (value: string) => {
-  //   setFormState({ ...formState, chapterId: value });
-  // };
 
   const handleEditorChange = (content: string) => {
     setFormState({ ...formState, content });
@@ -94,24 +91,6 @@ function EditLesson() {
           placeholder="Enter lesson title"
         />
       </div>
-      {/* <div className="mb-3">
-        <label htmlFor="chapterId" className="form-label">
-          Chapter
-        </label>
-        <Select
-          value={formState.chapterId}
-          id="chapterId"
-          onChange={handleSelectChange}
-          placeholder="Select a chapter"
-          style={{ width: "100%" }}
-        >
-          {chaptersData.map((chapter) => (
-            <Select.Option key={chapter._id} value={chapter._id}>
-              {chapter.title}
-            </Select.Option>
-          ))}
-        </Select>
-      </div> */}
 
       <div className="mb-3">
         <label htmlFor="description" className="form-label">

@@ -233,7 +233,7 @@ export default function useFetchChapterData(id: string | undefined) {
     );
 
     const updatedTimeline = prepareChapterViewTimelineUpdate(
-      updatedChapterTimeline
+      updatedChapterTimeline as unknown as TimelineItem[]
     );
 
     console.log("updatedTimeline", updatedTimeline);
@@ -283,10 +283,15 @@ export const prepareChapterViewTimelineUpdate = (
 ): ChapterTimelineEdit => {
   console.log("timeline", timeline);
   return timeline
-    .filter((item) => item)
+    .filter((item): item is TimelineItem => !!item)
     .map((item) => ({
       elementName:
-        "elementName" in item ? item.elementName : (item.type as any),
-      id: "data" in item ? item.data._id : "_id" in item ? item._id : item.id,
+        "elementName" in item ? item.elementName : (item as any).type,
+      id: "data" in item
+        ? (item as any).data._id
+        : "_id" in item
+        ? (item as any)._id
+        : (item as any).id,
     }));
 };
+

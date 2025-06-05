@@ -9,7 +9,7 @@ export default function useFetchQuizzesByCourseData(courseID: string) {
 
     const { courseApiClient } = useUserContext();
 
-    const [courseData, setCourseData] = useState<null | ICourse>(null);
+    const [courseData, setCourseData] = useState<null | { data: ICourse }>(null);
     const [error, setError] = useState<null | string>(null);
     const [isLoading, setIsLoading] = useState(false);
   
@@ -18,8 +18,7 @@ export default function useFetchQuizzesByCourseData(courseID: string) {
       courseApiClient
         .getAllQuizzesByCourse(courseID)
         .then((response) => {
-          const typedResponse = response as { data: ICourse }; 
-        setCourseData(typedResponse.data);
+          setCourseData(response as { data: ICourse });
         })
         .catch((err) => {
           const msg = "Failed to retrieve course data";

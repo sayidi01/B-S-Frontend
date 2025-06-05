@@ -13,11 +13,11 @@ export default function Quiz() {
   const { courseData } = useFetchQuizzesByCourseData(id as string);
   const { deleteQuiz } = UseFetchDeleteQuiz(quizId as string);
   
-  const [quizzesData, setQuizzesData] = useState(courseData?.quizzes || []);
+  const [quizzesData, setQuizzesData] = useState(courseData?.data?.quizzes || []);
 
   useEffect(() => {
-    if (courseData?.quizzes) {
-      setQuizzesData(courseData.quizzes);
+    if (courseData?.data?.quizzes) {
+      setQuizzesData(courseData.data.quizzes);
     }
   }, [courseData]);
 

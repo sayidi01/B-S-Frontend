@@ -46,12 +46,14 @@ export type CourseTimeline =
 // -------
 
 export interface ICourse {
+  id: string
   courseData: CourseData;
   timeline: TimelineItem[];
   quizzes: QuizGetterResponse[];
 }
 
 export interface CourseData {
+  id: string
   _id: string;
   title: string;
   imageCourse: string;
@@ -70,6 +72,7 @@ export interface TimelineReference {
 export type TimelineItem = ChapterTimelineItem | QuizTimelineItem | LessonTimelineItem;
 
 export interface ChapterTimelineItem {
+  _id: string
   id: string
   type: 'chapter';
   data: ChapterData;
@@ -77,12 +80,14 @@ export interface ChapterTimelineItem {
 }
 
 export interface QuizTimelineItem {
+  _id: string
   id: string
   type: 'quiz';
   data: QuizData;
 }
 
 export interface LessonTimelineItem {
+  _id: string
   id: string
   type: 'lesson';
   data: LessonData;

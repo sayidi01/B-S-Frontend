@@ -14,7 +14,7 @@ export default function useFetchLessonData(courseId: string) {
   const [lessonData, setLessonData] = useState<ILesson[]>([]);
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { updateCourseDetails} = useCourse();
   const queryClient = useQueryClient();
 
   const createLesson = useCallback(
@@ -117,9 +117,9 @@ export default function useFetchLessonData(courseId: string) {
             )
           );
 
-          // if (lessonResponse.courseDetails) {
-          //   updateCourseDetails(lessonResponse.courseDetails);
-          // }
+          if (lessonResponse.courseDetails) {
+            updateCourseDetails(lessonResponse.courseDetails);
+          }
 
           setError(null);
           toast.success("Lesson Updated Successfully");

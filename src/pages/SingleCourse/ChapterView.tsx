@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useFetchChapterData from "../../hooks/api/chapter/UseFetchChapter";
+import { ChapterData } from "../../types/course";
 
 function ChapterView() {
   const { id, chapterId } = useParams<{ id: string; chapterId: string }>();
@@ -25,7 +26,8 @@ function ChapterView() {
   return (
     <div>
       <p style={{ fontWeight: "bold", fontFamily: "serif", fontSize: 20 }}>
-        {singleChapterData?.chapters?.title}
+      {((singleChapterData?.chapters as unknown) as ChapterData)?.title}
+
       </p>
     </div>
   );
