@@ -64,7 +64,7 @@ const SidebarCoursesViews = () => {
                   <>
                     {element.type === ElementType.Chapter ? (
                       // Display chapter timeline
-                      <li key={element.data._id}>
+                      <li key={`chapter-${element.data._id}`}>
                         <span className="block text-lg font-semibold text-black-800 hover:font-bold dark:text-white">
                           {element.data.title}
                         </span>
@@ -77,16 +77,24 @@ const SidebarCoursesViews = () => {
                                 return (
                                   <li key={item.data._id}>
                                     <Link
-                                      to={`/Dashbord/courses/${id}/chapter/${element.data._id}/lesson/${item.data._id}`}
+                                      to={`/Dashbord/courses/${id}/${
+                                        item.type === ElementType.Quiz
+                                          ? "quiz"
+                                          : "lesson"
+                                      }/${item.data._id}`}
                                       className={`block text-black-700 dark:text-gray-300 hover:font-bold ${
                                         location.pathname ===
-                                        `/Dashbord/courses/${id}/chapter/${element.data._id}/lesson/${item.data._id}`
+                                        `/Dashbord/courses/${id}/${
+                                          item.type === ElementType.Quiz
+                                            ? "quiz"
+                                            : "lesson"
+                                        }/${item.data._id}`
                                           ? "font-bold"
                                           : ""
                                       }`}
                                       style={{ fontSize: 16 }}
                                     >
-                                      {item.type == ElementType.Lesson
+                                      {item.type === ElementType.Lesson
                                         ? item.data.title
                                         : item.data.name}
                                     </Link>
@@ -98,7 +106,7 @@ const SidebarCoursesViews = () => {
                       </li>
                     ) : element.type === ElementType.Quiz ? (
                       // Display quiz timeline
-                      <li key={element.data._id}>
+                      <li key={`quiz-${element.data._id}`}>
                         <Link
                           to={`/Dashbord/courses/${id}/quiz/${element.data._id}`}
                           className={`block text-lg font-semibold text-black-800 hover:font-bold dark:text-white ${
@@ -113,7 +121,7 @@ const SidebarCoursesViews = () => {
                       </li>
                     ) : element.type === ElementType.Lesson ? (
                       // Display lesson timeline
-                      <li key={element.data._id}>
+                      <li key={`lesson-${element.data._id}`}>
                         <Link
                           to={`/Dashbord/courses/${id}/lesson/${element.data._id}`}
                           className={`block text-lg font-semibold text-black-800 hover:font-bold dark:text-white ${
@@ -129,68 +137,6 @@ const SidebarCoursesViews = () => {
                     ) : null}
                   </>
                 ))}
-              {/* {courseDetails?.chapters?.map((chapter) => (
-                <li key={chapter._id}>
-                  <span className="block text-lg font-semibold text-black-800 hover:font-bold dark:text-white">
-                    {chapter.chapterData.title}
-                  </span>
-
-                  <ul className="ml-4 mt-2 space-y-1">
-                    {chapter.lessons?.map((lesson: ILesson) => (
-                      <li key={lesson._id}>
-                        <Link
-                          to={`/Dashbord/courses/${id}/lesson/${lesson.lessonData._id}`}
-                          className={`block text-black-700 dark:text-gray-300 hover:font-bold ${
-                            location.pathname ===
-                            `/Dashbord/courses/${id}/lesson/${lesson.lessonData._id}`
-                              ? "font-bold"
-                              : ""
-                          }`}
-                          style={{ fontSize: 16 }}
-                        >
-                          {lesson.lessonData.title}
-                        </Link>
-                        {lesson.lessonData.quizId && (
-                          <Link
-                            to={`/Dashbord/courses/${id}/quiz/${lesson.lessonData.quizId._id}`}
-                            className={`block text-black-700 dark:text-gray-300 hover:font-bold ${
-                              location.pathname ===
-                              `/Dashbord/courses/${id}/quiz/${lesson.lessonData.quizId._id}`
-                                ? "font-bold"
-                                : ""
-                            }`}
-                            style={{ fontSize: 16, marginTop: "0.5rem" }}
-                          >
-                            Quiz: {lesson.lessonData.quizId.name}
-                          </Link>
-                        )}
-                      </li>
-                    ))}
-                    {chapter.chapterData.quizzes?.map(
-                      (quiz: {
-                        _id: string;
-                        quizId?: { _id: string; name: string };
-                      }) =>
-                        quiz.quizId && (
-                          <li key={quiz._id}>
-                            <Link
-                              to={`/Dashbord/courses/${id}/quiz/${quiz.quizId._id}`}
-                              className={`block text-black-700 dark:text-gray-300 hover:font-bold ${
-                                location.pathname ===
-                                `/Dashbord/courses/${id}/quiz/${quiz.quizId._id}`
-                                  ? "font-bold"
-                                  : ""
-                              }`}
-                              style={{ fontSize: 16 }}
-                            >
-                              Quiz: {quiz.quizId.name}
-                            </Link>
-                          </li>
-                        )
-                    )}
-                  </ul>
-                </li>
-              ))} */}
             </ul>
           </PerfectScrollbar>
         </div>

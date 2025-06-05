@@ -165,7 +165,7 @@ export default function Chapters() {
       <div className="space-y-6 max-w-3xl mx-auto">
         {chapterView?.map((chapter, idx) => (
           <div
-            key={chapter._id+idx}
+            key={chapter._id + idx}
             className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
           >
             <div className="flex justify-between items-center">
@@ -194,10 +194,12 @@ export default function Chapters() {
                 <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100">
                   <ul className="space-y-2">
                     {chapter.timeline
-                      .filter((element): element is TimelineReference => !!element)
+                      .filter(
+                        (element): element is TimelineReference => !!element
+                      )
                       .map((element, index) => (
                         <li
-                          key={element.id + chapter._id+index}
+                          key={element.id + chapter._id + index}
                           className="bg-gray-50 p-3 rounded-md flex justify-between items-center hover:bg-gray-100 transition-colors duration-200"
                         >
                           <div>
@@ -234,10 +236,9 @@ export default function Chapters() {
                           </span>
                           <Link
                             to={
-                              // quiz._id
-                              //   ? `/Dashbord/courses/${id}/edit/quiz/${quiz.quizId?._id}`
-                              // :
-                              "#"
+                              element.elementName === "lesson"
+                                ? `/Dashbord/courses/${id}/edit/lesson/${element.id}`
+                                : `/Dashbord/courses/${id}/edit/quiz/${element.id}`
                             }
                           >
                             <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors duration-200">
