@@ -46,6 +46,8 @@ export type CourseTimeline =
 // -------
 
 export interface ICourse {
+  _id: string;
+  title: string
   id: string
   courseData: CourseData;
   timeline: TimelineItem[];

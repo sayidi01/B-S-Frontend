@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { Input, Button, Alert, Select } from "antd";
 const { TextArea } = Input;
 import { toast } from "react-hot-toast";
-import useFetchChapterData from "../../../../../hooks/api/chapter/UseFetchChapter";
 import { ILesson } from "./TypesLessons";
 import { useQueryClient } from "@tanstack/react-query";
 
