@@ -25,7 +25,7 @@ function ChapterView() {
   return (
     <div>
       <p style={{ fontWeight: "bold", fontFamily: "serif", fontSize: 20 }}>
-        {singleChapterData?.chapters?.chapterData.title}
+        {singleChapterData?.chapters?.title}
       </p>
     </div>
   );

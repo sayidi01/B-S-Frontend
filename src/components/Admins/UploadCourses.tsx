@@ -207,13 +207,14 @@ const UploadPdfCourses: React.FC = () => {
                     placement="bottom-start"
                     btnClassName="btn p-0 rounded-none border-0 shadow-none dropdown-toggle text-black dark:text-white-dark hover:text-primary dark:hover:text-primary"
                     button={
-                      <Button
-                        size="small"
-                        style={{ marginLeft: "5px" }}
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        style={{ marginLeft: "5px", cursor: "pointer" }}
                         className="p-0"
                       >
                         <IconHorizontalDots />
-                      </Button>
+                      </div>
                     }
                   >
                     <ul className="!min-w-[130px]">

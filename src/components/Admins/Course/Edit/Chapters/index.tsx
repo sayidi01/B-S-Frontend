@@ -8,11 +8,10 @@ import UpdateChapterPopover from "./UpdateChapterPopover";
 import ModalAssignQuizToChapter from "./ModalAssignQuizToChapter";
 
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { IChapter } from "../../../../../types/chapter";
+import { IChapter, SingleChapterView } from "../../../../../types/chapter";
 import { useCourse } from "../../../SingleCourse";
 import { capitalize } from "lodash";
 import TimelineAdder from "./TimelineAdder";
-import { TimelineItem, TimelineReference } from "../../../../../types/course";
 
 export default function Chapters() {
   const { id } = useParams();
@@ -26,7 +25,6 @@ export default function Chapters() {
     updateChapter,
     handleMoveOrderQuiz,
   } = useFetchChapterData(id);
-  const { updateCourseDetails } = useCourse();
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
   const [newChapterTitle, setNewChapterTitle] = useState("");
 
@@ -46,16 +44,15 @@ export default function Chapters() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChapter, setSelectedChapter] = useState<string | null>(null);
 
-  const updateChapterData = (chapterId: string, newData: IChapter) => {
+  const updateChapterData = (chapterId: string, newData: SingleChapterView) => {
     setchapterView((prev) => {
-      if (!prev) return [];
-
+      if (!prev) return prev;
+  
       return prev.map((chapter) =>
         chapter._id === chapterId ? newData : chapter
       );
     });
   };
-
   const toggleQuiz = (chapterId: string) => {
     setExpandedChapter(expandedChapter === chapterId ? null : chapterId);
   };
@@ -194,9 +191,7 @@ export default function Chapters() {
                 <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100">
                   <ul className="space-y-2">
                     {chapter.timeline
-                      .filter(
-                        (element): element is TimelineReference => !!element
-                      )
+                      .filter(Boolean) 
                       .map((element, index) => (
                         <li
                           key={element.id + chapter._id + index}

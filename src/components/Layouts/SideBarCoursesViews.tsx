@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { toggleSidebar } from "../../store/themeConfigSlice";
 import { IRootState } from "../../store";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import IconCaretsDown from "../Icon/IconCaretsDown";
 import { useCourse } from "../Admins/SingleCourse";
 import {
@@ -61,7 +61,7 @@ const SidebarCoursesViews = () => {
                     !!item && item.type === ElementType.Chapter
                 )
                 .map((element) => (
-                  <>
+                  <React.Fragment key={element.data._id}>
                     {element.type === ElementType.Chapter ? (
                       // Display chapter timeline
                       <li key={`chapter-${element.data._id}`}>
@@ -70,38 +70,39 @@ const SidebarCoursesViews = () => {
                         </span>
                         <ul className="ml-4 mt-2 space-y-1">
                           {element.timeline
-                            .filter((item) => item)
-                            .map(
-                              (item: QuizTimelineItem | LessonTimelineItem) => {
-                                // @TODO 7tta tl3ab 3la design
-                                return (
-                                  <li key={item.data._id}>
-                                    <Link
-                                      to={`/Dashbord/courses/${id}/${
-                                        item.type === ElementType.Quiz
-                                          ? "quiz"
-                                          : "lesson"
-                                      }/${item.data._id}`}
-                                      className={`block text-black-700 dark:text-gray-300 hover:font-bold ${
-                                        location.pathname ===
-                                        `/Dashbord/courses/${id}/${
-                                          item.type === ElementType.Quiz
-                                            ? "quiz"
-                                            : "lesson"
-                                        }/${item.data._id}`
-                                          ? "font-bold"
-                                          : ""
-                                      }`}
-                                      style={{ fontSize: 16 }}
-                                    >
-                                      {item.type === ElementType.Lesson
-                                        ? item.data.title
-                                        : item.data.name}
-                                    </Link>
-                                  </li>
-                                );
-                              }
-                            )}
+                            .filter(
+                              (
+                                item
+                              ): item is
+                                | QuizTimelineItem
+                                | LessonTimelineItem => item !== null
+                            )
+                            .map((item) => (
+                              <li key={item.data._id}>
+                                <Link
+                                  to={`/Dashbord/courses/${id}/${
+                                    item.type === ElementType.Quiz
+                                      ? "quiz"
+                                      : "lesson"
+                                  }/${item.data._id}`}
+                                  className={`block text-black-700 dark:text-gray-300 hover:font-bold ${
+                                    location.pathname ===
+                                    `/Dashbord/courses/${id}/${
+                                      item.type === ElementType.Quiz
+                                        ?  "quiz"
+                                        : "lesson"
+                                    }/${item.data._id}`
+                                      ? "font-bold"
+                                      : ""
+                                  }`}
+                                  style={{ fontSize: 16 }}
+                                >
+                                  {item.type === ElementType.Lesson
+                                    ? item.data.title
+                                    : item.data.name}
+                                </Link>
+                              </li>
+                            ))}
                         </ul>
                       </li>
                     ) : element.type === ElementType.Quiz ? (
@@ -135,7 +136,7 @@ const SidebarCoursesViews = () => {
                         </Link>
                       </li>
                     ) : null}
-                  </>
+                  </React.Fragment>
                 ))}
             </ul>
           </PerfectScrollbar>

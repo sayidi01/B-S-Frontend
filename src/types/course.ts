@@ -20,10 +20,11 @@ interface GetLessonData {
   content?: string;
 }
 
-interface QuizGetterResponse {
+export interface QuizGetterResponse {
   _id: string;
   name: string;
   questions: IQuiz["questions"];
+  createdAt: string;
 }
 
 export interface CourseTimelineChapter {
@@ -47,6 +48,7 @@ export type CourseTimeline =
 export interface ICourse {
   courseData: CourseData;
   timeline: TimelineItem[];
+  quizzes: QuizGetterResponse[];
 }
 
 export interface CourseData {
@@ -68,17 +70,20 @@ export interface TimelineReference {
 export type TimelineItem = ChapterTimelineItem | QuizTimelineItem | LessonTimelineItem;
 
 export interface ChapterTimelineItem {
+  id: string
   type: 'chapter';
   data: ChapterData;
   timeline: (TimelineItem | null)[];
 }
 
 export interface QuizTimelineItem {
+  id: string
   type: 'quiz';
   data: QuizData;
 }
 
 export interface LessonTimelineItem {
+  id: string
   type: 'lesson';
   data: LessonData;
 }
@@ -102,8 +107,10 @@ export interface ChapterQuizLink {
 }
 
 export interface QuizData {
+  id: string
   _id: string;
   name: string;
+  elementName: 'quiz'
   questions: Question[];
 }
 
@@ -123,7 +130,9 @@ export interface Option {
 }
 
 export interface LessonData {
+  id: string
   _id: string;
+  elementName: 'lesson';
   title: string;
   description: string;
   content?: string;
