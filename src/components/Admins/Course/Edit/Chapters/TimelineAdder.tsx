@@ -29,6 +29,8 @@ function TimelineAdder({ chapter }: Props) {
 
   console.log("courseDetails", courseDetails);
 
+  console.log(courseDetails?.timeline, "courseDetails timeline");
+
   const handleOptionClick =
     (resource: QuizTimelineItem | LessonTimelineItem) => () => {
       if (!courseDetails) {
@@ -38,6 +40,7 @@ function TimelineAdder({ chapter }: Props) {
         chapter.timeline as unknown as (QuizTimelineItem | LessonTimelineItem)[]
       ).concat([
         {
+          
           type: resource.type,
           data: resource.data,
           
@@ -81,6 +84,7 @@ function TimelineAdder({ chapter }: Props) {
     setIsOptionsOpen((prev) => !prev);
   };
 
+
   return (
     <>
       <div className="flex justify-end">
@@ -100,8 +104,11 @@ function TimelineAdder({ chapter }: Props) {
         >
           {courseDetails?.timeline
             .filter(
-              (resource) =>
-                resource?.type == "quiz" || resource?.type === "lesson"
+              (resource): resource is TimelineItem =>
+                resource?.type === "quiz" || resource?.type === "lesson"&&
+              !!resource.data &&
+              !!resource.data._id
+              
             )
             .map((resource) => (
               <Select.Option key={resource.data._id} value={resource.data._id}>
