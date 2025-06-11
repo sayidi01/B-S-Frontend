@@ -31,7 +31,13 @@ import { LessonAPIClient } from './api/LessonAPIClient';
 import QuizAPIClient from './api/QuizAPIClient';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-
+if (import.meta.env.MODE === 'production') {
+  console.log = () => {};
+  console.debug = () => {};
+  console.info = () => {};
+  console.warn = () => {};
+  console.error = () => {};
+}
 
 const apiClient = new APIClient();
 const courseApiClient = new CourseAPIClient();
