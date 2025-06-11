@@ -82,6 +82,7 @@ export interface ChapterTimelineItem {
 }
 
 export interface QuizTimelineItem {
+  name: string
   _id: string
   id: string
   type: 'quiz';

@@ -5,8 +5,8 @@ import {
   QuizQuestion,
 } from "../../../components/Admins/Course/Edit/Quiz/quiz.types";
 import { useUserContext } from "../../../config/UserContext";
-import { useCourse } from "../../../components/Admins/SingleCourse";
-import { ICourse } from "../../../types/course";
+
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateQuizResponse {
   data: {
@@ -30,7 +30,7 @@ interface UseQuizReturn {
 const useQuiz = (): UseQuizReturn => {
   const { quizAPIClient } = useUserContext();
   
-
+  const queryClient = useQueryClient(); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -84,6 +84,9 @@ const useQuiz = (): UseQuizReturn => {
           ...prev,
           ...response.data.quiz,
         }));
+        await queryClient.refetchQueries({
+          queryKey: ["courseData", courseId],
+        });
        
         return response;
       } catch (err: any) {

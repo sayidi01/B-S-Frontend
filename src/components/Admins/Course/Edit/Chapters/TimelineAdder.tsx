@@ -40,7 +40,7 @@ function TimelineAdder({ chapter }: Props) {
         chapter.timeline as unknown as (QuizTimelineItem | LessonTimelineItem)[]
       ).concat([
         {
-          
+          _id: resource._id,
           type: resource.type,
           data: resource.data,
           
@@ -105,12 +105,12 @@ function TimelineAdder({ chapter }: Props) {
           {courseDetails?.timeline
             .filter(
               (resource): resource is TimelineItem =>
-                resource?.type === "quiz" || resource?.type === "lesson"&&
-              !!resource.data &&
-              !!resource.data._id
-              
+                (resource?.type === "quiz" || resource?.type === "lesson") &&
+                !!resource.data &&
+                !!resource.data._id
             )
             .map((resource) => (
+              
               <Select.Option key={resource.data._id} value={resource.data._id}>
                 <span>
                   {capitalize(resource.type) + ": "}
