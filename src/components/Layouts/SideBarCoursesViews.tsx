@@ -99,7 +99,7 @@ const SidebarCoursesViews = () => {
                                 >
                                   {item.type === ElementType.Lesson
                                     ? item.data.title
-                                    : item.data.name}
+                                    : `Quiz : ${item.data.name}`}
                                 </Link>
                               </li>
                             ))}

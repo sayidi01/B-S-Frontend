@@ -109,6 +109,7 @@ function TimelineAdder({ chapter }: Props) {
                 !!resource.data &&
                 !!resource.data._id
             )
+            
             .map((resource) => (
               
               <Select.Option key={resource.data._id} value={resource.data._id}>
