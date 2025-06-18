@@ -49,7 +49,7 @@ function SingleQuiz() {
             <div>
               {question.fillTheBlank?.map((blank, blankIndex) => (
                 <div key={blankIndex} style={{ marginBottom: '10px' }}>
-                  {blank.type === "phrase" ? (
+                  {blank.type === "text" ? (
                     <Text style={{ fontWeight: 'bold' }}>{blank.text}</Text>
                   ) : (
                     <Text>______ (Options: {blank.options.join(", ")})</Text>

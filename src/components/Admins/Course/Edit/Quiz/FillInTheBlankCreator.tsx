@@ -24,12 +24,10 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
     updateItems(updatedItems);
   };
 
-
   const handleRemoveBlank = (id: string) => {
     const updatedItems: QuizItem[] = items.filter((item) => item.id !== id);
     updateItems(updatedItems);
-  }
-
+  };
 
   const handleRemovePhrase = (id: string) => {
     const updatedItems: QuizItem[] = items.filter((item) => item.id !== id);
@@ -47,14 +45,12 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
     updateItems(updatedItems);
   };
 
-
-
   const handleAddPhrase = () => {
     const updatedItems: QuizItem[] = [
       ...items,
       {
         id: uuidv4(),
-        type: "phrase",
+        type: "text",
         text: "",
       },
     ];
@@ -160,41 +156,53 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
               borderRadius: "6px",
             }}
           >
-            {item.type === "phrase" ? (
-               <div style={{ display: "flex", alignItems: "center" }}>
-               <input
-                 type="text"
-                 value={item.text}
-                 onChange={(e) => updateItem(item.id, { text: e.target.value })}
-                 placeholder="Enter phrase..."
-                 style={{ width: "100%", padding: 8 }}
-               />
-               <button
-                 onClick={() => handleRemovePhrase(item.id)}
-                 style={{
-                   background: "none",
-                   border: "none",
-                   cursor: "pointer",
-                   fontSize: "18px",
-                   color: "#d9534f",
-                   marginLeft: 8,
-                 }}
-                 title="Remove phrase"
-               >
-                 🗑️
-               </button>
-             </div>
+            {item.type === "text" ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <input
+                  type="text"
+                  value={item.text}
+                  onChange={(e) =>
+                    updateItem(item.id, { text: e.target.value })
+                  }
+                  placeholder="Enter phrase..."
+                  style={{ width: "100%", padding: 8 }}
+                />
+                <button
+                  onClick={() => handleRemovePhrase(item.id)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "18px",
+                    color: "#d9534f",
+                    marginLeft: 8,
+                  }}
+                  title="Remove phrase"
+                >
+                  🗑️
+                </button>
+              </div>
             ) : (
               <>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: 8,
-                  }}
-                >
-                  <label style={{ fontWeight: "bold" }}>Correct option:</label>
+                <div style={{ marginBottom: 8 }}>
+                  <label
+                    style={{
+                      fontWeight: "bold",
+                      marginBottom: 4,
+                      display: "block",
+                    }}
+                  >
+                    Correct option:
+                  </label>
+                  <input
+                    type="text"
+                    value={item.correctOption}
+                    onChange={(e) =>
+                      updateItem(item.id, { correctOption: e.target.value })
+                    }
+                    placeholder="Enter the correct option"
+                    style={{ width: "100%", padding: 6, marginBottom: 10 }}
+                  />
                   <button
                     onClick={() => handleRemoveBlank(item.id)}
                     style={{
@@ -206,39 +214,44 @@ const FillInTheBlankCreator: React.FC<FillInTheBlankCreatorProps> = ({
                     }}
                     title="Remove blank"
                   >
-                    🗑️
+                    🗑️ Remove Blank
                   </button>
                 </div>
+
                 <div style={{ marginTop: 10 }}>
                   {item.options.map((opt, idx) => (
-                   <div
-                   key={`${item.id}-option-${idx}`}
-                   style={{ display: "flex", alignItems: "center", marginTop: 5 }}
-                 >
-                   <input
-                     type="text"
-                     value={opt}
-                     onChange={(e) =>
-                       updateOption(item.id, idx, e.target.value)
-                     }
-                     placeholder={`Option ${idx + 1}`}
-                     style={{ width: "80%", padding: 6 }}
-                   />
-                   <button
-                     onClick={() => handleRemoveOption(item.id, idx)}
-                     style={{
-                       background: "none",
-                       border: "none",
-                       cursor: "pointer",
-                       fontSize: "18px",
-                       color: "#d9534f",
-                       marginLeft: 8,
-                     }}
-                     title="Remove option"
-                   >
-                     🗑
-                   </button>
-                 </div>
+                    <div
+                      key={`${item.id}-option-${idx}`}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginTop: 5,
+                      }}
+                    >
+                      <input
+                        type="text"
+                        value={opt}
+                        onChange={(e) =>
+                          updateOption(item.id, idx, e.target.value)
+                        }
+                        placeholder={`Option ${idx + 1}`}
+                        style={{ width: "80%", padding: 6 }}
+                      />
+                      <button
+                        onClick={() => handleRemoveOption(item.id, idx)}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          fontSize: "18px",
+                          color: "#d9534f",
+                          marginLeft: 8,
+                        }}
+                        title="Remove option"
+                      >
+                        🗑
+                      </button>
+                    </div>
                   ))}
 
                   <button

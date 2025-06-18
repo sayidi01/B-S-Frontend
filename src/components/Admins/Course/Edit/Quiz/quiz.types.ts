@@ -4,7 +4,7 @@ import { ICourse } from "../../../../../types/course";
 
 export type QuizItem = 
   | { id: string; type: 'blank';  correctOption: string; options: string[] }
-  | { id: string; type: 'phrase'; text: string };
+  | { id: string; type: 'text'; text: string };
 
 export enum QuizQuestionType {
   TRUE_FASLE = "true_false",
