@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-
 import Dropdown from "../Dropdown";
 import IconHorizontalDots from "../Icon/IconHorizontalDots";
 import IconTrashLines from "../Icon/IconTrashLines";
@@ -14,7 +13,7 @@ import { Admin } from "./ModalCreateAdmin";
 import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-hot-toast";
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined } from "@ant-design/icons";
 
 const itemsPerPage = 8;
 
@@ -23,7 +22,6 @@ const UploadPdfCourses: React.FC = () => {
 
   const { isConnected, titleCourses, setTitleCourses } = useUserContext();
   const navigate = useNavigate();
-
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -107,6 +105,12 @@ const UploadPdfCourses: React.FC = () => {
     });
   };
 
+  const stripHtml = (html: string) => {
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+    return temp.textContent || temp.innerText || "";
+  };
+
   return (
     <div>
       <p
@@ -184,10 +188,11 @@ const UploadPdfCourses: React.FC = () => {
                   overflow: "hidden",
                   margin: 0,
                 }}
-                dangerouslySetInnerHTML={{
-                  __html: course?.description ? course.description.slice(0, 100) + "..." : "No description available",
-                }}
-              ></p>
+              >
+                {course?.description
+                  ? stripHtml(course.description).slice(0, 100) + "..."
+                  : "No description available"}
+              </p>
               <div className="flex items-center">
                 <Link to={`/Dashbord/courses/${course._id}`}>
                   <Button
@@ -230,7 +235,7 @@ const UploadPdfCourses: React.FC = () => {
                             gap: "5px",
                           }}
                         >
-                          <EditOutlined style={{ fontSize: '16px' }} />
+                          <EditOutlined style={{ fontSize: "16px" }} />
                           Edit
                         </button>
                       </li>
