@@ -156,16 +156,16 @@ const Index = () => {
             Total Teachers : {totaleTeachers}
           </div>
         </Card>
-        <Card style={{ width: 250, backgroundColor: "rgba(255, 99, 71, 0.1)" }}>
-          <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#d32f2f" }}>
-            <IconMenuPages />
-            Total Courses : {totalCourses}
-          </div>
-        </Card>
         <Card style={{ width: 250, backgroundColor: "#fffde7" }}>
           <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#fbc02d" }}>
             <IconUserPlus />
             Total Students : {totaleStudents}
+          </div>
+        </Card>
+         <Card style={{ width: 250, backgroundColor: "rgba(255, 99, 71, 0.1)" }}>
+          <div style={{ fontSize: 20, fontFamily: "Roboto", color: "#d32f2f" }}>
+            <IconMenuPages />
+            Total Courses : {totalCourses}
           </div>
         </Card>
       </div>

@@ -79,19 +79,28 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
     }));
   };
 
-
   // ONCHANGE COURSE STUDENT
 
-  const handleCourseChange = (value: string | string[]) => {
-    const courses = Array.isArray(value) ? value : [value];
-    setFormDataStudent((prevData) => ({
-      ...prevData,
-      myCourses: courses.map(courseId => ({ courseId, expiredDateCourse: "" }))
-    }));
+  const handleCourseChange = (selectedCourseIds: string[]) => {
+    
+    setFormDataStudent((prevData) => {
+      const updatedCourses = selectedCourseIds.map((courseId) => {
+        const existingCourse = prevData.myCourses.find(
+          (c) => c.courseId === courseId
+        );
+        return {
+          courseId,
+          expiredDateCourse: existingCourse?.expiredDateCourse || "",
+        };
+      });
+      return {
+        ...prevData,
+        myCourses: updatedCourses,
+      };
+    });
   };
 
-
-  // ONCHANGE SESSION STUDENT 
+  // ONCHANGE SESSION STUDENT
 
   const onChange: DatePickerProps["onChange"] = (_, dateString) => {
     if (typeof dateString == "string")
@@ -103,18 +112,15 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
 
   // ONCHANGE EXPIRED DATE COURSE STUDENT
 
-  const onExpiredDateCourseChange: DatePickerProps["onChange"] = (
-    _,
-    dateString
-  ) => {
-    if (typeof dateString === "string") {
-      setFormDataStudent((prev) => ({
-        ...prev,
-        myCourses: prev.myCourses.map((course, index) =>
-          index === 0 ? { ...course, expiredDateCourse: dateString } : course
-        ),
-      }));
-    }
+  const handleCourseDateChange = (courseId: string, dateString: string) => {
+    setFormDataStudent((prev) => ({
+      ...prev,
+      myCourses: prev.myCourses.map((course) =>
+        course.courseId === courseId
+          ? { ...course, expiredDateCourse: dateString }
+          : course
+      ),
+    }));
   };
 
   // GET ALL COURSES
@@ -149,7 +155,7 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
       toast.error("Please fill in all fields");
       return;
     }
-    
+
     axiosInstance
       .post("/student", formdataStudent)
       .then(({ data }) => {
@@ -178,7 +184,6 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
             accountExpiryDate: "",
             myCourses: [],
             learningMode: "online",
-            
           });
           handleCancel();
         } else {
@@ -247,29 +252,42 @@ const ModalCreateStudent: React.FC<ModalCreateStudentProps> = ({
         </Select>
 
         <Select
+          mode="multiple"
           style={{ marginTop: "23px", width: "100%" }}
-          placeholder={'Select Course'}
+          placeholder={"Select Courses"}
           onChange={handleCourseChange}
-          value={formdataStudent.myCourses.map(course => course.courseId)}  >
-          <Select.Option value="">Select a course</Select.Option>
-
-          {courses &&
-            Array.isArray(courses) &&
-            courses.map((course) => (
-              <Select.Option key={course._id} value={course._id}>
-                {course.title}
-              </Select.Option>
-            ))}
+          value={formdataStudent.myCourses.map((course) => course.courseId)}
+        >
+          {courses?.map((course) => (
+            <Select.Option key={course._id} value={course._id}>
+              {course.title}
+            </Select.Option>
+          ))}
         </Select>
-        <div className="mt-4">
-          <p style={{ marginBottom: "4px" }}>Expiry Course</p>
-          <DatePicker
-            onChange={onExpiredDateCourseChange}
-            name="expiredDateCourse"
-            picker="date"
-            style={{ marginTop: "0px" }} 
-          />
-        </div>
+        {formdataStudent.myCourses.map((course) => {
+          const courseTitle =
+            courses.find((c) => c._id === course.courseId)?.title ||
+            course.courseId;
+          return (
+            <div key={course.courseId} className="mt-3">
+              <p style={{ marginBottom: "4px" }}>
+                Expiry for: <strong>{courseTitle}</strong>
+              </p>
+              <DatePicker
+                placeholder="Expiry Date"
+                onChange={(_date, dateString: string | string[]) => {
+                  if (typeof dateString === "string") {
+                    handleCourseDateChange(course.courseId, dateString);
+                  } else {
+                    toast.error("Veuillez sélectionner une seule date.");
+                  }
+                }}
+                style={{ width: "100%" }}
+              />
+            </div>
+          );
+        })}
+
         <div className="mt-4">
           <p style={{ marginBottom: "4px" }}>Expiry Session</p>
           <DatePicker

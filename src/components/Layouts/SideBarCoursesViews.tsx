@@ -41,7 +41,7 @@ const SidebarCoursesViews = () => {
   return (
     <div className={semidark ? "dark" : ""}>
       <nav
-        className={`sidebar fixed min-h-screen h-full top-0 w-[260px]  shadow-lg z-50 transition-all duration-300 ${
+        className={`sidebar fixed min-h-screen h-full top-0 w-[277px]  shadow-lg z-50 transition-all duration-300 ${
           semidark ? "text-white-dark bg-black" : "bg-white"
         }`}
       >
