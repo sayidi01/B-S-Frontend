@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 
 import useFetchChapterData from "../../../../../hooks/api/chapter/UseFetchChapter";
 import { Link, useParams } from "react-router-dom";
@@ -8,8 +8,7 @@ import UpdateChapterPopover from "./UpdateChapterPopover";
 import ModalAssignQuizToChapter from "./ModalAssignQuizToChapter";
 
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { IChapter, SingleChapterView } from "../../../../../types/chapter";
-import { useCourse } from "../../../SingleCourse";
+import {  SingleChapterView } from "../../../../../types/chapter";
 import { capitalize } from "lodash";
 import TimelineAdder from "./TimelineAdder";
 

@@ -16,14 +16,13 @@ import ModalEditStudent from "./ModalEditStudent";
 import { formatDistance, isPast } from "date-fns";
 import IconEdit from "../Icon/IconEdit";
 import { ICourse } from "../../types/course";
+import IconEye from "../Icon/IconEye";
 
 const itemsPerPage = 9;
 
 function ListStudent() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalEditOpen, setIsModaEditlOpen] = useState<boolean>(false);
-
- 
 
   const { isConnected, courses, setCourses } = useUserContext();
 
@@ -83,8 +82,7 @@ function ListStudent() {
 
   console.log(listStudents.length);
 
-
-  // GET ALL COURSES 
+  // GET ALL COURSES
 
   useEffect(() => {
     axiosInstance
@@ -98,25 +96,22 @@ function ListStudent() {
       });
   }, []);
 
+  // GET COURSE TITLE STUDENT
 
-  // GET COURSE TITLE STUDENT 
-
-  const getCourseTitles = (myCourses: { courseId: string; expiredDateCourse?: string }[]): string => {
+  const getCourseTitles = (
+    myCourses: { courseId: string; expiredDateCourse?: string }[]
+  ): string => {
     if (!Array.isArray(myCourses)) {
       console.error("myCourses doit être un tableau mais est :", myCourses);
       return "Aucun cours";
     }
-  
+
     const titles = myCourses
-      .map((course) => courses.find((c) => c._id === course.courseId)?.title) 
-      .filter((title) => title); 
-  
+      .map((course) => courses.find((c) => c._id === course.courseId)?.title)
+      .filter((title) => title);
+
     return titles.length > 0 ? titles.join(", ") : "No Courses";
   };
-  
-
-
-
 
   // GET ALL STUDENTS
 
@@ -207,7 +202,7 @@ function ListStudent() {
             <th>Email</th>
             <th>Password</th>
             <th>Phone</th>
-            <th > Mode</th>
+            <th> Mode</th>
             <th>Courses</th>
             <th>Expiry Session</th>
 
@@ -234,23 +229,25 @@ function ListStudent() {
               <td>{student.lastName}</td>
               <td>{student.email}</td>
               <td>
-                <input
-                  type={visiblePasswords[student.email] ? "text" : "password"}
-                  value={student.password}
-                  readOnly
-                  className="bg-transparent border-none"
-                />
-                {visiblePasswords[student.email] ? (
-                  <EyeInvisibleOutlined
-                    onClick={() => togglePasswordVisibility(student.email)}
-                    className="cursor-pointer ml-2"
+                <div className="flex items-center gap-1">
+                  <input
+                    type={visiblePasswords[student.email] ? "text" : "password"}
+                    value={student.password}
+                    readOnly
+                    className="bg-transparent border-none outline-none text-sm font-medium w-auto max-w-[110px] truncate"
                   />
-                ) : (
-                  <EyeOutlined
-                    onClick={() => togglePasswordVisibility(student.email)}
-                    className="cursor-pointer ml-2"
-                  />
-                )}
+                  {visiblePasswords[student.email] ? (
+                    <EyeInvisibleOutlined
+                      onClick={() => togglePasswordVisibility(student.email)}
+                      className="cursor-pointer text-gray-600 hover:text-gray-800 transition"
+                    />
+                  ) : (
+                    <EyeOutlined
+                      onClick={() => togglePasswordVisibility(student.email)}
+                      className="cursor-pointer text-gray-600 hover:text-gray-800 transition"
+                    />
+                  )}
+                </div>
               </td>
               <td>{student.phone}</td>
               <td>{student.learningMode}</td>
@@ -269,18 +266,24 @@ function ListStudent() {
                   : null}
               </td>
               <td className="text-center">
-                <div
-                  onClick={() => showModalEditStudent(student)}
-                  className="cursor-pointer mx-2 inline-block"
-                >
-                  <IconEdit className="w-5 h-5" />
-                </div>
+                <div className="flex items-center justify-center gap-1">
+                  <div
+                    onClick={() => showModalEditStudent(student)}
+                    className="cursor-pointer hover:text-blue-600 transition"
+                  >
+                    <IconEdit className="w-5 h-5" />
+                  </div>
 
-                <div
-                  onClick={() => confirmDeleteStudent(student._id)}
-                  className="cursor-pointer mx-2 inline-block"
-                >
-                  <IconTrashLines className="w-5 h-5" />
+                  <div
+                    onClick={() => confirmDeleteStudent(student._id)}
+                    className="cursor-pointer hover:text-red-500 transition"
+                  >
+                    <IconTrashLines className="w-5 h-5" />
+                  </div>
+
+                  <div className="cursor-pointer hover:text-gray-700 transition">
+                    <IconEye className="w-5 h-5" />
+                  </div>
                 </div>
               </td>
             </tr>
