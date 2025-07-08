@@ -12,6 +12,7 @@ interface ModalEditStudentProps {
   handleEditCancelStudent: () => void;
   setListStudents: React.Dispatch<React.SetStateAction<Student[]>>;
   editStudent: Student | null;
+  
 }
 
 const ModalEditStudent: React.FC<ModalEditStudentProps> = ({

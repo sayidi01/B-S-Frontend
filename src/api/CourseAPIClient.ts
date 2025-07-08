@@ -14,4 +14,9 @@ export default class CourseAPIClient extends APIClient {
         await this.axiosInstance.get(`/course/${courseID}/quiz`)
     ).data
 }
+
+  async getCourseProgressStudent(id: string, studentId: string) {
+    return (await this.axiosInstance.get(`/course/${id}/progress?studentId=${studentId}`)).data
+  }
+
 }

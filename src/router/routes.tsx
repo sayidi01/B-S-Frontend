@@ -13,6 +13,9 @@ import CreataNewQuiz from "../components/Admins/Course/Edit/Quiz/CreateNewQuiz"
 import SingleQuiz from "../components/Admins/Course/Edit/Quiz/SingleQuiz";
 import UpdateQuizData from "../components/Admins/Course/Edit/Quiz/UpdateQuizData";
 import CourseView from "../pages/SingleCourse";
+import ProcessStudent from "../components/Students/ ProcessStudent";
+
+import DetailsCourseProgressStudent from "../components/Students/DetailsCourseProgressStudent";
 
 import LessonView from "../pages/SingleCourse/LessonView";
 import ChapterView from "../pages/SingleCourse/ChapterView";
@@ -72,6 +75,16 @@ const routes = [
       {
         path: "ListStudent",
         element: <ListStudent />,
+        layout: "default",
+      },
+      {
+        path: "ProcessStudent/:studentId",
+        element: <ProcessStudent />,
+        layout: "default",
+      },
+      {
+        path: "DetailProgressCourse/:id/:studentId",
+        element: <DetailsCourseProgressStudent />,
         layout: "default",
       },
       {

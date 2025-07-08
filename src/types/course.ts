@@ -52,6 +52,8 @@ export interface ICourse {
   courseData: CourseData;
   timeline: TimelineItem[];
   quizzes: QuizGetterResponse[];
+   imageCourse: string;
+   createdAt: string
 }
 
 export interface CourseData {
@@ -104,6 +106,7 @@ export interface ChapterData {
   createdAt?: string;
   updatedAt: string;
   timeline: TimelineReference[];
+  name: string
 }
 
 export interface ChapterQuizLink {
@@ -119,6 +122,7 @@ export interface QuizData {
   name: string;
   elementName: 'quiz'
   questions: Question[];
+  
 }
 
 export interface Question {
@@ -143,4 +147,23 @@ export interface LessonData {
   title: string;
   description: string;
   content?: string;
+    name: string
+
+}
+
+export interface IcourseResponses {
+  _id: string;
+  courseId: {
+    _id: string;
+    title: string;
+    imageCourse?: string;
+  };
+  expiredDateCourse: string;
+  isExpired: boolean;
+  learningMode: string;
+  creationDate: string;
+  courseDetails: {
+    courseData: ICourse["courseData"];
+    timeline: TimelineItem[];
+  };
 }

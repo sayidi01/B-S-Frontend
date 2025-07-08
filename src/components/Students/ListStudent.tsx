@@ -17,6 +17,7 @@ import { formatDistance, isPast } from "date-fns";
 import IconEdit from "../Icon/IconEdit";
 import { ICourse } from "../../types/course";
 import IconEye from "../Icon/IconEye";
+import { useNavigate } from "react-router-dom";
 
 const itemsPerPage = 9;
 
@@ -46,6 +47,11 @@ function ListStudent() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  const navigate = useNavigate();
+
+    
+  
 
   console.log(listStudents);
 
@@ -81,6 +87,11 @@ function ListStudent() {
   };
 
   console.log(listStudents.length);
+
+
+  const handleViewStudent = (studentId: string) => {
+  navigate(`/Dashbord/ProcessStudent/${studentId}`);
+};
 
   // GET ALL COURSES
 
@@ -281,8 +292,8 @@ function ListStudent() {
                     <IconTrashLines className="w-5 h-5" />
                   </div>
 
-                  <div className="cursor-pointer hover:text-gray-700 transition">
-                    <IconEye className="w-5 h-5" />
+                  <div  onClick={() => handleViewStudent(student._id)} className="cursor-pointer hover:text-gray-700 transition">
+                    <IconEye  className="w-5 h-5" />
                   </div>
                 </div>
               </td>
