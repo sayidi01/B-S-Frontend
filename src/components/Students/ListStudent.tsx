@@ -50,9 +50,6 @@ function ListStudent() {
 
   const navigate = useNavigate();
 
-    
-  
-
   console.log(listStudents);
 
   const showModal = () => {
@@ -88,10 +85,9 @@ function ListStudent() {
 
   console.log(listStudents.length);
 
-
   const handleViewStudent = (studentId: string) => {
-  navigate(`/Dashbord/ProcessStudent/${studentId}`);
-};
+    navigate(`/Dashbord/ProcessStudent/${studentId}`);
+  };
 
   // GET ALL COURSES
 
@@ -279,6 +275,12 @@ function ListStudent() {
               <td className="text-center">
                 <div className="flex items-center justify-center gap-1">
                   <div
+                    onClick={() => handleViewStudent(student._id)}
+                    className="cursor-pointer hover:text-gray-700 transition"
+                  >
+                    <IconEye className="w-5 h-5" />
+                  </div>
+                  <div
                     onClick={() => showModalEditStudent(student)}
                     className="cursor-pointer hover:text-blue-600 transition"
                   >
@@ -290,10 +292,6 @@ function ListStudent() {
                     className="cursor-pointer hover:text-red-500 transition"
                   >
                     <IconTrashLines className="w-5 h-5" />
-                  </div>
-
-                  <div  onClick={() => handleViewStudent(student._id)} className="cursor-pointer hover:text-gray-700 transition">
-                    <IconEye  className="w-5 h-5" />
                   </div>
                 </div>
               </td>

@@ -122,6 +122,7 @@ export interface QuizData {
   name: string;
   elementName: 'quiz'
   questions: Question[];
+  score: number;
   
 }
 

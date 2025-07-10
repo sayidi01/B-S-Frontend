@@ -1,12 +1,19 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../config/Api";
-import { IcourseResponses,  ChapterTimelineItem, LessonTimelineItem, QuizTimelineItem } from "../../types/course";
+import {
+  IcourseResponses,
+  ChapterTimelineItem,
+  LessonTimelineItem,
+  QuizTimelineItem,
+} from "../../types/course";
 
 function DetailsCourseProgressStudent() {
   const { id, studentId } = useParams();
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
-  const [dataStudentProgress, setDataStudentProgress] = useState<IcourseResponses[]>([]);
+  const [dataStudentProgress, setDataStudentProgress] = useState<
+    IcourseResponses[]
+  >([]);
 
   useEffect(() => {
     if (studentId) {
@@ -25,24 +32,27 @@ function DetailsCourseProgressStudent() {
     setExpandedChapter((prev) => (prev === chapterId ? null : chapterId));
   };
 
-  const currentCourse = dataStudentProgress.find((course) => course.courseId._id === id);
+  const currentCourse = dataStudentProgress.find(
+    (course) => course.courseId._id === id
+  );
 
   if (!currentCourse) {
     return (
       <div className="text-center mt-10 text-gray-500">
-         No course found for this ID.
+        No course found for this ID.
       </div>
     );
   }
 
   const timeline = currentCourse.courseDetails.timeline.filter(
-    (item): item is ChapterTimelineItem => item?.type === "chapter" && "timeline" in item && !!item.timeline
+    (item): item is ChapterTimelineItem =>
+      item?.type === "chapter" && "timeline" in item && !!item.timeline
   );
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
-         Course Progress
+        Course Progress
       </h1>
 
       <div className="space-y-6 max-w-3xl mx-auto">
@@ -67,18 +77,32 @@ function DetailsCourseProgressStudent() {
               <div className="mt-4">
                 <ul className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
                   {chapter.timeline
-                    ?.filter((item): item is LessonTimelineItem | QuizTimelineItem => !!item && "data" in item && "_id" in item.data)
+                    ?.filter(
+                      (item): item is LessonTimelineItem | QuizTimelineItem =>
+                        !!item && "data" in item && "_id" in item.data
+                    )
                     .map((item, idx) => (
                       <li
                         key={item.data._id + idx}
                         className="flex justify-between items-center bg-gray-50 p-3 rounded-md hover:bg-gray-100 transition-colors"
                       >
-                        <span className="flex gap-2 items-center text-gray-800">
-                          {item.type === "lesson" ? "📝 Leçon" : "🧠 Quiz"} :
-                          {item.type === "lesson"
-                            ? item.data.title
-                            : item.data.name}
-                        </span>
+                        <div className="flex flex-col gap-1 text-gray-800">
+                          <span className="flex gap-2 items-center">
+                            {item.type === "lesson" ? "📝 Leçon" : "🧠 Quiz"} :{" "}
+                            {item.type === "lesson"
+                              ? item.data.title
+                              : item.data.name}
+                          </span>
+                          {item.type === "quiz" && (
+                            <span className="text-sm text-blue-600 font-semibold">
+                              🎯 Score :{" "}
+                              {typeof item.data.score === "number"
+                                ? `${item.data.score}%`
+                                : "non noté"}
+                            </span>
+                          )}
+                        </div>
+
                         <span
                           className={`text-sm font-medium px-3 py-1 rounded-full ${
                             (item.data as any).isCompleted
@@ -86,7 +110,9 @@ function DetailsCourseProgressStudent() {
                               : "bg-red-100 text-red-600"
                           }`}
                         >
-                          {(item.data as any).isCompleted ? "Completed ✅" : "Not Completed ❌"}
+                          {(item.data as any).isCompleted
+                            ? "Completed ✅"
+                            : "Not Completed ❌"}
                         </span>
                       </li>
                     ))}
