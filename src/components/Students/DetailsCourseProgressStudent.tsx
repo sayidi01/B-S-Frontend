@@ -66,7 +66,7 @@ function DetailsCourseProgressStudent() {
               onClick={() => toggleChapter(chapter.data._id)}
             >
               <h2 className="text-xl font-semibold text-gray-800">
-                📘 {chapter.data.title}
+                 {chapter.data.title}
               </h2>
               <span className="text-gray-500 text-lg">
                 {expandedChapter === chapter.data._id ? "▲" : "▼"}
@@ -88,14 +88,13 @@ function DetailsCourseProgressStudent() {
                       >
                         <div className="flex flex-col gap-1 text-gray-800">
                           <span className="flex gap-2 items-center">
-                            {item.type === "lesson" ? "📝 Leçon" : "🧠 Quiz"} :{" "}
+                            {item.type === "lesson" ? " Leçon" : " Quiz"} :{" "}
                             {item.type === "lesson"
                               ? item.data.title
                               : item.data.name}
                           </span>
                           {item.type === "quiz" && (
-                            <span className="text-sm text-blue-600 font-semibold">
-                              🎯 Score :{" "}
+                            <span className="text-sm text-blue-600 font-semibold"> Score :{" "}
                               {typeof item.data.score === "number"
                                 ? `${item.data.score}%`
                                 : "non noté"}
